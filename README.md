@@ -1,0 +1,3 @@
+
+# JIrcBot
+> powered by PircBotX
