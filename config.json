@@ -1,0 +1,12 @@
+{
+  "version" : "1.0"
+  "connections" : [
+    {
+      "enabled" : true,
+      "server" : "irc.freenode.net",
+      "port" : 6667,
+      "channelName" : "#voidforum",
+      "botName" : "jircbot"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: "org.springframework.boot"
+
+
+group 'ru.bvn13.jircbot'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+repositories {
+    mavenLocal()
+    jcenter()
+    mavenCentral()
+
+    maven { url 'http://repo.spring.io/libs-release' }
+    maven { url "http://repo.springsource.org/repo" }
+}
+
+
+bootRun {
+    systemProperties = System.properties
+}
+
+
+configurations {
+    all*.exclude module: 'spring-boot-starter-logging'
+}
+
+
+dependencies {
+    // PircBot: https://github.com/TheLQ/pircbotx/wiki/Documentation
+    compile("org.pircbotx:pircbotx:2.1")
+
+    // Spring
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter', version:'1.5.8.RELEASE') {
+        exclude(module: 'spring-boot-starter-logging')
+    }
+    compile 'org.springframework.boot:spring-boot-starter-log4j2:1.5.8.RELEASE'
+
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.16.18'
+
+    // JSON
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+
+    // Calculator
+    compile 'net.objecthunter:exp4j:0.4.8'
+
+    // Logging
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'org.apache.commons:commons-lang3:+'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE"
+    }
+}
