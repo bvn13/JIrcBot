@@ -20,6 +20,11 @@
     "search" : {
       "uuid" : "YOUR_UUID",
       "appKey" : "YOUR_APP_KEY"
+    },
+    "yaSearch" : {
+      "url" : "https://yandex.ru/search/xml?",
+      "user" : "USER_NAME",
+      "key" : "YOUR_KEY"
     }
   }
 }

@@ -10,9 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.bvn13.jircbot.Services.YandexSearchService;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
 import ru.bvn13.jircbot.listeners.*;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,12 +33,17 @@ public class JircBot extends ListenerAdapter {
 
 
     @Autowired
+    private YandexSearchService yandexSearchService;
+
+
+    @Autowired
     public JircBot(JircBotConfiguration config) {
         this.config = config;
-        this.start();
+        //this.start();
     }
 
 
+    @PostConstruct
     public void start() {
 
         //Setup this bot
@@ -59,6 +66,7 @@ public class JircBot extends ListenerAdapter {
                             //.addListener(new GoogleSearchListener(this.config))
                             .addListener(new UrlRetrieverListener())
                             .addListener(new RegexCheckerListener())
+                            .addListener(new YandexSearchListener(this.config, this.yandexSearchService))
                             .setServers(servers)
                             .setAutoReconnect(true)
                             //.addAutoJoinChannel(c.getChannelName()) //Join the official #pircbotx channel

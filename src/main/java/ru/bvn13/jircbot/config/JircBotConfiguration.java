@@ -10,10 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import ru.bvn13.jircbot.listeners.GoogleDoodleListener;
-import ru.bvn13.jircbot.model.Config;
-import ru.bvn13.jircbot.model.GoogleDoodleSettings;
-import ru.bvn13.jircbot.model.GoogleSearchSettings;
-import ru.bvn13.jircbot.model.ListenerSettings;
+import ru.bvn13.jircbot.listeners.YandexSearchListener;
+import ru.bvn13.jircbot.model.*;
 
 import javax.annotation.PostConstruct;
 import java.io.FileNotFoundException;
@@ -36,6 +34,7 @@ public class JircBotConfiguration {
 
     public static final String KEY_GOOGLE_DOODLE = "google-doodle";
     public static final String KEY_GOOGLE_SEARCH = "google-search";
+    public static final String KEY_YANDEX_SEARCH = "yandex-search";
 
     @Getter
     private Map<String, ListenerSettings> listenersSettings = new HashMap<>();
@@ -65,6 +64,7 @@ public class JircBotConfiguration {
             JSONObject lstnrSettings = (JSONObject) jsonObject.get("settings");
             this.listenersSettings.put(KEY_GOOGLE_DOODLE, this.readGoogleDoodleSettins(lstnrSettings));
             this.listenersSettings.put(KEY_GOOGLE_SEARCH, this.readGoogleSearchSettings(lstnrSettings));
+            this.listenersSettings.put(KEY_YANDEX_SEARCH, this.readYandexSearchSettings(lstnrSettings));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -104,9 +104,9 @@ public class JircBotConfiguration {
         return config;
     }
 
-    private ListenerSettings readGoogleDoodleSettins(JSONObject settings) {
+    private ListenerSettings readGoogleDoodleSettins(JSONObject data) {
         GoogleDoodleSettings sets = new GoogleDoodleSettings();
-        JSONObject googleSets = (JSONObject) settings.get("doodle");
+        JSONObject googleSets = (JSONObject) data.get("doodle");
         sets.setMainUrl((String) googleSets.get("mainUrl"));
         sets.setCheckUrl((String) googleSets.get("checkUrl"));
         sets.setLinkSelector((String) googleSets.get("linkSelector"));
@@ -115,10 +115,19 @@ public class JircBotConfiguration {
         return sets;
     }
 
-    private ListenerSettings readGoogleSearchSettings(JSONObject settings) {
+    private ListenerSettings readGoogleSearchSettings(JSONObject data) {
         GoogleSearchSettings sets = new GoogleSearchSettings();
-        JSONObject searchSets = (JSONObject) settings.get("search");
+        JSONObject searchSets = (JSONObject) data.get("search");
         sets.setUuid((String) searchSets.get("uuid"));
+        return sets;
+    }
+
+    private ListenerSettings readYandexSearchSettings(JSONObject data) {
+        YandexSearchSettings sets = new YandexSearchSettings();
+        JSONObject searchSets = (JSONObject) data.get("yaSearch");
+        sets.setUrl((String) searchSets.get("url"));
+        sets.setUser((String) searchSets.get("user"));
+        sets.setKey((String) searchSets.get("key"));
         return sets;
     }
 
