@@ -1,5 +1,5 @@
 {
-  "version" : "1.0"
+  "version" : "1.0",
   "connections" : [
     {
       "enabled" : true,
@@ -8,5 +8,18 @@
       "channelName" : "#voidforum",
       "botName" : "jircbot"
     }
-  ]
+  ],
+  "settings" : {
+    "doodle" : {
+      "mainUrl" : "https://www.google.com",
+      "checkUrl" : "https://www.google.com/doodles",
+      "linkSelector" : "li.latest-doodle.on .container a",
+      "titleSelector" : "li.latest-doodle.on .container input.title",
+      "dateSelector" : "li.latest-doodle.on .container input.tag"
+    },
+    "search" : {
+      "uuid" : "YOUR_UUID",
+      "appKey" : "YOUR_APP_KEY"
+    }
+  }
 }

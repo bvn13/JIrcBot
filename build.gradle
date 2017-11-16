@@ -51,6 +51,12 @@ dependencies {
     // Calculator
     compile 'net.objecthunter:exp4j:0.4.8'
 
+    // HTML parser
+    compile 'org.jsoup:jsoup:1.10.3'
+
+    // Google API
+    compile 'com.google.apis:google-api-services-customsearch:v1-rev57-1.23.0'
+
     // Logging
     compile 'ch.qos.logback:logback-classic:1.2.3'
     compile 'org.slf4j:slf4j-api:1.7.25'

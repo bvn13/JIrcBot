@@ -11,8 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
-import ru.bvn13.jircbot.listeners.CalculatorListener;
-import ru.bvn13.jircbot.listeners.TestListener;
+import ru.bvn13.jircbot.listeners.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +53,12 @@ public class JircBot extends ListenerAdapter {
                     String.format("%s/%s", c.getServer(), c.getChannelName()),
                     new PircBotX(templateConfig
                             .setName(c.getBotName())
+                            .addListener(new PingPongListener())
                             .addListener(new CalculatorListener()) //This class is a listener, so add it to the bots known listeners
+                            .addListener(new GoogleDoodleListener(this.config))
+                            .addListener(new GoogleSearchListener(this.config))
+                            .addListener(new UrlRetrieverListener())
+                            .addListener(new RegexCheckerListener())
                             .setServers(servers)
                             .setAutoReconnect(true)
                             .addAutoJoinChannel(c.getChannelName()) //Join the official #pircbotx channel

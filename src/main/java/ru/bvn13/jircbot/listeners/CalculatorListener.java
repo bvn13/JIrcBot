@@ -11,7 +11,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 
 public class CalculatorListener extends ListenerAdapter {
 
-    private static final String COMMAND = "?calc";
+    private static final String COMMAND = "?calc ";
 
 
     @Override
@@ -21,7 +21,7 @@ public class CalculatorListener extends ListenerAdapter {
             return;
         }
 
-        if (!event.getMessage().startsWith(COMMAND)) {
+        if (!event.getMessage().startsWith(COMMAND.trim())) {
             return;
         }
 
@@ -83,8 +83,6 @@ public class CalculatorListener extends ListenerAdapter {
                 } else {
                     currentEvent.respond(this.helpMessage());
                 }
-            } else {
-                currentEvent.respond("Command must be started with: "+COMMAND);
             }
 
         }
