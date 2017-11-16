@@ -19,7 +19,7 @@ public class RegexCheckerListener extends ListenerAdapter {
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
-        if (event.getUser().getNick().equals(event.getBot().getNick())) {
+        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
             return;
         }
 

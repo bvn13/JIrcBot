@@ -5,7 +5,7 @@
       "enabled" : true,
       "server" : "irc.freenode.net",
       "port" : 6667,
-      "channelName" : "#voidforum",
+      "channelsNames" : ["#voidforum", "#lor"],
       "botName" : "jircbot"
     }
   ],

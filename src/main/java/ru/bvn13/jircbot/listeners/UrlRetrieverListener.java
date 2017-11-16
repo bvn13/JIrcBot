@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class UrlRetrieverListener extends ListenerAdapter {
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
-        if (event.getUser().getNick().equals(event.getBot().getNick())) {
+        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
             return;
         }
 
@@ -49,9 +50,10 @@ public class UrlRetrieverListener extends ListenerAdapter {
         for (String url : foundUrls) {
             UrlInfo info = this.checkUrl(url);
             if (info.getError()) {
-                event.respondWith(info.getDescription());
+                event.respond(info.getDescription());
             } else {
-                event.respondWith(String.format("%s (%s)", info.getTitle(), info.getDescription()));
+                //event.respondWith(String.format("/notice %s %s", ((MessageEvent) event).getChannel().getName(), String.format("%s (%s)", info.getTitle(), info.getDescription())));
+                event.getBot().sendIRC().notice(((MessageEvent) event).getChannel().getName(), String.format("%s (%s)", info.getTitle(), info.getDescription()));
             }
         }
 
@@ -84,18 +86,21 @@ public class UrlRetrieverListener extends ListenerAdapter {
             ex.printStackTrace();
             info.setError(true);
             info.setDescription("ERROR retrieving url: "+url);
+            return info;
         }
         try {
             Element title = doc.head().select("title").first();
             info.setTitle(title.text());
         } catch (Exception ex) {
             ex.printStackTrace();
-            info.setError(true);
+            //info.setError(false);
             info.setDescription("ERROR retrieving title: "+url);
         }
         try {
             Element descr = doc.head().select("meta[name=\"description\"]").first();
-            info.setDescription(descr.attr("content").trim());
+            if (descr != null && descr.attr("content") != null) {
+                info.setDescription(descr.attr("content").trim());
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

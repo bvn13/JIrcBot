@@ -84,7 +84,22 @@ public class JircBotConfiguration {
         config.setEnabled((Boolean)data.get("enabled"));
         config.setServer((String)data.get("server"));
         config.setPort(Integer.parseInt(data.get("port").toString()));
-        config.setChannelName((String)data.get("channelName"));
+
+        List<String> channelsNames = new ArrayList<>();
+
+        JSONArray channels = (JSONArray) data.get("channelsNames");
+
+        if (channels != null && channels.size() > 0) {
+            for (int i=0; i < channels.size(); i++) {
+                String name = (String) channels.get(i);
+                channelsNames.add(name);
+            }
+        }
+
+        //channelsNames.add(name);
+        config.setChannelsNames(channelsNames);
+
+        //config.setChannelName((String);
         config.setBotName((String)data.get("botName"));
         return config;
     }

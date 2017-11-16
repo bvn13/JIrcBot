@@ -3,6 +3,8 @@ package ru.bvn13.jircbot.model;
 import com.sun.istack.internal.NotNull;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class Config {
 
@@ -18,6 +20,6 @@ public class Config {
     @NotNull
     private String botName;
 
-    private String channelName;
+    private List<String> channelsNames;
 
 }

@@ -50,18 +50,19 @@ public class JircBot extends ListenerAdapter {
             List<Configuration.ServerEntry> servers = new ArrayList<>();
             servers.add(new Configuration.ServerEntry(c.getServer(), c.getPort()));
             this.bots.put(
-                    String.format("%s/%s", c.getServer(), c.getChannelName()),
+                    String.format("%s/%s", c.getServer(), "1"), //c.getChannelName()),
                     new PircBotX(templateConfig
                             .setName(c.getBotName())
                             .addListener(new PingPongListener())
                             .addListener(new CalculatorListener()) //This class is a listener, so add it to the bots known listeners
                             .addListener(new GoogleDoodleListener(this.config))
-                            .addListener(new GoogleSearchListener(this.config))
+                            //.addListener(new GoogleSearchListener(this.config))
                             .addListener(new UrlRetrieverListener())
                             .addListener(new RegexCheckerListener())
                             .setServers(servers)
                             .setAutoReconnect(true)
-                            .addAutoJoinChannel(c.getChannelName()) //Join the official #pircbotx channel
+                            //.addAutoJoinChannel(c.getChannelName()) //Join the official #pircbotx channel
+                            .addAutoJoinChannels(c.getChannelsNames())
                             .buildForServer(c.getServer())
                     )
             );
