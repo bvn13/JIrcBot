@@ -9,8 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import ru.bvn13.jircbot.listeners.GoogleDoodleListener;
-import ru.bvn13.jircbot.listeners.YandexSearchListener;
 import ru.bvn13.jircbot.model.*;
 
 import javax.annotation.PostConstruct;
@@ -62,7 +60,7 @@ public class JircBotConfiguration {
             }
 
             JSONObject lstnrSettings = (JSONObject) jsonObject.get("settings");
-            this.listenersSettings.put(KEY_GOOGLE_DOODLE, this.readGoogleDoodleSettins(lstnrSettings));
+            this.listenersSettings.put(KEY_GOOGLE_DOODLE, this.readGoogleDoodleSettings(lstnrSettings));
             this.listenersSettings.put(KEY_GOOGLE_SEARCH, this.readGoogleSearchSettings(lstnrSettings));
             this.listenersSettings.put(KEY_YANDEX_SEARCH, this.readYandexSearchSettings(lstnrSettings));
 
@@ -104,7 +102,7 @@ public class JircBotConfiguration {
         return config;
     }
 
-    private ListenerSettings readGoogleDoodleSettins(JSONObject data) {
+    private ListenerSettings readGoogleDoodleSettings(JSONObject data) {
         GoogleDoodleSettings sets = new GoogleDoodleSettings();
         JSONObject googleSets = (JSONObject) data.get("doodle");
         sets.setMainUrl((String) googleSets.get("mainUrl"));

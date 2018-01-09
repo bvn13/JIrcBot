@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.Services.YandexSearchService;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
 import ru.bvn13.jircbot.listeners.*;
+import ru.bvn13.jircbot.listeners.calculator.CalculatorListener;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -64,9 +65,9 @@ public class JircBot extends ListenerAdapter {
                             .addListener(new CalculatorListener()) //This class is a listener, so add it to the bots known listeners
                             .addListener(new GoogleDoodleListener(this.config))
                             //.addListener(new GoogleSearchListener(this.config))
-                            .addListener(new UrlRetrieverListener())
+                            //.addListener(new UrlRetrieverListener())
                             .addListener(new RegexCheckerListener())
-                            .addListener(new YandexSearchListener(this.config, this.yandexSearchService))
+                            //.addListener(new YandexSearchListener(this.config, this.yandexSearchService))
                             .setServers(servers)
                             .setAutoReconnect(true)
                             //.addAutoJoinChannel(c.getChannelName()) //Join the official #pircbotx channel
