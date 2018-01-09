@@ -53,8 +53,16 @@ public class CalculatorDialog extends FSM {
                 dialog.exp = null;
                 dialog.expression = dialog.command;
                 dialog.expressionBuilder = new ExpressionBuilder(dialog.expression);
-                dialog.event.respond("inited, expression: "+dialog.expression);
-                dialog.event.respond("next: 'vars' for setting vars, 'done' for calculating, 'help' for help");
+                if (dialog.checkCalculating()) {
+                    try {
+                        dialog.next();
+                    } catch (FSMException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    dialog.event.respond("inited, expression: " + dialog.expression);
+                    dialog.event.respond("next: 'vars' for setting vars, 'done' for calculating, 'help' for help");
+                }
             }
         });
 
@@ -68,7 +76,7 @@ public class CalculatorDialog extends FSM {
             @Override
             public boolean check() {
                 CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                return dialog.commands[0].equalsIgnoreCase("done");
+                return dialog.checkCalculating() || dialog.commands[0].equalsIgnoreCase("done");
             }
         });
 
@@ -82,7 +90,7 @@ public class CalculatorDialog extends FSM {
             @Override
             public boolean check() {
                 CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                return dialog.commands[0].equalsIgnoreCase("vars");
+                return !dialog.checkCalculating() && dialog.commands[0].equalsIgnoreCase("vars");
             }
         });
 
@@ -101,7 +109,8 @@ public class CalculatorDialog extends FSM {
             @Override
             public boolean check() {
                 CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                return !dialog.commands[0].equalsIgnoreCase("done")
+                return !dialog.checkCalculating()
+                        && !dialog.commands[0].equalsIgnoreCase("done")
                         && !dialog.commands[0].equalsIgnoreCase("vars");
             }
         });
@@ -214,6 +223,19 @@ public class CalculatorDialog extends FSM {
                 }
             }
         }
+    }
+
+    private boolean checkCalculating() {
+        if (exp == null) {
+            try {
+                expressionBuilder.build();
+            } catch (Exception e) {
+                //event.respond("ERROR: "+e.getMessage());
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public void setEvent(GenericMessageEvent event) {
