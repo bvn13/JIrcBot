@@ -12,6 +12,22 @@ import ru.bvn13.fsm.State;
 
 /**
  * Created by bvn13 on 03.01.2018.
+ *
+ * scheme:
+ *
+ * init
+ * init -> entering-vars | == vars
+ * init -> calculating | == done
+ * init -> helping-init | != vars && !=done
+ * helping-init -> init
+ *
+ * entering-vars -> settings-vars | == set
+ * entering-vars -> helping-entering-vars | != vars
+ * helping-entering-vars -> PREV
+ *
+ * settings-vars -> settings-vars | != done
+ * settings-vars -> calculating | == done
+ *
  */
 @Data
 public class CalculatorDialog extends FSM {
@@ -34,53 +50,15 @@ public class CalculatorDialog extends FSM {
             @Override
             public void process() {
                 CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
+                dialog.exp = null;
                 dialog.expression = dialog.command;
                 dialog.expressionBuilder = new ExpressionBuilder(dialog.expression);
                 dialog.event.respond("inited, expression: "+dialog.expression);
+                dialog.event.respond("next: 'vars' for setting vars, 'done' for calculating, 'help' for help");
             }
         });
 
-        dialog.addTransition("init", new State("entering-vars") {
-            @Override
-            public void beforeEvent() {
-                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                dialog.event.respond("please enter variables (comma separated)");
-            }
-            @Override
-            public void process() {
-                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                dialog.enteringVars();
-            }
-        });
-
-        dialog.addTransition("entering-vars", new State("settings-vars") {
-            @Override
-            public void beforeEvent() {
-                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                dialog.event.respond("please set variable");
-            }
-            @Override
-            public void process() {
-                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                dialog.settingVars();
-            }
-        }, new Condition() {
-            @Override
-            public boolean check() {
-                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                return dialog.commands[0].equalsIgnoreCase("vars");
-            }
-        });
-
-        dialog.addTransition("settings-vars", "settings-vars", new Condition() {
-            @Override
-            public boolean check() {
-                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                return !dialog.commands[0].equalsIgnoreCase("done");
-            }
-        });
-
-        dialog.addTransition("settings-vars", new State("calculating", true) {
+        dialog.addTransition("init", new State("calculating", true) {
             @Override
             public void process() {
                 CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
@@ -94,22 +72,27 @@ public class CalculatorDialog extends FSM {
             }
         });
 
-        dialog.addTransition("entering-vars", "calculating", new Condition() {
-            @Override
-            public boolean check() {
-                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                return dialog.commands[0].equalsIgnoreCase("done");
-            }
-        });
-
-        dialog.addTransition("entering-vars", new State("helping-entering-vars") {
+        dialog.addTransition("init", new State("entering-vars") {
             @Override
             public void process() {
                 CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
-                dialog.event.respond(dialog.helpMessage());
-                //dialog.event.respond("Please set vars");
+                dialog.enteringVars();
+            }
+        }, new Condition() {
+            @Override
+            public boolean check() {
+                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
+                return dialog.commands[0].equalsIgnoreCase("vars");
+            }
+        });
+
+        dialog.addTransition("init", new State("helping-init") {
+            @Override
+            public void process() {
+                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
+                dialog.event.respond("next: 'vars' for declaring variables, 'done' for calculating");
                 try {
-                    dialog.next();
+                    dialog.prev();
                 } catch (FSMException e) {
                     e.printStackTrace();
                 }
@@ -123,15 +106,72 @@ public class CalculatorDialog extends FSM {
             }
         });
 
-        dialog.addTransition("helping-entering-vars", "entering-vars");
+        dialog.addTransition("entering-vars", new State("settings-vars") {
+            @Override
+            public void process() {
+                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
+                dialog.settingVars();
+            }
+        }, new Condition() {
+            @Override
+            public boolean check() {
+                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
+                return dialog.commands[0].equalsIgnoreCase("set");
+            }
+        });
+
+
+        dialog.addTransition("entering-vars", new State("helping-entering-vars") {
+            @Override
+            public void process() {
+                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
+                dialog.event.respond("Right syntax is: set x=1");
+                try {
+                    dialog.prev();
+                } catch (FSMException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Condition() {
+            @Override
+            public boolean check() {
+                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
+                return !dialog.commands[0].equalsIgnoreCase("set");
+            }
+        });
+
+
+        dialog.addTransition("settings-vars", "settings-vars", new Condition() {
+            @Override
+            public boolean check() {
+                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
+                return !dialog.commands[0].equalsIgnoreCase("done");
+            }
+        });
+
+        dialog.addTransition("settings-vars", "calculating", new Condition() {
+            @Override
+            public boolean check() {
+                CalculatorDialog dialog = ((CalculatorDialog)this.getFSM());
+                return dialog.commands[0].equalsIgnoreCase("done");
+            }
+        });
+
+
+
 
         return dialog;
 
     }
 
     private void enteringVars() {
-        exp = expressionBuilder.variables(commands[1].trim()).build();
-        event.respond("VARIABLES: "+commands[1].trim());
+        String[] vars = command.trim().split(" ", 2);
+        if (vars.length != 2 || vars[1].trim().isEmpty()) {
+            event.respond("Please set variables");
+            throw new IllegalArgumentException("Variables are not set");
+        }
+        exp = expressionBuilder.variables(vars[1].trim()).build();
+        event.respond("VARIABLES: "+vars[1].trim());
     }
 
     private void settingVars() {
@@ -152,13 +192,28 @@ public class CalculatorDialog extends FSM {
 
     private void calculating() {
         if (exp == null) {
-            exp = expressionBuilder.build();
+            try {
+                exp = expressionBuilder.build();
+            } catch (Exception e) {
+                event.respond("ERROR: "+e.getMessage());
+                return;
+            }
         }
-        Double result = exp.evaluate();
-        event.respond(String.format("%s = %f", expression, result));
-        expressionBuilder = null;
-        exp = null;
-        return;
+        try {
+            Double result = exp.evaluate();
+            event.respond(String.format("%s = %f", expression, result));
+            expressionBuilder = null;
+            exp = null;
+        } catch (Exception e) {
+            event.respond("ERROR: "+e.getMessage());
+            if (!this.getPreviousState().getName().equalsIgnoreCase("init")) {
+                try {
+                    this.prev();
+                } catch (FSMException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
     }
 
     public void setEvent(GenericMessageEvent event) {
@@ -174,18 +229,18 @@ public class CalculatorDialog extends FSM {
 
         if (this.getCurrentState()==null || this.getCurrentState().isFinish()) {
             try {
+                this.expression = "";
                 this.init();
             } catch (NotInitedException e) {
                 e.printStackTrace();
             }
+        } else {
+            try {
+                this.next();
+            } catch (FSMException e) {
+                e.printStackTrace();
+            }
         }
-
-        try {
-            this.next();
-        } catch (FSMException e) {
-            e.printStackTrace();
-        }
-
     }
 
 
@@ -199,11 +254,17 @@ public class CalculatorDialog extends FSM {
             return true;
         }
 
-        if (this.checkComand(commands[0].trim())) {
-            return false;
+        if (commands.length == 0 || commands[0].isEmpty() || commands[0].trim().equalsIgnoreCase("status")) {
+            event.respond("STATE: "+this.getCurrentState().getName()+" EXPRESSION: "+this.expression);
+            return true;
         }
 
         this.command = message;
+
+        if (this.checkCommand(commands[0].trim())) {
+            return false;
+        }
+
         return false;
     }
 
@@ -215,10 +276,11 @@ public class CalculatorDialog extends FSM {
                 "done - evaluate expression";
     }
 
-    private Boolean checkComand(String command) {
-        return command.equalsIgnoreCase("vars")
+    private Boolean checkCommand(String command) {
+        return /*command.equalsIgnoreCase("vars")
                 || command.equalsIgnoreCase("set")
-                || command.equalsIgnoreCase("done");
+                || */
+                command.equalsIgnoreCase("done");
     }
 
 }

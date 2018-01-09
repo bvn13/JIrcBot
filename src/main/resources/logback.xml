@@ -16,6 +16,7 @@
     <logger name="ru.bvn13.jircbot" level="ALL"/>
     <logger name="ru.bvn13.jircbot.listeners" level="ALL"/>
     <logger name="ru.bvn13.jircbot.listeners.calculator" level="ALL"/>
+    <logger name="org.pircbotx" level="ERROR"/>
 
     <logger name="org.hibernate.SQL" level="WARN"/>
     <!--<logger name="org.hibernate.type" level="TRACE">-->
