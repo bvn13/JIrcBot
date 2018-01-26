@@ -14,6 +14,7 @@ import ru.bvn13.jircbot.Services.YandexSearchService;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
 import ru.bvn13.jircbot.listeners.*;
 import ru.bvn13.jircbot.listeners.calculator.CalculatorListener;
+import ru.bvn13.jircbot.listeners.quiz.QuizListener;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -71,6 +72,7 @@ public class JircBot extends ListenerAdapter {
                             .addListener(new AdviceListener())
                             .addListener(new LinkPreviewListener())
                             .addListener(new HelloOnJoinListener())
+                            .addListener(new QuizListener())
                             .setServers(servers)
                             .setAutoReconnect(true)
                             //.addAutoJoinChannel(c.getChannelName()) //Join the official #pircbotx channel

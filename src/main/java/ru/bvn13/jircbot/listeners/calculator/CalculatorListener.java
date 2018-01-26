@@ -14,8 +14,6 @@ import java.util.UUID;
 
 public class CalculatorListener extends ListenerAdapter {
 
-
-
     private Map<UUID, CalculatorDialog> dialogs = new HashMap<>();
 
 

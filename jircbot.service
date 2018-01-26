@@ -1,0 +1,12 @@
+[Unit]
+Description=JIrcBot
+After=network.target
+
+[Service]
+User=bvn13
+WorkingDirectory=/srv/jircbot
+ExecStart=/usr/bin/java -jar /srv/jircbot/jircbot-1.0.3.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
