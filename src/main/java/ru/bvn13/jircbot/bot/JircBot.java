@@ -70,6 +70,7 @@ public class JircBot extends ListenerAdapter {
                             //.addListener(new YandexSearchListener(this.config, this.yandexSearchService))
                             .addListener(new AdviceListener())
                             .addListener(new LinkPreviewListener())
+                            .addListener(new HelloOnJoinListener())
                             .setServers(servers)
                             .setAutoReconnect(true)
                             //.addAutoJoinChannel(c.getChannelName()) //Join the official #pircbotx channel
