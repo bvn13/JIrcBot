@@ -93,7 +93,7 @@ public class QuizDialog extends FSM {
             public void process() {
                 QuizDialog dialog = (QuizDialog) this.getFSM();
                 try {
-                    dialog.event.respond(dialog.helpMessage());
+                    dialog.sendNotice(dialog.helpMessage());
                     dialog.next();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -161,6 +161,7 @@ public class QuizDialog extends FSM {
             public void process() {
                 QuizDialog dialog = (QuizDialog) this.getFSM();
                 dialog.sendNotice("Ошибка: "+dialog.error);
+                dialog.timerTicker.cancel();
             }
         }, new Condition() {
             @Override
@@ -185,6 +186,7 @@ public class QuizDialog extends FSM {
             public void process() {
                 QuizDialog dialog = (QuizDialog) this.getFSM();
                 dialog.sendNotice("ВРЕМЯ ВЫШЛО! Правильный ответ: "+dialog.question.getCorrectAnswer());
+                dialog.timerTicker.cancel();
             }
         }, new Condition() {
             @Override
@@ -323,14 +325,14 @@ public class QuizDialog extends FSM {
         }
 
         if (commands.length == 0 || commands[0].isEmpty() || commands[0].trim().equalsIgnoreCase("help")) {
-            event.respond(this.helpMessage());
+            this.sendNotice(this.helpMessage());
             return true;
         }
 
-        if (commands.length == 0 || commands[0].isEmpty() || commands[0].trim().equalsIgnoreCase("status")) {
-            event.respond("STATE: "+this.getCurrentState().getName());
-            return true;
-        }
+//        if (commands.length == 0 || commands[0].isEmpty() || commands[0].trim().equalsIgnoreCase("status")) {
+//            event.respond("STATE: "+this.getCurrentState().getName());
+//            return true;
+//        }
 
         this.command = message;
 
