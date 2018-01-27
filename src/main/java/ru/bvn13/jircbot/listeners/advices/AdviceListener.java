@@ -1,4 +1,4 @@
-package ru.bvn13.jircbot.listeners;
+package ru.bvn13.jircbot.listeners.advices;
 
 import com.google.common.collect.ImmutableSortedSet;
 import org.json.simple.JSONObject;
@@ -22,7 +22,6 @@ public class AdviceListener extends ListenerAdapter {
 
     private static final String COMMAND = "?advice";
 
-    private static final String urlAdvice = "http://fucking-great-advice.ru/api/random";
 
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
@@ -37,7 +36,7 @@ public class AdviceListener extends ListenerAdapter {
 
         if (event.getMessage().equalsIgnoreCase(COMMAND)) {
             try {
-                String advice = this.getAdvice();
+                String advice = AdviceEngine.getAdvice();
                 event.respond(advice);
             } catch (Exception e) {
                 event.respond(e.getMessage());
@@ -57,7 +56,7 @@ public class AdviceListener extends ListenerAdapter {
                 }
                 if (this.userIsInList(users, userName)) {
                     try {
-                        String advice = this.getAdvice();
+                        String advice = AdviceEngine.getAdvice();
                         String response = "" + userName + ", " + advice;
                         if (event instanceof MessageEvent) {
                             ((MessageEvent) event).respondChannel(response);
@@ -86,37 +85,6 @@ public class AdviceListener extends ListenerAdapter {
         return isOnline.get();
     }
 
-    private String getAdvice() throws Exception {
-        StringBuffer content = new StringBuffer();
-        try {
-            URL url = new URL(urlAdvice);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
 
-            int status = con.getResponseCode();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            in.close();
-
-            con.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("не могу получить совет для тебя");
-        }
-        try {
-            JSONParser jsonParser = new JSONParser();
-            JSONObject json = (JSONObject) jsonParser.parse(content.toString());
-
-            return (String) json.get("text");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("почини бота, блеать!");
-        }
-
-    }
 
 }

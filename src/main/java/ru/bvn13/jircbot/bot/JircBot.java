@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.Services.YandexSearchService;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
 import ru.bvn13.jircbot.listeners.*;
+import ru.bvn13.jircbot.listeners.advices.AdviceListener;
 import ru.bvn13.jircbot.listeners.calculator.CalculatorListener;
 import ru.bvn13.jircbot.listeners.quiz.QuizListener;
 
@@ -72,8 +73,9 @@ public class JircBot extends ListenerAdapter {
                             .addListener(new AdviceListener())
                             //.addListener(new LinkPreviewListener())
                             //.addListener(new HelloOnJoinListener())
-                            .addListener(new BashOrgListener())
                             .addListener(new QuizListener())
+                            .addListener(new BashOrgListener())
+                            .addListener(new AutoRejoinListener())
                             .setServers(servers)
                             .setAutoReconnect(true)
                             //.addAutoJoinChannel(c.getChannelName()) //Join the official #pircbotx channel

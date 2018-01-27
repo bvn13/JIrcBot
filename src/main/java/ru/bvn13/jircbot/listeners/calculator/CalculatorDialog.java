@@ -3,6 +3,7 @@ package ru.bvn13.jircbot.listeners.calculator;
 import lombok.Data;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
+import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import ru.bvn13.fsm.Condition;
 import ru.bvn13.fsm.Exceptions.FSMException;
@@ -204,7 +205,7 @@ public class CalculatorDialog extends FSM {
             try {
                 exp = expressionBuilder.build();
             } catch (Exception e) {
-                event.respond("ERROR: "+e.getMessage());
+                this.sendNotice("ERROR: "+e.getMessage());
                 return;
             }
         }
@@ -214,7 +215,7 @@ public class CalculatorDialog extends FSM {
             expressionBuilder = null;
             exp = null;
         } catch (Exception e) {
-            event.respond("ERROR: "+e.getMessage());
+            this.sendNotice("ERROR: "+e.getMessage());
             if (!this.getPreviousState().getName().equalsIgnoreCase("init")) {
                 try {
                     this.prev();
@@ -254,6 +255,7 @@ public class CalculatorDialog extends FSM {
                 this.expression = "";
                 this.init();
             } catch (NotInitedException e) {
+                this.sendNotice("ERROR: "+e.getMessage());
                 e.printStackTrace();
             }
         } else {
@@ -305,4 +307,7 @@ public class CalculatorDialog extends FSM {
                 command.equalsIgnoreCase("done");
     }
 
+    private void sendNotice(String str) {
+        event.getBot().sendIRC().notice(((MessageEvent) event).getChannel().getName(), str);
+    }
 }
