@@ -1,4 +1,4 @@
-package ru.bvn13.jircbot.Services;
+package ru.bvn13.jircbot.services;
 
 import lombok.Getter;
 import lombok.Setter;

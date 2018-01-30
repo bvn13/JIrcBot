@@ -2,7 +2,7 @@ package ru.bvn13.jircbot.listeners;
 
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
-import ru.bvn13.jircbot.Services.YandexSearchService;
+import ru.bvn13.jircbot.services.YandexSearchService;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
 import ru.bvn13.jircbot.model.YandexSearchSettings;
 
