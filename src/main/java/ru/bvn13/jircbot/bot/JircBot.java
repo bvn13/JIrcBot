@@ -42,8 +42,28 @@ public class JircBot extends ListenerAdapter {
     @Autowired
     public JircBot(JircBotConfiguration config) {
         this.config = config;
-        //this.start();
     }
+
+
+    @Autowired
+    private PingPongListener pingPongListener;
+    @Autowired
+    private CalculatorListener calculatorListener;
+    @Autowired
+    private RegexCheckerListener regexCheckerListener;
+    @Autowired
+    private AdviceListener adviceListener;
+    @Autowired
+    private QuizListener quizListener;
+    @Autowired
+    private BashOrgListener bashOrgListener;
+    @Autowired
+    private AutoRejoinListener autoRejoinListener;
+
+    @Autowired
+    private LinkPreviewListener linkPreviewListener;
+    @Autowired
+    private HelloOnJoinListener helloOnJoinListener;
 
 
     @PostConstruct
@@ -63,22 +83,25 @@ public class JircBot extends ListenerAdapter {
                     String.format("%s/%s", c.getServer(), "1"), //c.getChannelName()),
                     new PircBotX(templateConfig
                             .setName(c.getBotName())
-                            .addListener(new PingPongListener())
-                            .addListener(new CalculatorListener()) //This class is a listener, so add it to the bots known listeners
-                            .addListener(new GoogleDoodleListener(this.config))
+                            .addListener(pingPongListener)
+                            .addListener(calculatorListener)
+                            .addListener(regexCheckerListener)
+                            .addListener(adviceListener)
+                            .addListener(quizListener)
+                            .addListener(bashOrgListener)
+                            .addListener(autoRejoinListener)
+
+                            // disabled yet
+                            //.addListener(linkPreviewListener)
+                            //.addListener(helloOnJoinListener)
+
+                            // not tested
+                            //.addListener(new GoogleDoodleListener(this.config))
                             //.addListener(new GoogleSearchListener(this.config))
-                            //.addListener(new UrlRetrieverListener())
-                            .addListener(new RegexCheckerListener())
                             //.addListener(new YandexSearchListener(this.config, this.yandexSearchService))
-                            .addListener(new AdviceListener())
-                            //.addListener(new LinkPreviewListener())
-                            //.addListener(new HelloOnJoinListener())
-                            .addListener(new QuizListener())
-                            .addListener(new BashOrgListener())
-                            .addListener(new AutoRejoinListener())
+
                             .setServers(servers)
                             .setAutoReconnect(true)
-                            //.addAutoJoinChannel(c.getChannelName()) //Join the official #pircbotx channel
                             .addAutoJoinChannels(c.getChannelsNames())
                             .buildForServer(c.getServer())
                     )

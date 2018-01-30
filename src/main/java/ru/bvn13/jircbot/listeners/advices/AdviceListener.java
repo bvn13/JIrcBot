@@ -8,6 +8,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.NoticeEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Created by bvn13 on 23.01.2018.
  */
+@Component
 public class AdviceListener extends ListenerAdapter {
 
     private static final String COMMAND = "?advice";

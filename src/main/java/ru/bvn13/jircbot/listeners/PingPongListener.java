@@ -2,7 +2,9 @@ package ru.bvn13.jircbot.listeners;
 
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PingPongListener extends ListenerAdapter {
 
     private static final String COMMAND = "?ping";

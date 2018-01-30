@@ -5,11 +5,13 @@ import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.KickEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.listeners.advices.AdviceEngine;
 
 /**
  * Created by bvn13 on 27.01.2018.
  */
+@Component
 public class AutoRejoinListener extends ListenerAdapter {
 
     private Boolean wasKicked = false;

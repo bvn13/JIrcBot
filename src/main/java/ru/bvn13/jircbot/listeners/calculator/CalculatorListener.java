@@ -1,17 +1,14 @@
 package ru.bvn13.jircbot.listeners.calculator;
 
-import net.objecthunter.exp4j.Expression;
-import net.objecthunter.exp4j.ExpressionBuilder;
 import org.pircbotx.hooks.ListenerAdapter;
-import org.pircbotx.hooks.WaitForQueue;
-import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-
+@Component
 public class CalculatorListener extends ListenerAdapter {
 
     private Map<UUID, CalculatorDialog> dialogs = new HashMap<>();

@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,6 +17,7 @@ import java.net.URL;
 /**
  * Created by bvn13 on 26.01.2018.
  */
+@Component
 public class BashOrgListener extends ListenerAdapter {
 
     private static final String COMMAND = "?bash";

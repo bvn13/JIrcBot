@@ -3,6 +3,7 @@ package ru.bvn13.jircbot.listeners.quiz;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.springframework.stereotype.Component;
 import ru.bvn13.fsm.Exceptions.FSMException;
 
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import java.util.Map;
 /**
  * Created by bvn13 on 26.01.2018.
  */
+@Component
 public class QuizListener extends ListenerAdapter {
 
     private Map<String, QuizDialog> dialogs = new HashMap<>();
