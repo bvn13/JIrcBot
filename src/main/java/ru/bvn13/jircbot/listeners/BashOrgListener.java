@@ -8,6 +8,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.stereotype.Component;
+import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,7 +19,7 @@ import java.net.URL;
  * Created by bvn13 on 26.01.2018.
  */
 @Component
-public class BashOrgListener extends ListenerAdapter {
+public class BashOrgListener extends ImprovedListenerAdapter {
 
     private static final String COMMAND = "?bash";
     private static final String USER_AGENT = "Mozilla/5.0";
@@ -35,16 +36,12 @@ public class BashOrgListener extends ListenerAdapter {
         }
 
         try {
-            sendNotice(event, getRandomBashQuote());
+            this.sendNotice(event, getRandomBashQuote());
         } catch (Exception e) {
             event.respond("ОШИБКА: "+e.getMessage());
             e.printStackTrace();
         }
 
-    }
-
-    private void sendNotice(GenericMessageEvent event, String str) {
-        event.getBot().sendIRC().notice(((MessageEvent) event).getChannel().getName(), str);
     }
 
     private String getDataFromConnection(HttpURLConnection con) throws Exception {

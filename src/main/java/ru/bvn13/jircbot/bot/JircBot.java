@@ -59,12 +59,13 @@ public class JircBot extends ListenerAdapter {
     private BashOrgListener bashOrgListener;
     @Autowired
     private AutoRejoinListener autoRejoinListener;
+    @Autowired
+    private DeferredMessagesListener deferredMessagesListener;
 
     @Autowired
     private LinkPreviewListener linkPreviewListener;
     @Autowired
     private HelloOnJoinListener helloOnJoinListener;
-
 
     @PostConstruct
     public void start() {
@@ -80,7 +81,7 @@ public class JircBot extends ListenerAdapter {
             List<Configuration.ServerEntry> servers = new ArrayList<>();
             servers.add(new Configuration.ServerEntry(c.getServer(), c.getPort()));
             this.bots.put(
-                    String.format("%s/%s", c.getServer(), "1"), //c.getChannelName()),
+                    String.format("%s/%s", c.getServer(), "1"),
                     new PircBotX(templateConfig
                             .setName(c.getBotName())
                             .addListener(pingPongListener)
@@ -90,6 +91,7 @@ public class JircBot extends ListenerAdapter {
                             .addListener(quizListener)
                             .addListener(bashOrgListener)
                             .addListener(autoRejoinListener)
+                            .addListener(deferredMessagesListener)
 
                             // disabled yet
                             //.addListener(linkPreviewListener)

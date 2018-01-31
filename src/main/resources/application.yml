@@ -1,4 +1,24 @@
 
+server:
+  port: 8080
+  address: localhost
+
 name: jircbot
 
 config: config.json
+
+spring:
+  dataSource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/jircbot
+    username: jircbot
+    password: jircbotpass
+
+  hibernate:
+    dialect: org.hibernate.dialect.PostgreSQLDialect
+    hbm2ddl.auto: update
+    show_sql: true
+    use_sql_comments: true
+    format_sql: true
+
+

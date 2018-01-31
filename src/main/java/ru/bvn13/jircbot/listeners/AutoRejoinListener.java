@@ -6,13 +6,14 @@ import org.pircbotx.hooks.events.KickEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.stereotype.Component;
+import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
 import ru.bvn13.jircbot.listeners.advices.AdviceEngine;
 
 /**
  * Created by bvn13 on 27.01.2018.
  */
 @Component
-public class AutoRejoinListener extends ListenerAdapter {
+public class AutoRejoinListener extends ImprovedListenerAdapter {
 
     private Boolean wasKicked = false;
     private String offender = "";
@@ -33,7 +34,7 @@ public class AutoRejoinListener extends ListenerAdapter {
 
         if (wasKicked) {
             wasKicked = false;
-            event.getBot().sendIRC().notice(event.getChannel().getName(), ""+offender+", "+ AdviceEngine.getAdvice());
+            this.sendNotice(event, ""+offender+", "+ AdviceEngine.getAdvice());
         }
 
     }

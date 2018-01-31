@@ -4,6 +4,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.stereotype.Component;
+import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -23,7 +24,7 @@ import static java.lang.System.out;
  * Created by bvn13 on 23.01.2018.
  */
 @Component
-public class LinkPreviewListener extends ListenerAdapter {
+public class LinkPreviewListener extends ImprovedListenerAdapter {
 
     private static final Pattern REGEX = Pattern.compile("(?i)(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))\\.?)(?::\\d{2,5})?(?:[/?#]\\S*)?");
 
@@ -39,7 +40,7 @@ public class LinkPreviewListener extends ListenerAdapter {
         for (String link : links) {
             String info = parseLink(link);
             if (info != null && !info.isEmpty()) {
-                event.getBot().sendIRC().notice(((MessageEvent) event).getChannel().getName(), info);
+                this.sendNotice(event, info);
             }
         };
 
