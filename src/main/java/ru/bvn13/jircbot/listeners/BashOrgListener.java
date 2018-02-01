@@ -7,8 +7,10 @@ import org.jsoup.select.Elements;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
+import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,8 +26,15 @@ public class BashOrgListener extends ImprovedListenerAdapter {
     private static final String COMMAND = "?bash";
     private static final String USER_AGENT = "Mozilla/5.0";
 
+    @Autowired
+    private ChannelSettingsService channelSettingsService;
+
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
+
+        if (!channelSettingsService.getChannelSettings(getChannelName(event)).getBashOrgEnabled()) {
+            return;
+        }
 
         if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
             return;

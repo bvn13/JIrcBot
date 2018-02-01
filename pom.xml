@@ -12,6 +12,15 @@
 
     <properties>
         <java.version>1.8</java.version>
+
+        <pircbotx.version>2.1</pircbotx.version>
+
+        <spring.framework.version>1.5.9.RELEASE</spring.framework.version>
+        <spring.orm.version>4.3.13.RELEASE</spring.orm.version>
+        <h2.version>1.4.196</h2.version>
+        <hibernate.version>5.0.12.Final</hibernate.version>
+        <sqlite.jdbc.version>3.21.0.1</sqlite.jdbc.version>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -36,7 +45,7 @@
         <dependency>
             <groupId>org.pircbotx</groupId>
             <artifactId>pircbotx</artifactId>
-            <version>2.1</version>
+            <version>${pircbotx.version}</version>
         </dependency>
 
 
@@ -44,7 +53,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>1.5.9.RELEASE</version>
+            <version>${spring.framework.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>org.springframework.boot</artifactId>
@@ -52,11 +61,37 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--<dependency>
+
+
+
+        <!-- Dependencies for Hibernate and ORM  -->
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-            <version>1.5.9.RELEASE</version>
-        </dependency>-->
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${spring.framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>2.7.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.orm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.1.1</version>
+        </dependency>
+        <!--org.postgresql:postgresql:42.1.1-->
+
 
 
         <!--json-->
@@ -122,7 +157,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.16</version>
+            <version>1.16.20</version>
         </dependency>
 
 

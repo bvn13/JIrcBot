@@ -13,4 +13,8 @@ public class ImprovedListenerAdapter extends ListenerAdapter {
         event.getBot().sendIRC().notice(((MessageEvent) event).getChannel().getName(), str);
     }
 
+    protected String getChannelName(GenericEvent event) {
+        return ((MessageEvent) event).getChannel().getName();
+    }
+
 }

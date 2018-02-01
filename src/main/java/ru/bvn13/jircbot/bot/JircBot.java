@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 @Component
@@ -43,6 +47,9 @@ public class JircBot extends ListenerAdapter {
     public JircBot(JircBotConfiguration config) {
         this.config = config;
     }
+
+
+    private ScheduledExecutorService executorService;
 
 
     @Autowired
@@ -68,7 +75,20 @@ public class JircBot extends ListenerAdapter {
     private HelloOnJoinListener helloOnJoinListener;
 
     @PostConstruct
+    public void postConstruct() {
+        this.executorService = Executors.newSingleThreadScheduledExecutor();
+        this.executorService.schedule(new Runnable() {
+            @Override
+            public void run() {
+                start();
+            }
+        }, 5, TimeUnit.SECONDS);
+    }
+
+
     public void start() {
+
+        logger.info(">>>>>>>>>>>>>>>>>>>> BOT STARTING <<<<<<<<<<<<<<<<<<<<");
 
         //Setup this bot
         Configuration.Builder templateConfig = new Configuration.Builder()
@@ -94,8 +114,8 @@ public class JircBot extends ListenerAdapter {
                             .addListener(deferredMessagesListener)
 
                             // disabled yet
-                            //.addListener(linkPreviewListener)
-                            //.addListener(helloOnJoinListener)
+                            .addListener(linkPreviewListener)
+                            .addListener(helloOnJoinListener)
 
                             // not tested
                             //.addListener(new GoogleDoodleListener(this.config))

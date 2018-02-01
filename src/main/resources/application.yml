@@ -1,8 +1,4 @@
 
-server:
-  port: 8080
-  address: localhost
-
 name: jircbot
 
 config: config.json
@@ -17,7 +13,7 @@ spring:
   hibernate:
     dialect: org.hibernate.dialect.PostgreSQLDialect
     hbm2ddl.auto: update
-    show_sql: true
+    show_sql: false
     use_sql_comments: true
     format_sql: true
 

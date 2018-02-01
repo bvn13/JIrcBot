@@ -25,6 +25,8 @@
     <logger name="org.springframework" level="DEBUG"/>
     <logger name="org.pircbotx.PircBotX" level="DEBUG"/>
 
+    <logger name="org.springframework.core.env.PropertySourcesPropertyResolver" level="WARN"/>
+
     <root level="WARN">
         <appender-ref ref="STDOUT" />
     </root>

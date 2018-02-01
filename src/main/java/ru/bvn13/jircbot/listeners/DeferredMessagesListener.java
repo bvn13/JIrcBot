@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
 import ru.bvn13.jircbot.database.entities.DeferredMessage;
+import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 import ru.bvn13.jircbot.database.services.DeferredMessageService;
 
 import java.text.SimpleDateFormat;
@@ -22,17 +23,24 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
     private static SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
+    private ChannelSettingsService channelSettingsService;
+
+    @Autowired
     private DeferredMessageService deferredMessageService;
 
 
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
+        if (!channelSettingsService.getChannelSettings(getChannelName(event)).getDeferredMessagesEnabled()) {
+            return;
+        }
+
         if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
             return;
         }
 
-        //this.sendDeferredMessage(event);
+        this.sendDeferredMessage(event);
 
         if (!event.getMessage().startsWith(COMMAND)) {
             return;

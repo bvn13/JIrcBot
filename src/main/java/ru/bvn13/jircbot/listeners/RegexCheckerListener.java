@@ -4,7 +4,10 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.WaitForQueue;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
+import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,14 +15,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class RegexCheckerListener extends ListenerAdapter {
+public class RegexCheckerListener extends ImprovedListenerAdapter {
 
     private static final String COMMAND = "?regex ";
 
     private static final Map<String, Boolean> usersState = new HashMap<>();
 
+    @Autowired
+    private ChannelSettingsService channelSettingsService;
+
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
+
+        if (!channelSettingsService.getChannelSettings(getChannelName(event)).getRegexCheckerEnabled()) {
+            return;
+        }
 
         if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
             return;

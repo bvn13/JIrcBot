@@ -23,11 +23,6 @@ public class DeferredMessageService {
 
     public void saveDeferredMessage(String sender, String recipient, String message) {
         DeferredMessage msg = new DeferredMessage();
-        msg.setId(1L);
-
-        msg.setCreatedAt(new Date());
-        msg.setUpdatedAt(new Date());
-
         msg.setSender(sender);
         msg.setRecipient(recipient);
         msg.setMessage(message);

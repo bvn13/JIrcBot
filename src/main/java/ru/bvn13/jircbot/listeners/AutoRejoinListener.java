@@ -5,8 +5,10 @@ import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.KickEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
+import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 import ru.bvn13.jircbot.listeners.advices.AdviceEngine;
 
 /**
@@ -15,11 +17,18 @@ import ru.bvn13.jircbot.listeners.advices.AdviceEngine;
 @Component
 public class AutoRejoinListener extends ImprovedListenerAdapter {
 
+    @Autowired
+    private ChannelSettingsService channelSettingsService;
+
     private Boolean wasKicked = false;
     private String offender = "";
 
     @Override
     public void onKick(KickEvent event) throws Exception {
+
+        if (!channelSettingsService.getChannelSettings(event.getChannel().getName()).getAutoRejoinEnabled()) {
+            return;
+        }
 
         if (event.getRecipient().getUserId().equals(event.getBot().getUserBot().getUserId())) {
             wasKicked = true;
@@ -31,6 +40,10 @@ public class AutoRejoinListener extends ImprovedListenerAdapter {
 
     @Override
     public void onJoin(JoinEvent event) throws Exception {
+
+        if (!channelSettingsService.getChannelSettings(event.getChannel().getName()).getAutoRejoinEnabled()) {
+            return;
+        }
 
         if (wasKicked) {
             wasKicked = false;
