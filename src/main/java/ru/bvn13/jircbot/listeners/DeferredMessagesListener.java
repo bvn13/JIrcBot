@@ -58,14 +58,14 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
         if (commands[0].equalsIgnoreCase("me")) {
             // deferred to myself
             deferredMessageService.saveDeferredMessage(userName, userName.toLowerCase(), commands[1]);
-            event.respond("Saved message to "+userName);
+            this.sendNotice(event,"Saved message to "+userName);
         } else {
             if (commands[0].equalsIgnoreCase(event.getBot().getUserBot().getNick())) {
                 event.respond("Sorry, message cannot be deferred to me.");
             } else {
                 // deferred to somebody
                 deferredMessageService.saveDeferredMessage(userName, commands[0].toLowerCase(), commands[1]);
-                event.respond("Saved message to " + commands[0]);
+                this.sendNotice(event, "Saved message to " + commands[0]);
             }
         }
 
@@ -77,14 +77,9 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
         List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(event.getUser().getNick().toLowerCase());
         if (deferredMessages != null && deferredMessages.size() > 0) {
             DeferredMessage msg = deferredMessages.get(0);
-            String more = "" + (deferredMessages.size() > 1 ? " ("+(deferredMessages.size()-1)+" messages more)" : "");
+            String more = "" + (deferredMessages.size() > 1 ? " ("+(deferredMessages.size()-1)+" message/-s more)" : "");
             event.respond("User "+msg.getSender()+" at "+dt.format(msg.getCreatedAt())+" told you"+more+": "+msg.getMessage());
             deferredMessageService.markMessageWasSent(msg);
-
-            /*deferredMessages.forEach(msg -> {
-                event.respond("User "+msg.getSender()+" at "+dt.format(msg.getCreatedAt())+" told you: "+msg.getMessage());
-                deferredMessageService.markMessageWasSent(msg);
-            });*/
         }
 
     }
