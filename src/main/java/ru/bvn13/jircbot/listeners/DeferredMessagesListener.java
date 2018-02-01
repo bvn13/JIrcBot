@@ -61,7 +61,7 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
             this.sendNotice(event,"Saved message to "+userName);
         } else {
             if (commands[0].equalsIgnoreCase(event.getBot().getUserBot().getNick())) {
-                event.respond("Sorry, message cannot be deferred to me.");
+                this.sendNotice(event,"Sorry, message cannot be deferred to me.");
             } else {
                 // deferred to somebody
                 deferredMessageService.saveDeferredMessage(userName, commands[0].toLowerCase(), commands[1]);
