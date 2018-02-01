@@ -1,6 +1,7 @@
 package ru.bvn13.jircbot.listeners;
 
 import org.pircbotx.hooks.ListenerAdapter;
+import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -81,6 +82,19 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
             String more = "" + (deferredMessages.size() > 1 ? " ("+(deferredMessages.size()-1)+" message/-s more)" : "");
             event.respond("User "+msg.getSender()+" at "+dt.format(msg.getCreatedAt())+" told you"+more+": "+msg.getMessage());
             deferredMessageService.markMessageWasSent(msg);
+        }
+
+    }
+
+    public void onJoin(JoinEvent event) throws Exception {
+
+        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
+            return;
+        }
+
+        List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase());
+        if (deferredMessages != null && deferredMessages.size() > 0) {
+            event.respond("You have "+deferredMessages.size()+" unread messages");
         }
 
     }
