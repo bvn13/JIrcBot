@@ -60,9 +60,13 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
             deferredMessageService.saveDeferredMessage(userName, userName.toLowerCase(), commands[1]);
             event.respond("Saved message to "+userName);
         } else {
-            // deferred to somebody
-            deferredMessageService.saveDeferredMessage(userName, commands[0].toLowerCase(), commands[1]);
-            event.respond("Saved message to "+commands[0]);
+            if (commands[0].equalsIgnoreCase(event.getBot().getUserBot().getNick())) {
+                event.respond("Sorry, message cannot be deferred to me.");
+            } else {
+                // deferred to somebody
+                deferredMessageService.saveDeferredMessage(userName, commands[0].toLowerCase(), commands[1]);
+                event.respond("Saved message to " + commands[0]);
+            }
         }
 
     }
