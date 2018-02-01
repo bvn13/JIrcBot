@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=bvn13
 WorkingDirectory=/srv/jircbot
-ExecStart=/usr/bin/java -jar /srv/jircbot/jircbot-1.0.5.jar
+ExecStart=/usr/bin/java -jar /srv/jircbot/jircbot-1.1.0.jar
 SuccessExitStatus=143
 
 [Install]
