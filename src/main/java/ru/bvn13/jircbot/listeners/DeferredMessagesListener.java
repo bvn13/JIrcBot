@@ -75,11 +75,16 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
     private void sendDeferredMessage(final GenericMessageEvent event) {
 
         List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(event.getUser().getNick().toLowerCase());
-        if (deferredMessages != null) {
-            deferredMessages.forEach(msg -> {
+        if (deferredMessages != null && deferredMessages.size() > 0) {
+            DeferredMessage msg = deferredMessages.get(0);
+            String more = "" + (deferredMessages.size() > 1 ? " ("+(deferredMessages.size()-1)+" messages more)" : "");
+            event.respond("User "+msg.getSender()+" at "+dt.format(msg.getCreatedAt())+" told you"+more+": "+msg.getMessage());
+            deferredMessageService.markMessageWasSent(msg);
+
+            /*deferredMessages.forEach(msg -> {
                 event.respond("User "+msg.getSender()+" at "+dt.format(msg.getCreatedAt())+" told you: "+msg.getMessage());
                 deferredMessageService.markMessageWasSent(msg);
-            });
+            });*/
         }
 
     }
