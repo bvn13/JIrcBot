@@ -17,12 +17,13 @@ public class DeferredMessageService {
     @Autowired
     private DeferredMessageRepository deferredMessageRepository;
 
-    public List<DeferredMessage> getDeferredMessagesForUser(String user) {
-        return deferredMessageRepository.getDeferredMessagesByRecipientAndSentOrderByCreatedAt(user, false);
+    public List<DeferredMessage> getDeferredMessagesForUser(String channelName, String user) {
+        return deferredMessageRepository.getDeferredMessagesByChannelNameAndRecipientAndSentOrderByCreatedAt(channelName, user, false);
     }
 
-    public void saveDeferredMessage(String sender, String recipient, String message) {
+    public void saveDeferredMessage(String channelName, String sender, String recipient, String message) {
         DeferredMessage msg = new DeferredMessage();
+        msg.setChannelName(channelName);
         msg.setSender(sender);
         msg.setRecipient(recipient);
         msg.setMessage(message);

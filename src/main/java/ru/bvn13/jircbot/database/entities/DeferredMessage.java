@@ -18,6 +18,10 @@ public class DeferredMessage extends BaseModel {
 
     @Getter
     @Setter
+    private String channelName;
+
+    @Getter
+    @Setter
     private String sender;
 
     @Getter

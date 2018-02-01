@@ -55,16 +55,17 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
         }
 
         String userName = event.getUser().getNick();
+        String channelname = this.getChannelName(event);
         if (commands[0].equalsIgnoreCase("me")) {
             // deferred to myself
-            deferredMessageService.saveDeferredMessage(userName, userName.toLowerCase(), commands[1]);
+            deferredMessageService.saveDeferredMessage(channelname, userName, userName.toLowerCase(), commands[1]);
             this.sendNotice(event,"Saved message to "+userName);
         } else {
             if (commands[0].equalsIgnoreCase(event.getBot().getUserBot().getNick())) {
                 this.sendNotice(event,"Sorry, message cannot be deferred to me.");
             } else {
                 // deferred to somebody
-                deferredMessageService.saveDeferredMessage(userName, commands[0].toLowerCase(), commands[1]);
+                deferredMessageService.saveDeferredMessage(channelname, userName, commands[0].toLowerCase(), commands[1]);
                 this.sendNotice(event, "Saved message to " + commands[0]);
             }
         }
@@ -74,7 +75,7 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
 
     private void sendDeferredMessage(final GenericMessageEvent event) {
 
-        List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(event.getUser().getNick().toLowerCase());
+        List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase());
         if (deferredMessages != null && deferredMessages.size() > 0) {
             DeferredMessage msg = deferredMessages.get(0);
             String more = "" + (deferredMessages.size() > 1 ? " ("+(deferredMessages.size()-1)+" message/-s more)" : "");
