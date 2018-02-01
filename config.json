@@ -5,8 +5,8 @@
       "enabled" : true,
       "server" : "irc.freenode.net",
       "port" : 6667,
-      "channelsNames" : ["#voidforum"],
-      "botName" : "jircbot-test"
+      "channelsNames" : ["#voidforum", "#lor"],
+      "botName" : "jircbot"
     }
   ],
   "settings" : {
@@ -23,8 +23,8 @@
     },
     "yaSearch" : {
       "url" : "https://yandex.ru/search/xml?",
-      "user" : "mail4bvn",
-      "key" : "03.117744581:ccfd9a1224f901e0af4eaaf6a7ac27ec"
+      "user" : "USER_NAME",
+      "key" : "YOUR_KEY"
     }
   }
 }
