@@ -86,6 +86,7 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
 
     }
 
+    @Override
     public void onJoin(JoinEvent event) throws Exception {
 
         if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {

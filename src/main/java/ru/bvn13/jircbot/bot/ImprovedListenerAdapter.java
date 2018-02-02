@@ -2,6 +2,7 @@ package ru.bvn13.jircbot.bot;
 
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.types.GenericChannelEvent;
 import org.pircbotx.hooks.types.GenericEvent;
 
 /**
@@ -14,7 +15,11 @@ public class ImprovedListenerAdapter extends ListenerAdapter {
     }
 
     protected String getChannelName(GenericEvent event) {
-        return ((MessageEvent) event).getChannel().getName();
+        if (event instanceof GenericChannelEvent) {
+            return ((GenericChannelEvent) event).getChannel().getName();
+        } else {
+            return ((MessageEvent) event).getChannel().getName();
+        }
     }
 
 }
