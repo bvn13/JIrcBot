@@ -27,6 +27,8 @@ public class RegexCheckerListener extends ImprovedListenerAdapter {
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
+        //TODO: rework with FSM
+
         if (!channelSettingsService.getChannelSettings(getChannelName(event)).getRegexCheckerEnabled()) {
             return;
         }

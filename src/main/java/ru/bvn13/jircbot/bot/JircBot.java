@@ -74,6 +74,9 @@ public class JircBot extends ListenerAdapter {
     @Autowired
     private HelloOnJoinListener helloOnJoinListener;
 
+    @Autowired
+    private GrammarCorrectorListener grammarCorrectorListener;
+
     @PostConstruct
     public void postConstruct() {
         this.executorService = Executors.newSingleThreadScheduledExecutor();
@@ -112,10 +115,9 @@ public class JircBot extends ListenerAdapter {
                             .addListener(bashOrgListener)
                             .addListener(autoRejoinListener)
                             .addListener(deferredMessagesListener)
-
-                            // disabled yet
                             .addListener(linkPreviewListener)
                             .addListener(helloOnJoinListener)
+                            .addListener(grammarCorrectorListener)
 
                             // not tested
                             //.addListener(new GoogleDoodleListener(this.config))

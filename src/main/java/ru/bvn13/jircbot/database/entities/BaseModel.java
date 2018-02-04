@@ -1,5 +1,7 @@
 package ru.bvn13.jircbot.database.entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
@@ -15,22 +17,28 @@ public abstract class BaseModel implements Comparable<BaseModel>, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Getter
+    @Setter
     private Long id;
 
     @Column(nullable = false)
-    private Date createdAt;
+    @Getter
+    @Setter
+    private Date dtCreated;
 
     @Column(nullable = false)
-    private Date updatedAt;
+    @Getter
+    @Setter
+    private Date dtUpdated;
 
     @PrePersist
     public void prePersist(){
-        createdAt = updatedAt = new Date();
+        dtCreated = dtUpdated = new Date();
     }
 
     @PreUpdate
     public void preUpdate(){
-        updatedAt = new Date();
+        dtUpdated = new Date();
     }
 
     @Override
@@ -43,28 +51,28 @@ public abstract class BaseModel implements Comparable<BaseModel>, Serializable {
     }
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long _id) {
-        id = _id;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long _id) {
+//        id = _id;
+//    }
+//
+//    public Date getDtCreated() {
+//        return dtCreated;
+//    }
+//
+//    public void setDtCreated(Date dtCreated) {
+//        this.dtCreated = dtCreated;
+//    }
+//
+//    public Date getDtUpdated() {
+//        return dtUpdated;
+//    }
+//
+//    public void setDtUpdated(Date dtUpdated) {
+//        this.dtUpdated = dtUpdated;
+//    }
 
 }

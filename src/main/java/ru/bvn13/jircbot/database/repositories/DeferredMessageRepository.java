@@ -11,5 +11,5 @@ import java.util.List;
  */
 @Repository
 public interface DeferredMessageRepository extends JpaRepository<DeferredMessage, Long> {
-    List<DeferredMessage> getDeferredMessagesByChannelNameAndRecipientAndSentOrderByCreatedAt(String channelName, String recipient, Boolean sent);
+    List<DeferredMessage> getDeferredMessagesByChannelNameAndRecipientAndSentOrderByDtCreated(String channelName, String recipient, Boolean sent);
 }

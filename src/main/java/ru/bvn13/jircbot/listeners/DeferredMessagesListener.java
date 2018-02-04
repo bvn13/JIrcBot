@@ -1,6 +1,5 @@
 package ru.bvn13.jircbot.listeners;
 
-import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.NoticeEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
@@ -85,7 +84,7 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
         if (deferredMessages != null && deferredMessages.size() > 0) {
             DeferredMessage msg = deferredMessages.get(0);
             String more = "" + (deferredMessages.size() > 1 ? " ("+(deferredMessages.size()-1)+" message/-s more)" : "");
-            event.respond("User "+msg.getSender()+" at "+dt.format(msg.getCreatedAt())+" told you"+more+": "+msg.getMessage());
+            event.respond("User "+msg.getSender()+" at "+dt.format(msg.getDtCreated())+" told you"+more+": "+msg.getMessage());
             deferredMessageService.markMessageWasSent(msg);
         }
 

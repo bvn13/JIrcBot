@@ -13,7 +13,7 @@ import javax.persistence.UniqueConstraint;
  * Created by bvn13 on 31.01.2018.
  */
 @Entity
-@Table(name = "channel_settings", uniqueConstraints = {@UniqueConstraint(columnNames = {"channelName"}, name = "uniq_channel_name")})
+@Table(name = "channel_settings", uniqueConstraints = {@UniqueConstraint(columnNames = {"channelName"}, name = "uniq_channel_settings_channel_name")})
 public class ChannelSettings extends BaseModel {
 
     @Getter
@@ -65,5 +65,11 @@ public class ChannelSettings extends BaseModel {
     @Setter
     @Column(nullable = false)
     private Boolean deferredMessagesEnabled = false;
+
+    @Getter
+    @Setter
+    @Column(nullable = false, columnDefinition = "Boolean DEFAULT False")
+    private Boolean grammarCorrectionEnabled = false;
+
 
 }

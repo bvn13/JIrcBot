@@ -18,7 +18,7 @@ public class DeferredMessageService {
     private DeferredMessageRepository deferredMessageRepository;
 
     public List<DeferredMessage> getDeferredMessagesForUser(String channelName, String user) {
-        return deferredMessageRepository.getDeferredMessagesByChannelNameAndRecipientAndSentOrderByCreatedAt(channelName, user, false);
+        return deferredMessageRepository.getDeferredMessagesByChannelNameAndRecipientAndSentOrderByDtCreated(channelName, user, false);
     }
 
     public void saveDeferredMessage(String channelName, String sender, String recipient, String message) {
