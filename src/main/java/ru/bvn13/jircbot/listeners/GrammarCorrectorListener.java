@@ -66,7 +66,7 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
             if (commands[0].trim().equalsIgnoreCase("add")) {
                 String params[] = commands[1].trim().split(">");
                 if (params.length != 2) {
-                    event.respondWith(helpMessage());
+                    event.respond(helpMessage());
                 } else {
                     grammarCorrectionService.saveGrammarCorrection(params[0].trim(), params[1].trim(), event.getUser().getNick());
                     event.respond("added correction: "+params[0].trim()+" > "+params[1].trim());
@@ -79,10 +79,12 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
                     event.respond("correction not found: "+params[0].trim()+" > "+params[1].trim());
                 }
             } else {
-                event.respondWith(helpMessage());
+                event.respond(helpMessage());
             }
         } else if (commands.length == 1) {
-            if (commands[0].trim().equalsIgnoreCase("show")) {
+            if (commands[0].trim().equalsIgnoreCase("help")) {
+                event.respond(helpMessage());
+            } else if (commands[0].trim().equalsIgnoreCase("show")) {
                 List<GrammarCorrection> corrections = grammarCorrectionService.getAllCorrections();
                 if (corrections.size() > 0) {
                     event.respond("sent in private");
@@ -102,7 +104,7 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
     }
 
     private String helpMessage() {
-        return "syntax: \r\n ?correct add <REGEX-formatted word> > <full correction>\r\n ?correct remove <REGEX-formatted word> > <full correction>\r\n ?correct show";
+        return "syntax: ?correct add <REGEX-formatted word> > <full correction> | ?correct remove <REGEX-formatted word> > <full correction> | ?correct show";
     }
 
 }
