@@ -71,13 +71,24 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
                     grammarCorrectionService.saveGrammarCorrection(params[0].trim(), params[1].trim(), event.getUser().getNick());
                     event.respond("added correction: "+params[0].trim()+" > "+params[1].trim());
                 }
-            } else if (commands[1].trim().equalsIgnoreCase("remove")) {
+            } else if (commands[0].trim().equalsIgnoreCase("remove")) {
                 String params[] = commands[1].trim().split(">");
-                if (grammarCorrectionService.removeCorrection(params[0].trim(), params[1].trim())) {
-                    event.respond("added correction: "+params[0].trim()+" > "+params[1].trim());
+                if (params.length == 1) {
+                    // by word
+                    if (grammarCorrectionService.removeAllCorrectionsByWord(commands[1].trim())) {
+                        event.respond("all corrections by word "+commands[1].trim()+" were removed");
+                    } else {
+                        event.respond("corrections by word "+commands[1].trim()+" not found");
+                    }
                 } else {
-                    event.respond("correction not found: "+params[0].trim()+" > "+params[1].trim());
+                    // by correction
+                    if (grammarCorrectionService.removeCorrection(params[0].trim(), params[1].trim())) {
+                        event.respond("removed correction: "+params[0].trim()+" > "+params[1].trim());
+                    } else {
+                        event.respond("correction not found: "+params[0].trim()+" > "+params[1].trim());
+                    }
                 }
+
             } else {
                 event.respond(helpMessage());
             }

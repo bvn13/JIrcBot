@@ -94,6 +94,14 @@ public class GrammarCorrectionService {
         return false;
     }
 
+    public Boolean removeAllCorrectionsByWord(String word) {
+        List<GrammarCorrection> gcList = grammarCorrectionRepository.findAllByWord(word);
+        gcList.forEach(gc -> {
+            grammarCorrectionRepository.delete(gc);
+        });
+        return gcList.size() > 0;
+    }
+
     public List<GrammarCorrection> getAllCorrections() {
         List<GrammarCorrection> list = grammarCorrectionRepository.findAll(new Sort(Sort.Direction.DESC, "id"));
         return list;

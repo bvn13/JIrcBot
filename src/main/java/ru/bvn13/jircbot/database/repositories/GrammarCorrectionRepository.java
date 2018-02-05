@@ -15,5 +15,6 @@ import java.util.List;
 public interface GrammarCorrectionRepository extends JpaRepository<GrammarCorrection, Long> {
 
     GrammarCorrection findFirstByWordAndCorrection(String word, String correction);
+    List<GrammarCorrection> findAllByWord(String word);
 
 }
