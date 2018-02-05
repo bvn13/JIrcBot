@@ -9,6 +9,7 @@ import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 import ru.bvn13.jircbot.database.services.GrammarCorrectionService;
 
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
@@ -53,7 +54,7 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
 
     private void checkForCorrection(final GenericMessageEvent event) throws Exception {
         String message = event.getMessage().replace(COMMAND, "").trim();
-        List<String> corrections = grammarCorrectionService.getCorrectionsForMessage(message);
+        HashSet<String> corrections = grammarCorrectionService.getCorrectionsForMessage(message);
         corrections.forEach(correct -> {
             this.sendNotice(event,"*"+correct);
         });

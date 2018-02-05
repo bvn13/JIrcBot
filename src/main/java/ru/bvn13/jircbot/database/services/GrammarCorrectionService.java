@@ -9,6 +9,7 @@ import ru.bvn13.jircbot.database.repositories.GrammarCorrectionRepository;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -24,10 +25,10 @@ public class GrammarCorrectionService {
     @Autowired
     private GrammarCorrectionRepository grammarCorrectionRepository;
 
-    public List<String> getCorrectionsForMessage(String message) {
+    public HashSet<String> getCorrectionsForMessage(String message) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-        List<String> result = new ArrayList<>();
+        HashSet<String> result = new HashSet<>();
 
         try {
             jdbcTemplate.query("" +
