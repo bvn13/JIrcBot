@@ -34,7 +34,7 @@ public class GrammarCorrectionService {
             jdbcTemplate.query("" +
                             "SELECT ? as message, g.word, g.correction " +
                             "FROM public.grammar_correction AS g " +
-                            "WHERE ? ~ g.word", new Object[]{ message, message },
+                            "WHERE ? ~ concat('(\\A|\\s)', g.word, '(\\Z|\\s)')", new Object[]{ message, message },
                     row -> {
                         result.add(row.getString("correction"));
                     });
@@ -43,36 +43,6 @@ public class GrammarCorrectionService {
         }
 
         return result;
-    }
-
-
-    public GrammarCorrection getLastCorrection(String word) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-
-        List<GrammarCorrection> result = jdbcTemplate.query("" +
-                        "SELECT gc.id, gc.dtcreated, gc.dtupdated, gc.word, gc.correction, gc.author " +
-                        "FROM " +
-                        "  (SELECT gc.word, MAX(gc.dtupdated) AS dtupdated " +
-                        "  FROM grammar_correction AS gc " +
-                        "  WHERE word ~ ?) AS tmax " +
-                        "INNER JOIN grammar_correction AS gc " +
-                        "ON gc.word = tmax.word AND gc.dtupdated = tmax.dtupdated " +
-                        "ORDER BY gc.dtupdated DESC",
-                new Object[]{word},
-                (rs, rsNum) -> new GrammarCorrection(
-                        rs.getLong("id"),
-                        rs.getDate("dtcreated"),
-                        rs.getDate("dtupdated"),
-                        rs.getString("word"),
-                        rs.getString("correction"),
-                        rs.getString("author")
-                ));
-
-        if (result.size() > 0) {
-            return result.get(0);
-        }
-
-        return null;
     }
 
     public void saveGrammarCorrection(String word, String correction, String author) {
