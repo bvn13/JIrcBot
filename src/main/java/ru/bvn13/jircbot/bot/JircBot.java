@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -77,6 +76,9 @@ public class JircBot extends ListenerAdapter {
     @Autowired
     private GrammarCorrectorListener grammarCorrectorListener;
 
+    @Autowired
+    private GoogleSearchListener googleSearchListener;
+
     @PostConstruct
     public void postConstruct() {
         this.executorService = Executors.newSingleThreadScheduledExecutor();
@@ -118,10 +120,10 @@ public class JircBot extends ListenerAdapter {
                             .addListener(linkPreviewListener)
                             .addListener(helloOnJoinListener)
                             .addListener(grammarCorrectorListener)
+                            .addListener(googleSearchListener)
 
                             // not tested
                             //.addListener(new GoogleDoodleListener(this.config))
-                            //.addListener(new GoogleSearchListener(this.config))
                             //.addListener(new YandexSearchListener(this.config, this.yandexSearchService))
 
                             .setServers(servers)

@@ -71,5 +71,9 @@ public class ChannelSettings extends BaseModel {
     @Column(nullable = false, columnDefinition = "Boolean DEFAULT False")
     private Boolean grammarCorrectionEnabled = false;
 
+    @Getter
+    @Setter
+    @Column(nullable = false, columnDefinition = "Boolean DEFAULT False")
+    private Boolean googleSearchEnabled = false;
 
 }
