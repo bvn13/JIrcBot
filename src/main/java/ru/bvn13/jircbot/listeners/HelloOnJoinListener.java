@@ -28,8 +28,8 @@ public class HelloOnJoinListener extends ImprovedListenerAdapter {
             return;
         }
 
-        //event.respond("Привет, "+event.getUser().getNick()+"!");
-        this.sendNotice(event, "Привет, "+event.getUser().getNick()+"!");
+        event.respond("Привет, "+event.getUser().getNick()+"!");
+        //this.sendNotice(event, "Привет, "+event.getUser().getNick()+"!");
     }
 
 
