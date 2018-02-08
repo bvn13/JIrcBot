@@ -4,11 +4,18 @@ name: jircbot
 config: config.json
 
 spring:
+  # for PostgreSQL
   dataSource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/jircbot
     username: jircbot
     password: jircbotpass
+  # for MySQL
+#  dataSource:
+#    driverClassName: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:5432/jircbot
+#    username: jircbot
+#    password: jircbotpass
 
   hibernate:
     dialect: org.hibernate.dialect.PostgreSQLDialect
