@@ -5,26 +5,8 @@
       "enabled" : true,
       "server" : "irc.freenode.net",
       "port" : 6667,
-      "channelsNames" : ["#voidforum", "#lor"],
-      "botName" : "jircbot"
+      "channelsNames" : ["#voidforum"],
+      "botName" : "jircbot-test"
     }
-  ],
-  "settings" : {
-    "doodle" : {
-      "mainUrl" : "https://www.google.com",
-      "checkUrl" : "https://www.google.com/doodles",
-      "linkSelector" : "li.latest-doodle.on .container a",
-      "titleSelector" : "li.latest-doodle.on .container input.title",
-      "dateSelector" : "li.latest-doodle.on .container input.tag"
-    },
-    "search" : {
-      "uuid" : "YOUR_UUID",
-      "appKey" : "YOUR_APP_KEY"
-    },
-    "yaSearch" : {
-      "url" : "https://yandex.ru/search/xml?",
-      "user" : "USER_NAME",
-      "key" : "YOUR_KEY"
-    }
-  }
+  ]
 }

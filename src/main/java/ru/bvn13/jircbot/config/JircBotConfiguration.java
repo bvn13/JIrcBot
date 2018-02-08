@@ -59,10 +59,10 @@ public class JircBotConfiguration {
                     this.connections.add(config);
             }
 
-            JSONObject lstnrSettings = (JSONObject) jsonObject.get("settings");
-            this.listenersSettings.put(KEY_GOOGLE_DOODLE, this.readGoogleDoodleSettings(lstnrSettings));
-            this.listenersSettings.put(KEY_GOOGLE_SEARCH, this.readGoogleSearchSettings(lstnrSettings));
-            this.listenersSettings.put(KEY_YANDEX_SEARCH, this.readYandexSearchSettings(lstnrSettings));
+//            JSONObject lstnrSettings = (JSONObject) jsonObject.get("settings");
+//            this.listenersSettings.put(KEY_GOOGLE_DOODLE, this.readGoogleDoodleSettings(lstnrSettings));
+//            this.listenersSettings.put(KEY_GOOGLE_SEARCH, this.readGoogleSearchSettings(lstnrSettings));
+//            this.listenersSettings.put(KEY_YANDEX_SEARCH, this.readYandexSearchSettings(lstnrSettings));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
