@@ -13,12 +13,15 @@ spring:
   # for MySQL
 #  dataSource:
 #    driverClassName: com.mysql.jdbc.Driver
-#    url: jdbc:mysql://localhost:5432/jircbot
+#    url: jdbc:mysql://localhost:3306/jircbot
 #    username: jircbot
 #    password: jircbotpass
 
   hibernate:
+    # for PostgreSQL
     dialect: org.hibernate.dialect.PostgreSQLDialect
+    # for MySQL
+#    dialect: org.hibernate.spatial.dialect.mysql.MySQLSpatialDialect
     hbm2ddl.auto: update
     show_sql: false
     use_sql_comments: true
