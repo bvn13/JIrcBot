@@ -26,7 +26,7 @@ import java.util.List;
 public class IrcLogController {
 
     private final SimpleDateFormat DATE_READER = new SimpleDateFormat("yyyy-MM-dd");
-    private final SimpleDateFormat DATE_WRITER = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    private final SimpleDateFormat DATE_WRITER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     private IrcMessageService ircMessageService;

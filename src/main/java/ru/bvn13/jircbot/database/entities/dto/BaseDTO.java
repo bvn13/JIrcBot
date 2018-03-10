@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 public abstract class BaseDTO {
 
-    private final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    private final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private Long id;
     private Date dtCreated;
