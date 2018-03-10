@@ -79,6 +79,9 @@ public class JircBot extends ListenerAdapter {
     @Autowired
     private GoogleSearchListener googleSearchListener;
 
+    @Autowired
+    private LoggerListener loggerListener;
+
     @PostConstruct
     public void postConstruct() {
         this.executorService = Executors.newSingleThreadScheduledExecutor();
@@ -121,6 +124,7 @@ public class JircBot extends ListenerAdapter {
                             .addListener(helloOnJoinListener)
                             .addListener(grammarCorrectorListener)
                             .addListener(googleSearchListener)
+                            .addListener(loggerListener)
 
                             // not tested
                             //.addListener(new GoogleDoodleListener(this.config))
