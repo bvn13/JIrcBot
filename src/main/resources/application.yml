@@ -3,6 +3,9 @@ name: jircbot
 
 config: config.json
 
+server:
+  port: 8001
+
 spring:
   # for PostgreSQL
   dataSource:

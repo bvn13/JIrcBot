@@ -1,6 +1,7 @@
 package ru.bvn13.jircbot.database.entities;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "irc_messages")
 @Getter @Setter
+@NoArgsConstructor
 public class IrcMessage extends BaseModel {
 
     @Column
