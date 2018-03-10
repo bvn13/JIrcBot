@@ -22,9 +22,9 @@ public class InternetAccessor {
 
     public String retrieveContentByLinkWithEncoding(String link, String encoding) {
         if (link.startsWith("https")) {
-            return retrieveContentByLinkWithEncoding_http(link, encoding);
-        } else {
             return retrieveContentByLinkWithEncoding_https(link, encoding);
+        } else {
+            return retrieveContentByLinkWithEncoding_http(link, encoding);
         }
     }
 

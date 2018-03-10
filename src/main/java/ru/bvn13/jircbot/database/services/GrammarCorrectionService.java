@@ -9,6 +9,7 @@ import ru.bvn13.jircbot.database.repositories.GrammarCorrectionRepository;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -25,19 +26,33 @@ public class GrammarCorrectionService {
     @Autowired
     private GrammarCorrectionRepository grammarCorrectionRepository;
 
-    public HashSet<String> getCorrectionsForMessage(String message) {
+    public HashMap<String, String[]> getCorrectionsForMessage(String message) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-        HashSet<String> result = new HashSet<>();
+        HashMap<String, String[]> result = new HashMap<>();
 
         try {
             jdbcTemplate.query("" +
                             "SELECT ? as message, g.word, g.correction " +
                             "FROM public.grammar_correction AS g " +
-                            "WHERE ? ~ concat('(\\A|\\s)', g.word, '(\\Z|\\s)')", new Object[]{ message, message },
+                            "WHERE " +
+                            "NOT g.correction = '~' " +
+                            "AND " +
+                            "CASE WHEN g.regexp THEN " +
+                            "? ~ concat('(\\A|\\s)(', g.word, ')(\\Z|\\s)') " +
+                            "ELSE " +
+                            "? ~ concat('(', g.word , ')') " +
+                            "END ", new Object[]{ message, message, message },
                     row -> {
-                        result.add(row.getString("correction"));
+                        result.put(row.getString("correction"),
+                                new String[] {
+                                        row.getString("message"),
+                                        row.getString("word"),
+                                        row.getString("correction")
+                                }
+                                );
                     });
+
         } catch (Exception e) {
             e.printStackTrace();
         }

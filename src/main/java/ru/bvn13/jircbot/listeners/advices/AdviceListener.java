@@ -48,7 +48,11 @@ public class AdviceListener extends ImprovedListenerAdapter {
         if (event.getMessage().equalsIgnoreCase(COMMAND)) {
             try {
                 String advice = AdviceEngine.getAdvice();
-                event.respond(advice);
+                if (advice.trim().isEmpty()) {
+                    event.respond("советы кончились");
+                } else {
+                    event.respond(advice);
+                }
             } catch (Exception e) {
                 event.respond(e.getMessage());
             }

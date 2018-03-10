@@ -39,7 +39,10 @@ public class AdviceEngine {
             JSONParser jsonParser = new JSONParser();
             JSONObject json = (JSONObject) jsonParser.parse(content.toString());
 
-            return (String) json.get("text");
+            String advice = (String) json.get("text");
+            advice = advice.trim();
+            advice = "" + advice.substring(0, 1).toLowerCase() + advice.substring(1);
+            return advice;
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("почини бота, блеать!");

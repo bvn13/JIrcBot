@@ -9,6 +9,7 @@ import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 import ru.bvn13.jircbot.database.services.GrammarCorrectionService;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -43,22 +44,31 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
             return;
         }
 
-        if (event.getMessage().startsWith(COMMAND)) {
-            onCommand(event);
-        } else {
+//        if (event.getMessage().startsWith(COMMAND)) {
+//            onCommand(event);
+//        } else {
             checkForCorrection(event);
-        }
+//        }
 
     }
-
 
     private void checkForCorrection(final GenericMessageEvent event) throws Exception {
         String message = event.getMessage().replace(COMMAND, "").trim();
-        HashSet<String> corrections = grammarCorrectionService.getCorrectionsForMessage(message);
-        corrections.forEach(correct -> {
-            this.sendNotice(event,"*"+correct);
+        HashMap<String, String[]> corrections = grammarCorrectionService.getCorrectionsForMessage(message);
+        corrections.forEach((correction, data) -> {
+            Pattern REGEX = Pattern.compile("(\\w*"+data[1]+"\\w*)", Pattern.UNICODE_CHARACTER_CLASS | Pattern.CASE_INSENSITIVE);
+//            String words[] = data[0].split("\\s");
+//            for (String w : words) {
+                Matcher matcher = REGEX.matcher(data[0].trim());
+                if (matcher.find() && !matcher.group().trim().equalsIgnoreCase(data[2].trim())) {
+                    String correct = matcher.group().replace(data[1], data[2]);
+                    this.sendNotice(event,"*"+correct);
+                }
+            //}
         });
     }
+
+
 
     private void onCommand(final GenericMessageEvent event) throws Exception {
         String message = event.getMessage().replace(COMMAND, "").trim();
