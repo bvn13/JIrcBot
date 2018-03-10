@@ -4,7 +4,7 @@ name: jircbot
 config: config.json
 
 server:
-  port: 8001
+  port: 8002
 
 spring:
   # for PostgreSQL
