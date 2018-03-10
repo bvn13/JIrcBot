@@ -48,7 +48,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
         event.getChannel().getUsers().forEach(user -> {
             users.add(user.getNick().toLowerCase());
         });
-        log(event.getChannel().getName(), "User joined: "+event.getUser().getNick());
+        log(event.getBot().getServerHostname(), event.getChannel().getName(), "User joined: "+event.getUser().getNick());
     }
 
     @Override
@@ -58,7 +58,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
             Set<String> users = onlineUsers.get(channelName);
             if (users.contains(event.getUser().getNick().toLowerCase())) {
                 if (isEnabled(channelName)) {
-                    log(channelName, "User " + event.getUser().getNick() + " quit (" + event.getReason() + ")");
+                    log(event.getBot().getServerHostname(), channelName, "User " + event.getUser().getNick() + " quit (" + event.getReason() + ")");
                     users.remove(event.getUser().getNick().toLowerCase());
                 }
             }
@@ -72,7 +72,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
         if (onlineUsers.containsKey(event.getChannel().getName())) {
             onlineUsers.get(event.getChannel().getName()).remove(event.getUser().getNick().toLowerCase());
         }
-        log(event.getChannel().getName(), "User "+event.getRecipient().getNick()+" was kicked by "+event.getUser().getNick()+" by reason: "+event.getReason());
+        log(event.getBot().getServerHostname(), event.getChannel().getName(), "User "+event.getRecipient().getNick()+" was kicked by "+event.getUser().getNick()+" by reason: "+event.getReason());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
             Set<String> users = onlineUsers.get(channelName);
             if (users.contains(event.getUser().getNick().toLowerCase())) {
                 if (isEnabled(channelName)) {
-                    log(channelName,"User "+event.getOldNick()+" is now known as "+event.getNewNick());
+                    log(event.getBot().getServerHostname(), channelName,"User "+event.getOldNick()+" is now known as "+event.getNewNick());
                     users.remove(event.getUser().getNick().toLowerCase());
                 }
             }
@@ -99,27 +99,22 @@ public class LoggerListener extends ImprovedListenerAdapter {
     @Override
     public void onNotice(NoticeEvent event) throws Exception {
         if (!isEnabled(event)) return;
-        log(event.getChannel().getName(), event.getMessage());
+        log(event.getBot().getServerHostname(), event.getChannel().getName(), event.getMessage());
     }
 
     @Override
     public void onTopic(TopicEvent event) throws Exception {
         if (!isEnabled(event)) return;
-        log(event.getChannel().getName(), ""+event.getUser().getNick()+" set topic: "+event.getTopic());
+        log(event.getBot().getServerHostname(), event.getChannel().getName(), ""+event.getUser().getNick()+" set topic: "+event.getTopic());
     }
 
-    private void log(String channelName, String username, String message) {
-        IrcMessage msg = new IrcMessage(channelName, username, message);
+    private void log(String serverHost, String channelName, String username, String message) {
+        IrcMessage msg = new IrcMessage(serverHost, channelName, username, message);
         ircMessageService.save(msg);
     }
 
-    private void log(String channelName, String message) {
-        IrcMessage msg = new IrcMessage(channelName, message);
-        ircMessageService.save(msg);
-    }
-
-    private void log(String message) {
-        IrcMessage msg = new IrcMessage(message);
+    private void log(String serverHost, String channelName, String message) {
+        IrcMessage msg = new IrcMessage(serverHost, channelName, message);
         ircMessageService.save(msg);
     }
 

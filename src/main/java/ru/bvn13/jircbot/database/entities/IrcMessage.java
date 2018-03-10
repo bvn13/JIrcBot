@@ -16,6 +16,9 @@ import javax.persistence.Table;
 public class IrcMessage extends BaseModel {
 
     @Column
+    private String serverHost;
+
+    @Column
     private String channelName;
 
     @Column
@@ -25,18 +28,16 @@ public class IrcMessage extends BaseModel {
     private String message;
 
 
-    public IrcMessage(String channelName, String username, String message) {
+    public IrcMessage(String serverHost, String channelName, String username, String message) {
+        this.serverHost = serverHost;
         this.channelName = channelName;
         this.username = username;
         this.message = message;
     }
 
-    public IrcMessage(String channelName, String message) {
+    public IrcMessage(String serverHost, String channelName, String message) {
+        this.serverHost = serverHost;
         this.channelName = channelName;
-        this.message = message;
-    }
-
-    public IrcMessage(String message) {
         this.message = message;
     }
 
