@@ -79,7 +79,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
     public void onMessage(MessageEvent event) throws Exception {
         if (!isEnabled(event)) return;
 
-        log(event.getChannel().getName(), event.getUser().getNick(), event.getMessage());
+        log(event.getBot().getServerHostname(), event.getChannel().getName(), event.getUser().getNick(), event.getMessage());
     }
 
     @Override
