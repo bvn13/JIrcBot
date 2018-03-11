@@ -33,25 +33,25 @@ public class IrcLogController {
 
 
 
-    @RequestMapping(value = "/{serverHost:.+}/{day}", method = RequestMethod.GET)
-    public String index(@PathVariable String serverHost, @RequestParam(name = "channel") String channelName, @PathVariable String day, Model model) throws Exception {
+    @RequestMapping(value = "/{serverHost:.+}/{channelName:.+}/{day}", method = RequestMethod.GET)
+    public String index(@PathVariable String serverHost, @PathVariable String channelName, @PathVariable String day, Model model) throws Exception {
         prepareModel(model, serverHost, channelName, day);
         return "irclog";
     }
 
-    @RequestMapping(value = "/{serverHost:.+}", method = RequestMethod.GET)
-    public String index(@PathVariable String serverHost, @RequestParam(name = "channel") String channelName, Model model) throws Exception {
+    @RequestMapping(value = "/{serverHost:.+}/{channelName:.+}", method = RequestMethod.GET)
+    public String index(@PathVariable String serverHost, @PathVariable String channelName, Model model) throws Exception {
         prepareModel(model, serverHost, channelName, DATE_READER.format(new Date()));
         return "irclog";
     }
 
-    @RequestMapping(value = "/text/{serverHost:.+}/{day}", method = RequestMethod.GET, produces = "plain/text; charset=utf-8")
-    public @ResponseBody String indexText(@PathVariable String serverHost, @RequestParam(name = "channel") String channelName, @PathVariable String day, Model model) throws Exception {
+    @RequestMapping(value = "/text/{serverHost:.+}/{channelName:.+}/{day}", method = RequestMethod.GET, produces = "plain/text; charset=utf-8")
+    public @ResponseBody String indexText(@PathVariable String serverHost, @PathVariable String channelName, @PathVariable String day, Model model) throws Exception {
         return renderAsText(serverHost, channelName, day);
     }
 
-    @RequestMapping(value = "/text/{serverHost:.+}", method = RequestMethod.GET, produces = "plain/text; charset=utf-8")
-    public @ResponseBody String indexText(@PathVariable String serverHost, @RequestParam(name = "channel") String channelName, Model model) throws Exception {
+    @RequestMapping(value = "/text/{serverHost:.+}/{channelName:.+}", method = RequestMethod.GET, produces = "plain/text; charset=utf-8")
+    public @ResponseBody String indexText(@PathVariable String serverHost, @PathVariable String channelName, Model model) throws Exception {
         return renderAsText(serverHost, channelName, DATE_READER.format(new Date()));
     }
 

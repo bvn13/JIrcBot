@@ -6,6 +6,7 @@
     <title th:text="|${day} - ${channelName} on ${serverHost}|"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}" href="webjars/font-awesome/4.7.0/css/font-awesome.min.css" />
 </head>
 <body>
 
@@ -17,8 +18,8 @@
 
         <p>
             <div class="btn-toolbar">
-                <a class="btn btn-default" th:href="@{'/logs/'+${serverHost}+'/'+${prevDay}+'?channel='+${channelName}}" th:text="${prevDay}"></a>
-                <a class="btn btn-default" th:href="@{'/logs/'+${serverHost}+'/'+${nextDay}+'?channel='+${channelName}}" th:text="${nextDay}"></a>
+                <a class="btn btn-default" th:href="@{'/logs/'+${serverHost}+'/'+${channelName}+'/'+${prevDay}}" th:text="${prevDay}"></a>
+                <a class="btn btn-default" th:href="@{'/logs/'+${serverHost}+'/'+${channelName}+'/'+${nextDay}}" th:text="${nextDay}"></a>
             </div>
         </p>
 
@@ -36,12 +37,12 @@
                 <tbody>
                     <tr th:each="msg : ${messages}">
 
-                        <div th:if="${msg.isUserSet()}">
+                        <div th:if="${msg.isUserSet()}" th:remove="tag">
                             <td class="col-sm-2 col-md-2 col-lg-2" th:text="${msg.getDtCreatedStr()}"></td>
-                            <td class="col-sm-2 col-md-2 col-lg-2" th:text="${msg.username}"></td>
+                            <td class="col-sm-2 col-md-2 col-lg-2"><b th:text="${msg.username}"></b></td>
                             <td class="col-sm-8 col-md-8 col-lg-8" th:text="${msg.message}"></td>
                         </div>
-                        <div th:if="${!msg.isUserSet()}">
+                        <div th:unless="${msg.isUserSet()}" th:remove="tag">
                             <td class="col-sm-2 col-md-2 col-lg-2" th:text="${msg.getDtCreatedStr()}"></td>
                             <td class="col-sm-10 col-md-10 col-lg-10" colspan="2"><i th:text="${msg.message}"></i></td>
                         </div>
