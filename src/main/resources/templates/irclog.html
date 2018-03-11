@@ -40,11 +40,11 @@
                         <div th:if="${msg.isUserSet()}" th:remove="tag">
                             <td class="col-sm-2 col-md-2 col-lg-2" th:text="${msg.getDtCreatedStr()}"></td>
                             <td class="col-sm-2 col-md-2 col-lg-2"><b th:text="${msg.username}"></b></td>
-                            <td class="col-sm-8 col-md-8 col-lg-8" th:text="${msg.message}"></td>
+                            <td class="col-sm-8 col-md-8 col-lg-8" style="word-break: break-all;" th:text="${msg.message}"></td>
                         </div>
                         <div th:unless="${msg.isUserSet()}" th:remove="tag">
                             <td class="col-sm-2 col-md-2 col-lg-2" th:text="${msg.getDtCreatedStr()}"></td>
-                            <td class="col-sm-10 col-md-10 col-lg-10" colspan="2"><i th:text="${msg.message}"></i></td>
+                            <td class="col-sm-10 col-md-10 col-lg-10" style="word-break: break-all;" colspan="2"><i th:text="${msg.message}"></i></td>
                         </div>
 
                     </tr>
