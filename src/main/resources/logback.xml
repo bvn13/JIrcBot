@@ -22,8 +22,8 @@
     <!--<logger name="org.hibernate.type" level="TRACE">-->
     <!--<appender-ref ref="STDOUT" />-->
     <!--</logger>-->
-    <logger name="org.springframework" level="DEBUG"/>
-    <logger name="org.pircbotx.PircBotX" level="DEBUG"/>
+    <logger name="org.springframework" level="ERROR"/>
+    <logger name="org.pircbotx.PircBotX" level="ERROR"/>
 
     <logger name="org.springframework.core.env.PropertySourcesPropertyResolver" level="WARN"/>
 
