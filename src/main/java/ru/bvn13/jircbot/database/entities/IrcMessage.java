@@ -26,7 +26,7 @@ public class IrcMessage extends BaseModel {
     @Column
     private String username;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String message;
 
 
@@ -41,6 +41,11 @@ public class IrcMessage extends BaseModel {
         this.serverHost = serverHost;
         this.channelName = channelName;
         this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("IrcMessage(%s at %s%s, msg=%s)", username, channelName, serverHost, message);
     }
 
 }

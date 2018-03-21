@@ -2,6 +2,8 @@ package ru.bvn13.jircbot.listeners;
 
 import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
@@ -16,6 +18,7 @@ import java.util.*;
  */
 @Component
 public class LoggerListener extends ImprovedListenerAdapter {
+
 
     @Autowired
     private ChannelSettingsService channelSettingsService;

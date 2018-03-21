@@ -1,5 +1,7 @@
 package ru.bvn13.jircbot.database.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.bvn13.jircbot.database.entities.IrcMessage;
@@ -18,11 +20,18 @@ import java.util.List;
 @Service
 public class IrcMessageService {
 
+    private static final Logger logger = LoggerFactory.getLogger(IrcMessageService.class);
+
+
     @Autowired
     private IrcMessageRepository ircMessageRepository;
 
     public void save(IrcMessage message) {
-        ircMessageRepository.save(message);
+        try {
+            ircMessageRepository.save(message);
+        } catch (Exception e) {
+            logger.error("Could not save message! "+message, e);
+        }
     }
 
     public List<IrcMessage> getMessagesOfDay(String serverHost, String channelName, Date date) {
