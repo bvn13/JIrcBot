@@ -44,6 +44,10 @@ public class LoggerListener extends ImprovedListenerAdapter {
 //
 //        int a = 0;
 //
+//        if (event instanceof OutputEvent) {
+//            this.onOutput((OutputEvent) event);
+//        }
+//
 //    }
 
 
@@ -88,7 +92,6 @@ public class LoggerListener extends ImprovedListenerAdapter {
     @Override
     public void onMessage(MessageEvent event) throws Exception {
         if (!isEnabled(event)) return;
-
         log(event.getBot().getServerHostname(), event.getChannel().getName(), event.getUser().getNick(), event.getMessage());
     }
 
@@ -122,6 +125,16 @@ public class LoggerListener extends ImprovedListenerAdapter {
     public void onAction(ActionEvent event) throws Exception {
         if (!isEnabled(event)) return;
         log(event.getBot().getServerHostname(), event.getChannel().getName(), "*"+event.getUser().getNick()+" "+event.getAction());
+    }
+
+    @Override
+    public void onOutput(OutputEvent event) throws Exception {
+        if (!isEnabled(event.getLineParsed().get(1))) return;
+        switch (event.getLineParsed().get(0)) {
+            case "PRIVMSG" :
+            case "NOTICE" :
+                log(event.getBot().getServerHostname(), event.getLineParsed().get(1), event.getLineParsed().get(2));
+        }
     }
 
     private void log(String serverHost, String channelName, String username, String message) {
