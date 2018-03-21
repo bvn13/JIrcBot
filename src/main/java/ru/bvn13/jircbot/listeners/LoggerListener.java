@@ -39,6 +39,13 @@ public class LoggerListener extends ImprovedListenerAdapter {
         return channelSettingsService.getChannelSettings(channelName).getLoggingEnabled();
     }
 
+//    @Override
+//    public void onEvent(Event event) throws Exception {
+//
+//        int a = 0;
+//
+//    }
+
 
     @Override
     public void onJoin(JoinEvent event) throws Exception {
@@ -109,6 +116,12 @@ public class LoggerListener extends ImprovedListenerAdapter {
     public void onTopic(TopicEvent event) throws Exception {
         if (!isEnabled(event)) return;
         log(event.getBot().getServerHostname(), event.getChannel().getName(), ""+event.getUser().getNick()+" set topic: "+event.getTopic());
+    }
+
+    @Override
+    public void onAction(ActionEvent event) throws Exception {
+        if (!isEnabled(event)) return;
+        log(event.getBot().getServerHostname(), event.getChannel().getName(), "*"+event.getUser().getNick()+" "+event.getAction());
     }
 
     private void log(String serverHost, String channelName, String username, String message) {
