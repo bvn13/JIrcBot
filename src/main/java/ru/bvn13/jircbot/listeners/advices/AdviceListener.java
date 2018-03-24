@@ -57,7 +57,7 @@ public class AdviceListener extends ImprovedListenerAdapter {
                 event.respond(e.getMessage());
             }
         } else {
-            String userName = event.getMessage().replace(COMMAND, "").trim();
+            String userName = event.getMessage().replace(COMMAND, "").trim().replaceAll(" ", "");
             if (userName.equalsIgnoreCase(event.getBot().getNick())) {
                 event.respondPrivateMessage("я тебе посоветую щас, блеать!");
             } else {
