@@ -7,6 +7,14 @@
       "channelsNames" : ["#voidforum"],
       "botName" : "jircbot-test",
       "masterNick" : "bvn13"
+    },
+    {
+      "enabled" : true,
+      "server" : "irc.mozilla.org",
+      "port" : 6667,
+      "channelsNames" : ["#borsch"],
+      "botName" : "jircbot-test",
+      "masterNick" : "bvn13"
     }
   ]
 }

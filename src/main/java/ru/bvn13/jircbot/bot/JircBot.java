@@ -2,6 +2,7 @@ package ru.bvn13.jircbot.bot;
 
 
 import org.pircbotx.Configuration;
+import org.pircbotx.MultiBotManager;
 import org.pircbotx.PircBotX;
 import org.pircbotx.UtilSSLSocketFactory;
 import org.pircbotx.cap.TLSCapHandler;
@@ -142,15 +143,13 @@ public class JircBot extends ListenerAdapter {
             );
         });
 
-        //bot.connect throws various exceptions for failures
-        this.bots.forEach((id, b) -> {
-            try {
-                b.startBot();
-            } catch (Exception ex) {
-                logger.error("ERROR STARTING BOT: "+id);
-                ex.printStackTrace();
-            }
+        MultiBotManager manager = new MultiBotManager();
+
+        this.bots.forEach((id, bot) -> {
+            manager.addBot(bot);
         });
+
+        manager.start();
 
     }
 
