@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
+import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.entities.IrcMessage;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 import ru.bvn13.jircbot.database.services.IrcMessageService;
@@ -32,11 +33,11 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
 
     public boolean isEnabled(Event event) throws Exception {
-        return channelSettingsService.getChannelSettings(getChannelName(event)).getLoggingEnabled();
+        return channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), getChannelName(event)).getLoggingEnabled();
     }
 
-    public boolean isEnabled(String channelName) throws Exception {
-        return channelSettingsService.getChannelSettings(channelName).getLoggingEnabled();
+    public boolean isEnabled(String serverName, String channelName) throws Exception {
+        return channelSettingsService.getChannelSettings(serverName, channelName).getLoggingEnabled();
     }
 
 //    @Override
@@ -71,7 +72,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
         for (String channelName : onlineUsers.keySet()) {
             Set<String> users = onlineUsers.get(channelName);
             if (users.contains(event.getUser().getNick().toLowerCase())) {
-                if (isEnabled(channelName)) {
+                if (isEnabled(JircBot.extractServer(event.getBot().getUserBot().getServer()), channelName)) {
                     log(event.getBot().getServerHostname(), channelName, "User " + event.getUser().getNick() + " quit (" + event.getReason() + ")");
                     users.remove(event.getUser().getNick().toLowerCase());
                 }
@@ -101,7 +102,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
         for (String channelName : onlineUsers.keySet()) {
             Set<String> users = onlineUsers.get(channelName);
             if (users.contains(event.getUser().getNick().toLowerCase())) {
-                if (isEnabled(channelName)) {
+                if (isEnabled(JircBot.extractServer(event.getBot().getUserBot().getServer()), channelName)) {
                     log(event.getBot().getServerHostname(), channelName,"User "+event.getOldNick()+" is now known as "+event.getNewNick());
                     users.remove(event.getUser().getNick().toLowerCase());
                 }
@@ -129,7 +130,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
     @Override
     public void onOutput(OutputEvent event) throws Exception {
-        if (!isEnabled(event.getLineParsed().get(1))) return;
+        if (!isEnabled(JircBot.extractServer(event.getBot().getUserBot().getServer()), event.getLineParsed().get(1))) return;
         switch (event.getLineParsed().get(0)) {
             case "PRIVMSG" :
             case "NOTICE" :

@@ -7,6 +7,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
+import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class RegexCheckerListener extends ImprovedListenerAdapter {
 
         //TODO: rework with FSM
 
-        if (!channelSettingsService.getChannelSettings(getChannelName(event)).getRegexCheckerEnabled()) {
+        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), getChannelName(event)).getRegexCheckerEnabled()) {
             return;
         }
 

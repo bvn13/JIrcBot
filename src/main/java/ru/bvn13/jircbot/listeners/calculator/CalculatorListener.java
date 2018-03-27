@@ -5,6 +5,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
+import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class CalculatorListener extends ImprovedListenerAdapter {
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
-        if (!channelSettingsService.getChannelSettings(getChannelName(event)).getCalculatorEnabled()) {
+        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), getChannelName(event)).getCalculatorEnabled()) {
             return;
         }
 

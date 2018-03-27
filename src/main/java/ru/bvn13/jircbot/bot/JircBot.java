@@ -153,6 +153,9 @@ public class JircBot extends ListenerAdapter {
 
     }
 
-
+    public static String extractServer(String s) {
+        String d[] = s.split("[\\.]");
+        return ""+d[d.length-2]+"."+d[d.length-1];
+    }
 
 }

@@ -13,9 +13,12 @@ import javax.persistence.UniqueConstraint;
  * Created by bvn13 on 31.01.2018.
  */
 @Entity
-@Table(name = "channel_settings", uniqueConstraints = {@UniqueConstraint(columnNames = {"channelName"}, name = "uniq_channel_settings_channel_name")})
+@Table(name = "channel_settings", uniqueConstraints = {@UniqueConstraint(columnNames = {"serverHost", "channelName"}, name = "uniq_channel_settings_server_host_channel_name")})
 @Getter @Setter
 public class ChannelSettings extends BaseModel {
+
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT ''")
+    private String serverHost;
 
     @Column(nullable = false)
     private String channelName;

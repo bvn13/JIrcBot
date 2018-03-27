@@ -6,6 +6,7 @@ import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
+import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.entities.DeferredMessage;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 import ru.bvn13.jircbot.database.services.DeferredMessageService;
@@ -33,7 +34,7 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
-        if (!channelSettingsService.getChannelSettings(getChannelName(event)).getDeferredMessagesEnabled()) {
+        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), getChannelName(event)).getDeferredMessagesEnabled()) {
             return;
         }
 

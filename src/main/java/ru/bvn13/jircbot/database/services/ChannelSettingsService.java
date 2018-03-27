@@ -14,19 +14,21 @@ public class ChannelSettingsService {
     @Autowired
     private ChannelSettingsRepository channelSettingsRepository;
 
-    public ChannelSettings getChannelSettings(String channelName) {
-        ChannelSettings settings = channelSettingsRepository.getFirstByChannelName(channelName);
+    public ChannelSettings getChannelSettings(String serverHost, String channelName) {
+        ChannelSettings settings = channelSettingsRepository.getFirstByServerHostAndChannelName(serverHost, channelName);
         if (settings == null) {
             settings = new ChannelSettings();
+            settings.setServerHost(serverHost);
             settings.setChannelName(channelName);
         }
         return settings;
     }
 
-    public void creaateChannelSettings(String channelName) {
-        ChannelSettings settings = channelSettingsRepository.getFirstByChannelName(channelName);
+    public void creaateChannelSettings(String serverHost, String channelName) {
+        ChannelSettings settings = channelSettingsRepository.getFirstByServerHostAndChannelName(serverHost, channelName);
         if (settings == null) {
             settings = new ChannelSettings();
+            settings.setServerHost(serverHost);
             settings.setChannelName(channelName);
             channelSettingsRepository.save(settings);
         }

@@ -6,6 +6,7 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
+import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.entities.ChannelSettings;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 
@@ -21,7 +22,7 @@ public class HelloOnJoinListener extends ImprovedListenerAdapter {
     @Override
     public void onJoin(final JoinEvent event) throws Exception {
 
-        ChannelSettings channelSettings = channelSettingsService.getChannelSettings(getChannelName(event));
+        ChannelSettings channelSettings = channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), getChannelName(event));
 
         if (!channelSettings.getHelloOnJoinEnabled()) {
             return;

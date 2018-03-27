@@ -5,6 +5,7 @@ import org.pircbotx.hooks.events.PrivateMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
+import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
 import ru.bvn13.jircbot.database.entities.ChannelSettings;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
@@ -29,7 +30,7 @@ public class AdminListener extends ImprovedListenerAdapter {
     @Override
     public void onJoin(JoinEvent event) throws Exception {
         if (event.getChannel().getName().startsWith("#")) {
-            channelSettingsService.creaateChannelSettings(event.getChannel().getName());
+            channelSettingsService.creaateChannelSettings(JircBot.extractServer(event.getUser().getServer()), event.getChannel().getName());
         }
     }
 
@@ -74,8 +75,8 @@ public class AdminListener extends ImprovedListenerAdapter {
                         event.getBot().sendRaw().rawLine(command); event.respondPrivateMessage("done"); break;
                     case "set" :
                         try {
-                            String args[] = commands[1].split(" ", 3); // set, channel, mode/hello-message
-                            changeSettings(args[1], args[0], args[2]);
+                            String args[] = commands[1].split(" ", 4); // set, server, channel, mode/hello-message
+                            changeSettings(JircBot.extractServer(args[1]),  args[2], args[0], args[3]);
                             event.respondPrivateMessage("done");
                         } catch (Exception e) {
                             event.respondPrivateMessage(e.getMessage());
@@ -105,9 +106,11 @@ public class AdminListener extends ImprovedListenerAdapter {
         return false;
     }
 
-    private void changeSettings(String channelName, String set, String modeStr) {
+
+
+    private void changeSettings(String serverHost, String channelName, String set, String modeStr) {
         if (set.equals("hello-message") || set.equals("hello-msg")) {
-            ChannelSettings settings = channelSettingsService.getChannelSettings(channelName);
+            ChannelSettings settings = channelSettingsService.getChannelSettings(serverHost, channelName);
             settings.setOnJoinMessage(modeStr);
             channelSettingsService.save(settings);
         } else {
@@ -116,7 +119,7 @@ public class AdminListener extends ImprovedListenerAdapter {
             }
 
             Boolean mode = modeStr.equals("on");
-            ChannelSettings settings = channelSettingsService.getChannelSettings(channelName);
+            ChannelSettings settings = channelSettingsService.getChannelSettings(serverHost, channelName);
 
             switch (set.toLowerCase()) {
                 case "autorejoin":
