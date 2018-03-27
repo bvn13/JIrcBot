@@ -19,9 +19,21 @@ public class ChannelSettingsService {
         if (settings == null) {
             settings = new ChannelSettings();
             settings.setChannelName(channelName);
-            channelSettingsRepository.save(settings);
         }
         return settings;
+    }
+
+    public void creaateChannelSettings(String channelName) {
+        ChannelSettings settings = channelSettingsRepository.getFirstByChannelName(channelName);
+        if (settings == null) {
+            settings = new ChannelSettings();
+            settings.setChannelName(channelName);
+            channelSettingsRepository.save(settings);
+        }
+    }
+
+    public void save(ChannelSettings settings) {
+        channelSettingsRepository.save(settings);
     }
 
 }

@@ -14,72 +14,49 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name = "channel_settings", uniqueConstraints = {@UniqueConstraint(columnNames = {"channelName"}, name = "uniq_channel_settings_channel_name")})
+@Getter @Setter
 public class ChannelSettings extends BaseModel {
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private String channelName;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private Boolean calculatorEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private Boolean regexCheckerEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private Boolean advicesEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private Boolean quizEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private Boolean bashOrgEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private Boolean autoRejoinEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private Boolean linkPreviewEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private Boolean helloOnJoinEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private Boolean deferredMessagesEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false, columnDefinition = "Boolean DEFAULT False")
     private Boolean grammarCorrectionEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false, columnDefinition = "Boolean DEFAULT False")
     private Boolean googleSearchEnabled = false;
 
-    @Getter
-    @Setter
     @Column(nullable = false, columnDefinition = "Boolean DEFAULT False")
     private Boolean loggingEnabled = false;
 
+    @Column(nullable = false, columnDefinition = "varchar(255) default ''")
+    private String onJoinMessage = "";
 
 }

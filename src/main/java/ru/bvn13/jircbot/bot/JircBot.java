@@ -82,6 +82,9 @@ public class JircBot extends ListenerAdapter {
     @Autowired
     private LoggerListener loggerListener;
 
+    @Autowired
+    private AdminListener adminListener;
+
     @PostConstruct
     public void postConstruct() {
         this.executorService = Executors.newSingleThreadScheduledExecutor();
@@ -112,6 +115,7 @@ public class JircBot extends ListenerAdapter {
                     String.format("%s/%s", c.getServer(), "1"),
                     new PircBotX(templateConfig
                             .setName(c.getBotName())
+                            .addListener(adminListener)
                             .addListener(pingPongListener)
                             .addListener(calculatorListener)
                             .addListener(regexCheckerListener)

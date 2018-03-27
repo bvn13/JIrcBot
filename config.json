@@ -1,12 +1,12 @@
 {
-  "version" : "1.0",
   "connections" : [
     {
       "enabled" : true,
       "server" : "irc.freenode.net",
       "port" : 6667,
       "channelsNames" : ["#voidforum"],
-      "botName" : "jircbot-test"
+      "botName" : "jircbot-test",
+      "masterNick" : "bvn13"
     }
   ]
 }

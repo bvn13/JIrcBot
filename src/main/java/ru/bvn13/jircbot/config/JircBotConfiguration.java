@@ -48,8 +48,6 @@ public class JircBotConfiguration {
             Object jsonObj = parser.parse(reader);
             JSONObject jsonObject = (JSONObject) jsonObj;
 
-            logger.debug("CONFIG VERSION: "+jsonObject.get("version"));
-
             JSONArray settings = (JSONArray) jsonObject.get("connections");
 
             Iterator<JSONObject> iterator = settings.iterator();
@@ -99,6 +97,8 @@ public class JircBotConfiguration {
 
         //config.setChannelName((String);
         config.setBotName((String)data.get("botName"));
+
+        config.setMasterNick((String)data.get("masterNick"));
         return config;
     }
 

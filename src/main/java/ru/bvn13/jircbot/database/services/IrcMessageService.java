@@ -40,19 +40,21 @@ public class IrcMessageService {
         LocalDateTime dtFrom = localDateTime.with(LocalTime.MIN);
         LocalDateTime dtTo = localDateTime.with(LocalTime.MAX);
 
-        return ircMessageRepository.findAllByServerHostAndChannelNameAndDay(
+        String realChannelName = channelName;
+        String prefix = "";
+        while (realChannelName.substring(0, 1).equals("_")) {
+            prefix += "#";
+            realChannelName = realChannelName.substring(1);
+        }
+        realChannelName = prefix + realChannelName;
+
+        return ircMessageRepository.findAllByServerHostAndRealChannelNameAndDay(
                 serverHost,
-                channelName,
+                realChannelName,
                 DateTimeUtility.localDateTimeToDate(dtFrom),
                 DateTimeUtility.localDateTimeToDate(dtTo)
         );
 
-        /*return ircMessageRepository.findAllByServerHostAndChannelNameAndDtCreatedGreaterThanEqualAndDtCreatedIsLessThanEqual(
-                serverHost,
-                channelName,
-                DateTimeUtility.localDateTimeToDate(dtFrom),
-                DateTimeUtility.localDateTimeToDate(dtTo)
-        );*/
     }
 
 }

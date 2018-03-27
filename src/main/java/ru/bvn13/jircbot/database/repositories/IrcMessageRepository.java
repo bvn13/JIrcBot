@@ -19,4 +19,8 @@ public interface IrcMessageRepository extends JpaRepository<IrcMessage, Long> {
     @Query("SELECT m FROM IrcMessage m WHERE m.serverHost = :serverHost AND (m.channelName = CONCAT('#', :channelName) OR m.channelName = CONCAT('##', :channelName)) AND m.dtCreated >= :dtFrom AND m.dtCreated <= :dtTo ORDER BY m.dtCreated")
     List<IrcMessage> findAllByServerHostAndChannelNameAndDay(@Param("serverHost") String serverHost, @Param("channelName") String channelName, @Param("dtFrom") Date dtFrom, @Param("dtTo") Date dtTo);
 
+    @Query("SELECT m FROM IrcMessage m WHERE m.serverHost = :serverHost AND (m.channelName = :channelName) AND m.dtCreated >= :dtFrom AND m.dtCreated <= :dtTo ORDER BY m.dtCreated")
+    List<IrcMessage> findAllByServerHostAndRealChannelNameAndDay(@Param("serverHost") String serverHost, @Param("channelName") String channelName, @Param("dtFrom") Date dtFrom, @Param("dtTo") Date dtTo);
+
+
 }
