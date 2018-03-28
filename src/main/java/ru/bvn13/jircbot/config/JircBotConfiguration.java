@@ -81,9 +81,15 @@ public class JircBotConfiguration {
         config.setServer((String)data.get("server"));
         config.setPort(Integer.parseInt(data.get("port").toString()));
 
+        if (data.containsKey("botPassword")) {
+            config.setBotPassword((String)data.get("botPassword"));
+        } else {
+            config.setBotPassword("");
+        }
+
         List<String> channelsNames = new ArrayList<>();
 
-        JSONArray channels = (JSONArray) data.get("channelsNames");
+        JSONArray channels = (JSONArray) data.get("channels");
 
         if (channels != null && channels.size() > 0) {
             for (int i=0; i < channels.size(); i++) {

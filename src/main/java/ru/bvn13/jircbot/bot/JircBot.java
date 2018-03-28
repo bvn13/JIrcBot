@@ -127,33 +127,39 @@ public class JircBot extends ListenerAdapter {
         this.config.getConnections().forEach(c -> {
             List<Configuration.ServerEntry> servers = new ArrayList<>();
             servers.add(new Configuration.ServerEntry(c.getServer(), c.getPort()));
+
+            Configuration.Builder confBuilder = templateConfig
+                    .setName(c.getBotName())
+                    .addListener(adminListener)
+                    .addListener(pingPongListener)
+                    .addListener(calculatorListener)
+                    .addListener(regexCheckerListener)
+                    .addListener(adviceListener)
+                    .addListener(quizListener)
+                    .addListener(bashOrgListener)
+                    .addListener(autoRejoinListener)
+                    .addListener(deferredMessagesListener)
+                    .addListener(linkPreviewListener)
+                    .addListener(helloOnJoinListener)
+                    .addListener(grammarCorrectorListener)
+                    .addListener(googleSearchListener)
+                    .addListener(loggerListener)
+
+                    // not tested
+                    //.addListener(new GoogleDoodleListener(this.config))
+                    //.addListener(new YandexSearchListener(this.config, this.yandexSearchService))
+
+                    .setServers(servers)
+                    .setAutoReconnect(true)
+                    .addAutoJoinChannels(c.getChannelsNames());
+
+            if (c.getBotPassword() != null && !c.getBotPassword().isEmpty()) {
+                confBuilder.setNickservPassword(c.getBotPassword());
+            }
+
             this.bots.put(
                     String.format("%s/%s", c.getServer(), "1"),
-                    new PircBotX(templateConfig
-                            .setName(c.getBotName())
-                            .addListener(adminListener)
-                            .addListener(pingPongListener)
-                            .addListener(calculatorListener)
-                            .addListener(regexCheckerListener)
-                            .addListener(adviceListener)
-                            .addListener(quizListener)
-                            .addListener(bashOrgListener)
-                            .addListener(autoRejoinListener)
-                            .addListener(deferredMessagesListener)
-                            .addListener(linkPreviewListener)
-                            .addListener(helloOnJoinListener)
-                            .addListener(grammarCorrectorListener)
-                            .addListener(googleSearchListener)
-                            .addListener(loggerListener)
-
-                            // not tested
-                            //.addListener(new GoogleDoodleListener(this.config))
-                            //.addListener(new YandexSearchListener(this.config, this.yandexSearchService))
-
-                            .setServers(servers)
-                            .setAutoReconnect(true)
-                            .addAutoJoinChannels(c.getChannelsNames())
-                            .buildForServer(c.getServer())
+                            new PircBotX(confBuilder.buildForServer(c.getServer())
                     )
             );
         });

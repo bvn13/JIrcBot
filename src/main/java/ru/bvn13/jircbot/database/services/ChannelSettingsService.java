@@ -24,7 +24,7 @@ public class ChannelSettingsService {
         return settings;
     }
 
-    public void creaateChannelSettings(String serverHost, String channelName) {
+    public void createChannelSettings(String serverHost, String channelName) {
         ChannelSettings settings = channelSettingsRepository.getFirstByServerHostAndChannelName(serverHost, channelName);
         if (settings == null) {
             settings = new ChannelSettings();

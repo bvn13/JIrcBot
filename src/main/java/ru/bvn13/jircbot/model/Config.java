@@ -19,6 +19,8 @@ public class Config {
 
     private String botName;
 
+    private String botPassword = "";
+
     private List<String> channelsNames;
 
     private String masterNick;

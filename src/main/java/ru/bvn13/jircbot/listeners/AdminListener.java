@@ -2,6 +2,8 @@ package ru.bvn13.jircbot.listeners;
 
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
@@ -19,6 +21,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Component
 public class AdminListener extends ImprovedListenerAdapter {
 
+    private static final Logger logger = LoggerFactory.getLogger(AdminListener.class);
+
     private static final String COMMAND = "?";
 
     @Autowired
@@ -30,7 +34,14 @@ public class AdminListener extends ImprovedListenerAdapter {
     @Override
     public void onJoin(JoinEvent event) throws Exception {
         if (event.getChannel().getName().startsWith("#")) {
-            channelSettingsService.creaateChannelSettings(JircBot.extractServer(event.getUser().getServer()), event.getChannel().getName());
+            if (event.getUser().getNick().equals(event.getBot().getNick())) {
+                event.getBot().sendRaw().rawLineNow("MODE " + event.getBot().getUserBot().getNick() + " +B");
+                try {
+                    channelSettingsService.createChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), event.getChannel().getName());
+                } catch (Exception e) {
+                    logger.error("Could not create channel settings for channel "+event.getChannel().getName(), e);
+                }
+            }
         }
     }
 
