@@ -1,6 +1,7 @@
 package ru.bvn13.jircbot.bot;
 
 
+import lombok.Getter;
 import org.pircbotx.Configuration;
 import org.pircbotx.MultiBotManager;
 import org.pircbotx.PircBotX;
@@ -11,6 +12,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.services.YandexSearchService;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
@@ -36,6 +38,11 @@ public class JircBot extends ListenerAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(JircBot.class);
 
+    @Value("${bot.version}")
+    private String version;
+    public String getVersion() {
+        return version == null ? "" : version;
+    }
 
     private JircBotConfiguration config;
 
@@ -54,7 +61,7 @@ public class JircBot extends ListenerAdapter {
 
     private ScheduledExecutorService executorService;
 
-    MultiBotManager manager = new MultiBotManager();
+    private MultiBotManager manager = new MultiBotManager();
 
     @Autowired
     private PingPongListener pingPongListener;
@@ -92,6 +99,7 @@ public class JircBot extends ListenerAdapter {
 
     @PostConstruct
     public void postConstruct() {
+        logger.warn("VERSION: "+version);
         this.executorService = Executors.newScheduledThreadPool(10);
         this.executorService.schedule(new Runnable() {
             @Override
@@ -103,19 +111,22 @@ public class JircBot extends ListenerAdapter {
         this.executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
+                //logger.warn("check");
                 checkBots();
             }
-        }, 30*1000, 5, TimeUnit.SECONDS);
+        }, 30, 5, TimeUnit.SECONDS);
     }
 
     @PreDestroy
     public void preDestroy() {
+        logger.warn("Bot is shutting down...");
         this.executorService.shutdown();
+        this.manager.stop("Bot is shutting down...");
     }
 
 
     private void initBots() {
-        logger.info(">>>>>>>>>>>>>>>>>>>> BOT INIT <<<<<<<<<<<<<<<<<<<<");
+        logger.info(">>>>>>>>>>>>>>>>>>>> BOT INIT : "+getVersion()+" <<<<<<<<<<<<<<<<<<<<");
 
         //Setup this bot
         Configuration.Builder templateConfig = new Configuration.Builder()
@@ -129,6 +140,7 @@ public class JircBot extends ListenerAdapter {
             servers.add(new Configuration.ServerEntry(c.getServer(), c.getPort()));
 
             Configuration.Builder confBuilder = templateConfig
+                    .setRealName("JIrcBot v"+getVersion()+" | github.com/bvn13/JIrcBot")
                     .setName(c.getBotName())
                     .addListener(adminListener)
                     .addListener(pingPongListener)
@@ -177,14 +189,15 @@ public class JircBot extends ListenerAdapter {
     }
 
     private void checkBots() {
+
         this.manager.getBots().forEach(bot -> {
             if (bot.getState().equals(PircBotX.State.DISCONNECTED)) {
                 try {
                     bot.startBot();
                 } catch (IOException e) {
-                    logger.error("Could not start bot at "+bot.getUserBot().getServer(), e);
+                    logger.error("Could not start bot at "+bot.getServerHostname(), e);
                 } catch (IrcException e) {
-                    logger.error("IrcException while starting bot at "+bot.getUserBot().getServer(), e);
+                    logger.error("IrcException while starting bot at "+bot.getServerHostname(), e);
                 }
             }
         });

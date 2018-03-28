@@ -33,7 +33,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
 
     public boolean isEnabled(Event event) throws Exception {
-        return channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), getChannelName(event)).getLoggingEnabled();
+        return channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), getChannelName(event)).getLoggingEnabled();
     }
 
     public boolean isEnabled(String serverName, String channelName) throws Exception {
@@ -72,7 +72,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
         for (String channelName : onlineUsers.keySet()) {
             Set<String> users = onlineUsers.get(channelName);
             if (users.contains(event.getUser().getNick().toLowerCase())) {
-                if (isEnabled(JircBot.extractServer(event.getBot().getUserBot().getServer()), channelName)) {
+                if (isEnabled(JircBot.extractServer(event.getBot().getServerHostname()), channelName)) {
                     log(event.getBot().getServerHostname(), channelName, "User " + event.getUser().getNick() + " quit (" + event.getReason() + ")");
                     users.remove(event.getUser().getNick().toLowerCase());
                 }
@@ -102,7 +102,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
         for (String channelName : onlineUsers.keySet()) {
             Set<String> users = onlineUsers.get(channelName);
             if (users.contains(event.getUser().getNick().toLowerCase())) {
-                if (isEnabled(JircBot.extractServer(event.getBot().getUserBot().getServer()), channelName)) {
+                if (isEnabled(JircBot.extractServer(event.getBot().getServerHostname()), channelName)) {
                     log(event.getBot().getServerHostname(), channelName,"User "+event.getOldNick()+" is now known as "+event.getNewNick());
                     users.remove(event.getUser().getNick().toLowerCase());
                 }
@@ -130,7 +130,7 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
     @Override
     public void onOutput(OutputEvent event) throws Exception {
-        if (!isEnabled(JircBot.extractServer(event.getBot().getUserBot().getServer()), event.getLineParsed().get(1))) return;
+        if (!isEnabled(JircBot.extractServer(event.getBot().getServerHostname()), event.getLineParsed().get(1))) return;
         switch (event.getLineParsed().get(0)) {
             case "PRIVMSG" :
             case "NOTICE" :

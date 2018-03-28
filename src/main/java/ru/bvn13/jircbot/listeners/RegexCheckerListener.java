@@ -30,7 +30,7 @@ public class RegexCheckerListener extends ImprovedListenerAdapter {
 
         //TODO: rework with FSM
 
-        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), getChannelName(event)).getRegexCheckerEnabled()) {
+        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), getChannelName(event)).getRegexCheckerEnabled()) {
             return;
         }
 

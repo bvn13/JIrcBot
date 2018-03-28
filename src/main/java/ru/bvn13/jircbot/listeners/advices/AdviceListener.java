@@ -34,7 +34,7 @@ public class AdviceListener extends ImprovedListenerAdapter {
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
-        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), getChannelName(event)).getAdvicesEnabled()) {
+        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), getChannelName(event)).getAdvicesEnabled()) {
             return;
         }
 

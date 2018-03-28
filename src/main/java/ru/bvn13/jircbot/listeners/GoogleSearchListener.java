@@ -35,7 +35,7 @@ public class GoogleSearchListener extends ImprovedListenerAdapter {
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
-        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), this.getChannelName(event)).getGoogleSearchEnabled()) {
+        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), this.getChannelName(event)).getGoogleSearchEnabled()) {
             return;
         }
 

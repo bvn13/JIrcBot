@@ -27,7 +27,7 @@ public class AutoRejoinListener extends ImprovedListenerAdapter {
     @Override
     public void onKick(KickEvent event) throws Exception {
 
-        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), event.getChannel().getName()).getAutoRejoinEnabled()) {
+        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), event.getChannel().getName()).getAutoRejoinEnabled()) {
             return;
         }
 
@@ -42,7 +42,7 @@ public class AutoRejoinListener extends ImprovedListenerAdapter {
     @Override
     public void onJoin(JoinEvent event) throws Exception {
 
-        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), event.getChannel().getName()).getAutoRejoinEnabled()) {
+        if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), event.getChannel().getName()).getAutoRejoinEnabled()) {
             return;
         }
 

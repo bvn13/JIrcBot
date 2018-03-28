@@ -37,9 +37,9 @@ public class AdminListener extends ImprovedListenerAdapter {
             if (event.getUser().getNick().equals(event.getBot().getNick())) {
                 event.getBot().sendRaw().rawLineNow("MODE " + event.getBot().getUserBot().getNick() + " +B");
                 try {
-                    channelSettingsService.createChannelSettings(JircBot.extractServer(event.getBot().getUserBot().getServer()), event.getChannel().getName());
+                    channelSettingsService.createChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), event.getChannel().getName());
                 } catch (Exception e) {
-                    logger.error("Could not create channel settings for channel "+event.getChannel().getName(), e);
+                    logger.error("Could not create channel settings for channel "+event.getChannel().getName()+" at "+event.getBot().getServerHostname(), e);
                 }
             }
         }
@@ -77,16 +77,18 @@ public class AdminListener extends ImprovedListenerAdapter {
                     return;
                 }
 
+                String args[] = null;
                 switch (commands[0].toLowerCase()) {
                     case "join" :
                         event.getBot().sendIRC().joinChannel(commands[1]); event.respondPrivateMessage("done"); break;
                     case "leave" :
                         event.getBot().sendRaw().rawLine("PART "+commands[1]); event.respondPrivateMessage("done"); break;
                     case "cmd" :
-                        event.getBot().sendRaw().rawLine(command); event.respondPrivateMessage("done"); break;
+                        args = commands[1].split(" ", 3);
+                        event.getBot().sendRaw().rawLine(args[2]); event.respondPrivateMessage("done"); break;
                     case "set" :
                         try {
-                            String args[] = commands[1].split(" ", 4); // set, server, channel, mode/hello-message
+                            args = commands[1].split(" ", 4); // set, server, channel, mode/hello-message
                             changeSettings(JircBot.extractServer(args[1]),  args[2], args[0], args[3]);
                             event.respondPrivateMessage("done");
                         } catch (Exception e) {

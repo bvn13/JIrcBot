@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @EnableAutoConfiguration//(exclude={DataSourceAutoConfiguration.class})
 @ComponentScan("ru.bvn13.jircbot")
-public class MainApp implements CommandLineRunner {
+public class MainApp {
 
     private static final Logger logger = LoggerFactory.getLogger(MainApp.class);
 
@@ -26,8 +26,4 @@ public class MainApp implements CommandLineRunner {
         logger.info("==============> STARTING <==============");
     }
 
-    @Override
-    public void run(String... strings) throws Exception {
-
-    }
 }

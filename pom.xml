@@ -6,20 +6,27 @@
 
     <groupId>ru.bvn13</groupId>
     <artifactId>jircbot</artifactId>
-    <version>1.2.3</version>
+    <version>${bot.version}</version>
     <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.0.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
 
     <properties>
+        <bot.version>2.0.0</bot.version>
+
         <java.version>1.8</java.version>
 
         <pircbotx.version>2.1</pircbotx.version>
 
-        <spring.framework.version>1.5.9.RELEASE</spring.framework.version>
-        <spring.orm.version>4.3.13.RELEASE</spring.orm.version>
-        <h2.version>1.4.196</h2.version>
-        <hibernate.version>5.0.12.Final</hibernate.version>
-        <sqlite.jdbc.version>3.21.0.1</sqlite.jdbc.version>
+        <spring.framework.version>2.0.0.RELEASE</spring.framework.version>
+        <spring.orm.version>5.0.4.RELEASE</spring.orm.version>
+        <hibernate.version>5.2.14.Final</hibernate.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -53,7 +60,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>${spring.framework.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>org.springframework.boot</artifactId>
@@ -66,12 +72,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.framework.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
-            <version>${spring.framework.version}</version>
         </dependency>
 
 
@@ -80,7 +84,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>${spring.framework.version}</version>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -95,7 +98,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>${spring.orm.version}</version>
         </dependency>
         <!--PostgreSQL-->
         <dependency>
@@ -217,16 +219,19 @@
 
 
 
+
+
     <build>
+
         <plugins>
 
             <!-- Package as an executable jar/war -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.5.6.RELEASE</version>
                 <configuration>
                     <mainClass>ru.bvn13.jircbot.MainApp</mainClass>
+                    <addResources>true</addResources>
                 </configuration>
                 <executions>
                     <execution>
