@@ -18,6 +18,14 @@ __powered by [PircBotX](https://github.com/pircbotx/pircbotx)__
 12. Поиск Google
 _____
 
+### 2018-03-28
+
+* Портирован на SpringBoot 2 (__NB!__ _перед запуском бота версии 2.0.0 необходимо запустить скрипт в базе: /srv/main/resources/sql/update_to_2.0.0.sql_)
+
+### 2018-03-27
+
+* Добавлена возможность коннекта бота к нескольким серверам
+
 ### 2018-02-06 
 
 * Добавлен поиск Google
@@ -123,6 +131,13 @@ Resolving deltas: 100% (253/253), done.
     {
       "enabled" : true,
       "server" : "irc.freenode.net",
+      "port" : 6667,
+      "channelsNames" : ["#voidforum", "#lor"],
+      "botName" : "jircbot"
+    },
+    {
+      "enabled" : true,
+      "server" : "irc.mozilla.org",
       "port" : 6667,
       "channelsNames" : ["#voidforum", "#lor"],
       "botName" : "jircbot"
