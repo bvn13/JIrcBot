@@ -6,6 +6,7 @@ import org.pircbotx.MultiBotManager;
 import org.pircbotx.PircBotX;
 import org.pircbotx.UtilSSLSocketFactory;
 import org.pircbotx.cap.TLSCapHandler;
+import org.pircbotx.exception.IrcException;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ import ru.bvn13.jircbot.listeners.calculator.CalculatorListener;
 import ru.bvn13.jircbot.listeners.quiz.QuizListener;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,6 +54,7 @@ public class JircBot extends ListenerAdapter {
 
     private ScheduledExecutorService executorService;
 
+    MultiBotManager manager = new MultiBotManager();
 
     @Autowired
     private PingPongListener pingPongListener;
@@ -88,19 +92,30 @@ public class JircBot extends ListenerAdapter {
 
     @PostConstruct
     public void postConstruct() {
-        this.executorService = Executors.newSingleThreadScheduledExecutor();
+        this.executorService = Executors.newScheduledThreadPool(10);
         this.executorService.schedule(new Runnable() {
             @Override
             public void run() {
-                start();
+                initBots();
+                startBots();
             }
         }, 5, TimeUnit.SECONDS);
+        this.executorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                checkBots();
+            }
+        }, 30*1000, 5, TimeUnit.SECONDS);
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        this.executorService.shutdown();
     }
 
 
-    public void start() {
-
-        logger.info(">>>>>>>>>>>>>>>>>>>> BOT STARTING <<<<<<<<<<<<<<<<<<<<");
+    private void initBots() {
+        logger.info(">>>>>>>>>>>>>>>>>>>> BOT INIT <<<<<<<<<<<<<<<<<<<<");
 
         //Setup this bot
         Configuration.Builder templateConfig = new Configuration.Builder()
@@ -142,15 +157,31 @@ public class JircBot extends ListenerAdapter {
                     )
             );
         });
+    }
 
-        MultiBotManager manager = new MultiBotManager();
+
+    private void startBots() {
+        logger.info(">>>>>>>>>>>>>>>>>>>> BOT STARTING <<<<<<<<<<<<<<<<<<<<");
 
         this.bots.forEach((id, bot) -> {
             manager.addBot(bot);
         });
 
         manager.start();
+    }
 
+    private void checkBots() {
+        this.manager.getBots().forEach(bot -> {
+            if (bot.getState().equals(PircBotX.State.DISCONNECTED)) {
+                try {
+                    bot.startBot();
+                } catch (IOException e) {
+                    logger.error("Could not start bot at "+bot.getUserBot().getServer(), e);
+                } catch (IrcException e) {
+                    logger.error("IrcException while starting bot at "+bot.getUserBot().getServer(), e);
+                }
+            }
+        });
     }
 
     public static String extractServer(String s) {
