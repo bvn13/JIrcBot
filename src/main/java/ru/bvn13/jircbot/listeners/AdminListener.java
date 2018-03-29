@@ -52,13 +52,14 @@ public class AdminListener extends ImprovedListenerAdapter {
 
         configuration.getConnections().forEach(c -> {
 
-            if (sameServer(event.getUser().getServer(), c.getServer())) {
+            if (sameServer(event.getBot().getServerHostname(), c.getServer())) {
                 aConfig.set(c);
             }
 
         });
 
         if (aConfig.get() == null) {
+            event.respondPrivateMessage("sorry, bot not found!");
             return;
         }
 
@@ -79,13 +80,17 @@ public class AdminListener extends ImprovedListenerAdapter {
 
                 String args[] = null;
                 switch (commands[0].toLowerCase()) {
+                    case "restart":
+                        event.getBot().stopBotReconnect(); break;
                     case "join" :
                         event.getBot().sendIRC().joinChannel(commands[1]); event.respondPrivateMessage("done"); break;
                     case "leave" :
                         event.getBot().sendRaw().rawLine("PART "+commands[1]); event.respondPrivateMessage("done"); break;
+                    case "privmsg" :
+                        event.getBot().sendRaw().rawLine("PRIVMSG "+commands[1]); event.respondPrivateMessage("done"); break;
                     case "cmd" :
-                        args = commands[1].split(" ", 3);
-                        event.getBot().sendRaw().rawLine(args[2]); event.respondPrivateMessage("done"); break;
+                        args = commands[1].split(" ", 2);
+                        event.getBot().sendRaw().rawLine(args[1]); event.respondPrivateMessage("done"); break;
                     case "set" :
                         try {
                             args = commands[1].split(" ", 4); // set, server, channel, mode/hello-message
@@ -93,6 +98,32 @@ public class AdminListener extends ImprovedListenerAdapter {
                             event.respondPrivateMessage("done");
                         } catch (Exception e) {
                             event.respondPrivateMessage(e.getMessage());
+                        }
+                        break;
+                    case "op" :
+                    case "deop" :
+                        String cmd = commands[0].toLowerCase();
+                        args = commands[1].split(" ", 2);
+                        if (args.length == 1) {
+                            event.getBot().sendRaw().rawLine("PRIVMSG chanserv :"+cmd+" "+args[0]+" "+event.getUser().getNick());
+                            event.respondPrivateMessage("done");
+                        } else if (args.length == 2) {
+                            event.getBot().sendRaw().rawLine("PRIVMSG chanserv :"+cmd+" "+args[0]+" "+args[1]);
+                            event.respondPrivateMessage("done");
+                        } else {
+                            event.respondPrivateMessage("wrong arguments");
+                        }
+                        break;
+                    case "kick" :
+                        args = commands[1].split(" ", 3);
+                        if (args.length == 2) {
+                            event.getBot().sendRaw().rawLine("KICK "+args[0]+" "+args[1]);
+                            event.respondPrivateMessage("done");
+                        } else if (args.length == 3) {
+                            event.getBot().sendRaw().rawLine("KICK "+args[0]+" "+args[1]+" "+args[2]);
+                            event.respondPrivateMessage("done");
+                        } else {
+                            event.respondPrivateMessage("wrong arguments");
                         }
                         break;
                     default:
