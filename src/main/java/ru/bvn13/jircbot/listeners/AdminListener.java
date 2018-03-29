@@ -93,11 +93,12 @@ public class AdminListener extends ImprovedListenerAdapter {
                         event.getBot().sendRaw().rawLine(args[1]); event.respondPrivateMessage("done"); break;
                     case "set" :
                         try {
-                            args = commands[1].split(" ", 4); // set, server, channel, mode/hello-message
-                            changeSettings(JircBot.extractServer(args[1]),  args[2], args[0], args[3]);
+                            args = commands[1].split(" ", 4); // set, channel, mode/hello-message
+                            changeSettings(JircBot.extractServer(event.getBot().getServerHostname()),  args[1], args[0], args[2]); //server, channel, set, mode
                             event.respondPrivateMessage("done");
                         } catch (Exception e) {
-                            event.respondPrivateMessage(e.getMessage());
+                            event.respondPrivateMessage(e.toString());
+                            logger.error("ERROR", e);
                         }
                         break;
                     case "op" :

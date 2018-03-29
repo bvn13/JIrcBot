@@ -40,41 +40,56 @@ public class LoggerListener extends ImprovedListenerAdapter {
         return channelSettingsService.getChannelSettings(serverName, channelName).getLoggingEnabled();
     }
 
-//    @Override
-//    public void onEvent(Event event) throws Exception {
-//
-//        int a = 0;
-//
-//        if (event instanceof OutputEvent) {
-//            this.onOutput((OutputEvent) event);
-//        }
-//
-//    }
+    @Override
+    public void onEvent(Event event) throws Exception {
+        super.onEvent(event);
+    }
 
 
     @Override
     public void onJoin(JoinEvent event) throws Exception {
         if (!isEnabled(event)) return;
 
-        if (!onlineUsers.containsKey(event.getChannel().getName())) {
-            onlineUsers.put(event.getChannel().getName(), new HashSet<>());
+        synchronized (onlineUsers) {
+            if (!onlineUsers.containsKey(event.getChannel().getName())) {
+                onlineUsers.put(event.getChannel().getName(), new HashSet<>());
+            }
+            Set<String> users = onlineUsers.get(event.getChannel().getName());
+            event.getChannel().getUsers().forEach(user -> {
+                if (!users.contains(user.getNick().toLowerCase())) {
+                    users.add(user.getNick().toLowerCase());
+                }
+            });
         }
-        Set<String> users = onlineUsers.get(event.getChannel().getName());
-        event.getChannel().getUsers().forEach(user -> {
-            users.add(user.getNick().toLowerCase());
-        });
+
         log(event.getBot().getServerHostname(), event.getChannel().getName(), "User joined: "+event.getUser().getNick());
+    }
+
+    @Override
+    public void onPart(PartEvent event) throws Exception {
+        if (!isEnabled(event)) return;
+        log(event.getBot().getServerHostname(), event.getChannel().getName(), "User " + event.getUser().getNick() + " quit (" + event.getReason() + ")");
+        synchronized (onlineUsers) {
+            for (String channelName : onlineUsers.keySet()) {
+                Set<String> users = onlineUsers.get(channelName);
+                if (users.contains(event.getUser().getNick().toLowerCase())) {
+                    users.remove(event.getUser().getNick().toLowerCase());
+                }
+            }
+        }
     }
 
     @Override
     public void onQuit(QuitEvent event) throws Exception {
         List<String> channels = new ArrayList<>();
-        for (String channelName : onlineUsers.keySet()) {
-            Set<String> users = onlineUsers.get(channelName);
-            if (users.contains(event.getUser().getNick().toLowerCase())) {
-                if (isEnabled(JircBot.extractServer(event.getBot().getServerHostname()), channelName)) {
-                    log(event.getBot().getServerHostname(), channelName, "User " + event.getUser().getNick() + " quit (" + event.getReason() + ")");
-                    users.remove(event.getUser().getNick().toLowerCase());
+        synchronized (onlineUsers) {
+            for (String channelName : onlineUsers.keySet()) {
+                Set<String> users = onlineUsers.get(channelName);
+                if (users.contains(event.getUser().getNick().toLowerCase())) {
+                    if (isEnabled(JircBot.extractServer(event.getBot().getServerHostname()), channelName)) {
+                        log(event.getBot().getServerHostname(), channelName, "User " + event.getUser().getNick() + " quit (" + event.getReason() + ")");
+                        users.remove(event.getUser().getNick().toLowerCase());
+                    }
                 }
             }
         }
