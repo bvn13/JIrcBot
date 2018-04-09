@@ -39,7 +39,7 @@ public class LinkPreviewListener extends ImprovedListenerAdapter {
     private ChannelSettingsService channelSettingsService;
 
     @Override
-    public void onGenericMessage(final GenericMessageEvent event) throws Exception {
+    public void onMessage(final MessageEvent event) throws Exception {
 
         if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), getChannelName(event)).getLinkPreviewEnabled()) {
             return;

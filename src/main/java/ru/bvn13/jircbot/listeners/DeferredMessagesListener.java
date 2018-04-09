@@ -1,6 +1,7 @@
 package ru.bvn13.jircbot.listeners;
 
 import org.pircbotx.hooks.events.JoinEvent;
+import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.NoticeEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
 
 
     @Override
-    public void onGenericMessage(final GenericMessageEvent event) throws Exception {
+    public void onMessage(final MessageEvent event) throws Exception {
 
         if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), getChannelName(event)).getDeferredMessagesEnabled()) {
             return;
@@ -75,11 +76,7 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
     }
 
 
-    private void sendDeferredMessage(final GenericMessageEvent event) {
-
-        if (event instanceof NoticeEvent) {
-            return;
-        }
+    private void sendDeferredMessage(final MessageEvent event) {
 
         List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase());
         if (deferredMessages != null && deferredMessages.size() > 0) {

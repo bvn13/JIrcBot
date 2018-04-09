@@ -26,7 +26,7 @@ public class RegexCheckerListener extends ImprovedListenerAdapter {
     private ChannelSettingsService channelSettingsService;
 
     @Override
-    public void onGenericMessage(final GenericMessageEvent event) throws Exception {
+    public void onMessage(final MessageEvent event) throws Exception {
 
         //TODO: rework with FSM
 

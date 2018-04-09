@@ -1,5 +1,6 @@
 package ru.bvn13.jircbot.listeners;
 
+import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,7 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
 
 
     @Override
-    public void onGenericMessage(final GenericMessageEvent event) throws Exception {
+    public void onMessage(final MessageEvent event) throws Exception {
 
         if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), this.getChannelName(event)).getGrammarCorrectionEnabled()) {
             return;

@@ -144,8 +144,12 @@ public class AdminListener extends ImprovedListenerAdapter {
                     case "set" :
                         try {
                             args = commands[1].split(" ", 4); // set, channel, mode/hello-message
-                            changeSettings(JircBot.extractServer(event.getBot().getServerHostname()),  args[1], args[0], args[2]); //server, channel, set, mode
-                            event.respondPrivateMessage("done");
+                            if (args.length == 3) {
+                                changeSettings(JircBot.extractServer(event.getBot().getServerHostname()), args[0], args[1], args[2]); //server, channel, set, mode
+                                event.respondPrivateMessage("done");
+                            } else {
+                                event.respondPrivateMessage("SYNTAX: ?set <channel> <option> on/off");
+                            }
                         } catch (Exception e) {
                             event.respondPrivateMessage(e.toString());
                             logger.error("ERROR", e);
@@ -245,6 +249,7 @@ public class AdminListener extends ImprovedListenerAdapter {
                     break;
                 case "defferedmessages":
                 case "deffered-messages":
+                case "tell" :
                     settings.setDeferredMessagesEnabled(mode);
                     break;
                 case "gs":
