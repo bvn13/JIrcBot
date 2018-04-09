@@ -39,7 +39,7 @@ public class DeferredMessageService {
     public void forgetAllMessages(String channelName, String recipient) {
         List<DeferredMessage> messages = deferredMessageRepository.getDeferredMessagesByChannelNameAndRecipientAndSentOrderByDtCreated(channelName, recipient, false);
         messages.forEach(msg -> {
-            msg.setSent(false);
+            msg.setSent(true);
             deferredMessageRepository.save(msg);
         });
     }
