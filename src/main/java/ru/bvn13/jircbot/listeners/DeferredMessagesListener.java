@@ -45,9 +45,6 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
             return;
         }
 
-        this.sendDeferredMessage(event);
-
-
         String userName = event.getUser().getNick();
         String channelName = this.getChannelName(event);
 
@@ -81,6 +78,8 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
             deferredMessages.forEach(msg -> {
                 event.respondPrivateMessage("User "+msg.getSender()+" at "+dt.format(msg.getDtCreated())+" told you: "+msg.getMessage());
             });
+        } else {
+            this.sendDeferredMessage(event);
         }
 
     }
