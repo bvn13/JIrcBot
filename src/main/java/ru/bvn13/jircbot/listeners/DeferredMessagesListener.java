@@ -22,6 +22,7 @@ import java.util.List;
 public class DeferredMessagesListener extends ImprovedListenerAdapter {
 
     private static final String COMMAND = "?tell";
+    private static final String COMMAND_FORGET = "?forget";
 
     private static SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -45,32 +46,35 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
 
         this.sendDeferredMessage(event);
 
-        if (!event.getMessage().startsWith(COMMAND)) {
-            return;
-        }
-
-        String message = event.getMessage().replace(COMMAND, "").trim();
-        String commands[] = message.split(" ", 2);
-
-        if (commands.length != 2) {
-            event.respond("Deferred messages usage: ?tell <UserNick/ME> your message");
-            return;
-        }
 
         String userName = event.getUser().getNick();
-        String channelname = this.getChannelName(event);
-        if (commands[0].equalsIgnoreCase("me")) {
-            // deferred to myself
-            deferredMessageService.saveDeferredMessage(channelname, userName, userName.toLowerCase(), commands[1]);
-            this.sendNotice(event,"Saved message to "+userName);
-        } else {
-            if (commands[0].equalsIgnoreCase(event.getBot().getUserBot().getNick())) {
-                this.sendNotice(event,"Sorry, message cannot be deferred to me.");
-            } else {
-                // deferred to somebody
-                deferredMessageService.saveDeferredMessage(channelname, userName, commands[0].toLowerCase(), commands[1]);
-                this.sendNotice(event, "Saved message to " + commands[0]);
+        String channelName = this.getChannelName(event);
+
+        if (event.getMessage().startsWith(COMMAND)) {
+            String message = event.getMessage().replace(COMMAND, "").trim();
+            String commands[] = message.split(" ", 2);
+
+            if (commands.length != 2) {
+                event.respond("Deferred messages usage: ?tell <UserNick/ME> your message here");
+                return;
             }
+
+            if (commands[0].equalsIgnoreCase("me")) {
+                // deferred to myself
+                deferredMessageService.saveDeferredMessage(channelName, userName, userName.toLowerCase(), commands[1]);
+                this.sendNotice(event,"Saved message to "+userName);
+            } else {
+                if (commands[0].equalsIgnoreCase(event.getBot().getUserBot().getNick())) {
+                    this.sendNotice(event,"Sorry, message cannot be deferred to me.");
+                } else {
+                    // deferred to somebody
+                    deferredMessageService.saveDeferredMessage(channelName, userName, commands[0].toLowerCase(), commands[1]);
+                    this.sendNotice(event, "Saved message to " + commands[0]);
+                }
+            }
+        } else if (event.getMessage().startsWith(COMMAND)) {
+            deferredMessageService.forgetAllMessages(channelName, userName);
+            this.sendNotice(event, "All messages to "+userName+" were deleted");
         }
 
     }
