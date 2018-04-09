@@ -2,11 +2,13 @@ package ru.bvn13.jircbot.database.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bvn13.jircbot.database.entities.DeferredMessage;
 import ru.bvn13.jircbot.database.repositories.DeferredMessageRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by bvn13 on 31.01.2018.
@@ -36,12 +38,16 @@ public class DeferredMessageService {
         deferredMessageRepository.save(msg);
     }
 
-    public void forgetAllMessages(String channelName, String recipient) {
+    @Transactional
+    public int forgetAllMessages(String channelName, String recipient) {
+        AtomicInteger count = new AtomicInteger(0);
         List<DeferredMessage> messages = deferredMessageRepository.getDeferredMessagesByChannelNameAndRecipientAndSentOrderByDtCreated(channelName, recipient, false);
         messages.forEach(msg -> {
+            count.set(count.get()+1);
             msg.setSent(true);
             deferredMessageRepository.save(msg);
         });
+        return count.get();
     }
 
 }

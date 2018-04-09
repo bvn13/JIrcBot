@@ -71,12 +71,13 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
                 }
             }
         } else if (event.getMessage().startsWith(COMMAND_FORGET)) {
-            deferredMessageService.forgetAllMessages(channelName, userName);
-            this.sendNotice(event, "All messages to "+userName+" were deleted");
+            int count = deferredMessageService.forgetAllMessages(channelName, userName);
+            this.sendNotice(event, "All "+count+" messages to "+userName+" were deleted");
         } else if (event.getMessage().startsWith(COMMAND_READ)) {
             List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(channelName, userName);
             deferredMessages.forEach(msg -> {
                 event.respondPrivateMessage("User "+msg.getSender()+" at "+dt.format(msg.getDtCreated())+" told you: "+msg.getMessage());
+                deferredMessageService.markMessageWasSent(msg);
             });
         } else {
             this.sendDeferredMessage(event);
