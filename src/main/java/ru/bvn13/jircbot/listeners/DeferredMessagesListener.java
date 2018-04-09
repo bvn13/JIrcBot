@@ -23,6 +23,7 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
 
     private static final String COMMAND = "?tell";
     private static final String COMMAND_FORGET = "?forget";
+    private static final String COMMAND_READ = "?read";
 
     private static SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -72,9 +73,14 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
                     this.sendNotice(event, "Saved message to " + commands[0]);
                 }
             }
-        } else if (event.getMessage().startsWith(COMMAND)) {
+        } else if (event.getMessage().startsWith(COMMAND_FORGET)) {
             deferredMessageService.forgetAllMessages(channelName, userName);
             this.sendNotice(event, "All messages to "+userName+" were deleted");
+        } else if (event.getMessage().startsWith(COMMAND_READ)) {
+            List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(channelName, userName);
+            deferredMessages.forEach(msg -> {
+                event.respondPrivateMessage("User "+msg.getSender()+" at "+dt.format(msg.getDtCreated())+" told you: "+msg.getMessage());
+            });
         }
 
     }

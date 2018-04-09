@@ -18,14 +18,14 @@ public class DeferredMessageService {
     private DeferredMessageRepository deferredMessageRepository;
 
     public List<DeferredMessage> getDeferredMessagesForUser(String channelName, String user) {
-        return deferredMessageRepository.getDeferredMessagesByChannelNameAndRecipientAndSentOrderByDtCreated(channelName, user, false);
+        return deferredMessageRepository.getDeferredMessagesByChannelNameAndRecipientAndSentOrderByDtCreated(channelName, user.toLowerCase(), false);
     }
 
     public void saveDeferredMessage(String channelName, String sender, String recipient, String message) {
         DeferredMessage msg = new DeferredMessage();
         msg.setChannelName(channelName);
         msg.setSender(sender);
-        msg.setRecipient(recipient);
+        msg.setRecipient(recipient.toLowerCase());
         msg.setMessage(message);
         msg.setSent(false);
         deferredMessageRepository.save(msg);
