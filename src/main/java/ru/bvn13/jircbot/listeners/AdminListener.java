@@ -1,7 +1,10 @@
 package ru.bvn13.jircbot.listeners;
 
 import org.pircbotx.hooks.events.JoinEvent;
+import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
+import org.pircbotx.hooks.types.GenericEvent;
+import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,25 +48,72 @@ public class AdminListener extends ImprovedListenerAdapter {
         }
     }
 
+
+
     @Override
-    public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
-
-        AtomicReference<Config> aConfig = new AtomicReference<>(null);
-
-        configuration.getConnections().forEach(c -> {
-
-            if (sameServer(event.getBot().getServerHostname(), c.getServer())) {
-                aConfig.set(c);
-            }
-
-        });
-
-        if (aConfig.get() == null) {
-            event.respondPrivateMessage("sorry, bot not found!");
+    public void onMessage(MessageEvent event) throws Exception {
+        Config config = getBotConfig(event);
+        if (config == null) {
             return;
         }
 
-        Config config = aConfig.get();
+        if (event.getUser().isVerified()
+                && !config.getMasterNick().isEmpty()
+                && config.getMasterNick().equals(event.getUser().getNick())) {
+
+            if (event.getMessage().startsWith(COMMAND)) {
+                String command = event.getMessage().substring(COMMAND.length());
+                String commands[] = command.trim().split(" ", 2);
+
+                if (commands[0].startsWith("+") || commands[0].startsWith("-")) {
+                    boolean isApply = commands[0].startsWith("+");
+                    command = commands[0].substring(1);
+
+                    switch (command.toLowerCase()) {
+                        case "op" :
+                            if (commands.length == 1) {
+                                event.getBot().sendRaw().rawLine("PRIVMSG chanserv :" + (!isApply ? "deop" : "op") + " " + event.getChannel().getName() + " " + event.getUser().getNick());
+                            } else {
+                                event.getBot().sendRaw().rawLine("PRIVMSG chanserv :" + (!isApply ? "deop" : "op") + " " + event.getChannel().getName() + " " + commands[1]);
+                            }
+                            break;
+                        case "v" :
+                        case "voice":
+                            if (commands.length == 1) {
+                                event.getBot().sendRaw().rawLine("MODE " + event.getChannel().getName() + " " + (isApply ? "+" : "-") + "v " + event.getUser().getNick());
+                            } else {
+                                event.getBot().sendRaw().rawLine("MODE " + event.getChannel().getName() + " " + (isApply ? "+" : "-") + "v " + commands[1]);
+                            }
+                            break;
+                    }
+                } else {
+                    switch (command.toLowerCase()) {
+                        case "inv" :
+                        case "invite" :
+                            if (command.length() > 1) {
+                                event.getBot().sendRaw().rawLine("INVITE " + event.getChannel().getName() + " " + commands[1]);
+                            }
+                            break;
+                        case "kick" :
+                            if (command.length() > 1) {
+                                event.getBot().sendRaw().rawLine("KICK " + event.getChannel().getName() + " " + commands[1] + (commands.length > 2 ? " "+commands[2] : ""));
+                            }
+                            break;
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    @Override
+    public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
+
+        Config config = getBotConfig(event);
+        if (config == null) {
+            return;
+        }
 
         if (event.getUser().isVerified()
                 && !config.getMasterNick().isEmpty()
@@ -151,7 +201,25 @@ public class AdminListener extends ImprovedListenerAdapter {
         return false;
     }
 
+    private Config getBotConfig(GenericMessageEvent event) {
+        AtomicReference<Config> aConfig = new AtomicReference<>(null);
 
+        configuration.getConnections().forEach(c -> {
+
+            if (sameServer(event.getBot().getServerHostname(), c.getServer())) {
+                aConfig.set(c);
+            }
+
+        });
+
+        if (aConfig.get() == null) {
+            event.respondPrivateMessage("sorry, bot not found!");
+            return null;
+        }
+
+        Config config = aConfig.get();
+        return config;
+    }
 
     private void changeSettings(String serverHost, String channelName, String set, String modeStr) {
         if (set.equals("hello-message") || set.equals("hello-msg")) {

@@ -111,10 +111,10 @@ public class JircBot extends ListenerAdapter {
         this.executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                //logger.warn("check");
+                logger.debug("check");
                 checkBots();
             }
-        }, 30, 5, TimeUnit.SECONDS);
+        }, 15, 5, TimeUnit.SECONDS);
     }
 
     @PreDestroy
@@ -190,17 +190,35 @@ public class JircBot extends ListenerAdapter {
 
     private void checkBots() {
 
-        this.manager.getBots().forEach(bot -> {
-            if (bot.getState().equals(PircBotX.State.DISCONNECTED)) {
-                try {
-                    bot.startBot();
-                } catch (IOException e) {
-                    logger.error("Could not start bot at "+bot.getServerHostname(), e);
-                } catch (IrcException e) {
-                    logger.error("IrcException while starting bot at "+bot.getServerHostname(), e);
+        if (this.manager.getBots().size() < this.bots.size()) {
+            logger.warn("CHECKING BOTS");
+            logger.debug("BOTS COUNT: " + this.manager.getBots().size());
+        }
+
+        this.bots.forEach((id, bot) -> {
+            if (!this.manager.getBots().contains(bot)) {
+                logger.warn("RECONNECTION BOT "+bot.getServerHostname());
+                bot.stopBotReconnect();
+                this.manager.addBot(bot);
+            } else {
+                if (bot.getState().equals(PircBotX.State.DISCONNECTED)) {
+                    logger.warn("RECONNECTION BOT "+bot.getServerHostname());
+                    bot.stopBotReconnect();
                 }
             }
         });
+
+    }
+
+    private void startBot(PircBotX bot) {
+        logger.warn("BOT "+bot.getServerHostname()+" STATUS "+bot.getState().toString());
+        try {
+            bot.startBot();
+        } catch (IOException e) {
+            logger.error("Could not start bot at "+bot.getServerHostname(), e);
+        } catch (IrcException e) {
+            logger.error("IrcException while starting bot at "+bot.getServerHostname(), e);
+        }
     }
 
     public static String extractServer(String s) {
