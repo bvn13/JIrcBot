@@ -41,7 +41,7 @@ public class DeferredMessageService {
     @Transactional
     public int forgetAllMessages(String channelName, String recipient) {
         AtomicInteger count = new AtomicInteger(0);
-        List<DeferredMessage> messages = deferredMessageRepository.getDeferredMessagesByChannelNameAndRecipientAndSentOrderByDtCreated(channelName, recipient, false);
+        List<DeferredMessage> messages = getDeferredMessagesForUser(channelName, recipient);
         messages.forEach(msg -> {
             count.set(count.get()+1);
             msg.setSent(true);
