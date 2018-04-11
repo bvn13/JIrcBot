@@ -89,11 +89,21 @@ public class StatisticsListener extends ImprovedListenerAdapter {
                 event.respondChannel("Statistics is empty now");
                 return;
             }
-            event.respondChannel("TOP for all over time:");
 
-            for (int i = 0; i < statistics.size(); i++) {
-                StatisticsDTO stats = statistics.get(i);
-                event.respondChannel("" + (i + 1) + ". " + stats.getUsername() + " - " + stats.getCount());
+            if (statistics.size() > 10) {
+                event.respondPrivateMessage("TOP for all over time:");
+
+                for (int i = 0; i < statistics.size(); i++) {
+                    StatisticsDTO stats = statistics.get(i);
+                    event.respondPrivateMessage("" + (i + 1) + ". " + stats.getUsername() + " - " + stats.getCount());
+                }
+            } else {
+                event.respondChannel("TOP for all over time:");
+
+                for (int i = 0; i < statistics.size(); i++) {
+                    StatisticsDTO stats = statistics.get(i);
+                    event.respondChannel("" + (i + 1) + ". " + stats.getUsername() + " - " + stats.getCount());
+                }
             }
 
         } else if (commands.length == 3) {
@@ -113,11 +123,21 @@ public class StatisticsListener extends ImprovedListenerAdapter {
                     event.respondChannel("Statistics for "+periodInfo.period+" is empty now");
                     return;
                 }
-                event.respondChannel("TOP for "+periodInfo.period+":");
 
-                for (int i = 0; i < statistics.size(); i++) {
-                    StatisticsDTO stats = statistics.get(i);
-                    event.respondChannel("" + (i + 1) + ". " + stats.getUsername() + " - " + stats.getCount());
+                if (statistics.size() > 10) {
+                    event.respondPrivateMessage("TOP for " + periodInfo.period + ":");
+
+                    for (int i = 0; i < statistics.size(); i++) {
+                        StatisticsDTO stats = statistics.get(i);
+                        event.respondPrivateMessage("" + (i + 1) + ". " + stats.getUsername() + " - " + stats.getCount());
+                    }
+                } else {
+                    event.respondChannel("TOP for " + periodInfo.period + ":");
+
+                    for (int i = 0; i < statistics.size(); i++) {
+                        StatisticsDTO stats = statistics.get(i);
+                        event.respondChannel("" + (i + 1) + ". " + stats.getUsername() + " - " + stats.getCount());
+                    }
                 }
 
             } else {
