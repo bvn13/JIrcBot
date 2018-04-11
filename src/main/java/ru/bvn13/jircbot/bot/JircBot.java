@@ -97,6 +97,10 @@ public class JircBot extends ListenerAdapter {
     @Autowired
     private AdminListener adminListener;
 
+    @Autowired
+    private StatisticsListener statisticsListener;
+
+
     @PostConstruct
     public void postConstruct() {
         logger.warn("VERSION: "+version);
@@ -143,6 +147,7 @@ public class JircBot extends ListenerAdapter {
                     .setRealName("JIrcBot v"+getVersion()+" | github.com/bvn13/JIrcBot")
                     .setName(c.getBotName())
                     .addListener(adminListener)
+                    .addListener(statisticsListener)
                     .addListener(pingPongListener)
                     .addListener(calculatorListener)
                     .addListener(regexCheckerListener)
