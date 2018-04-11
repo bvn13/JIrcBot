@@ -37,7 +37,7 @@ public class StatisticsListener extends ImprovedListenerAdapter {
             return;
         }
 
-        String commands[] = event.getMessage().toLowerCase().split(" ", 2);
+        String commands[] = event.getMessage().toLowerCase().split(" ");
 
         if (commands.length > 3) {
             sendHelp(event);
