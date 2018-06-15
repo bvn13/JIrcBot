@@ -139,12 +139,12 @@ public class AdminListener extends ImprovedListenerAdapter {
                     case "privmsg" :
                         event.getBot().sendRaw().rawLine("PRIVMSG "+commands[1]); event.respondPrivateMessage("done"); break;
                     case "cmd" :
-                        args = commands[1].split(" ", 2);
-                        event.getBot().sendRaw().rawLine(args[1]); event.respondPrivateMessage("done"); break;
+                        //args = commands[1].split(" ", 2);
+                        event.getBot().sendRaw().rawLine(commands[1]); event.respondPrivateMessage("done"); break;
                     case "set" :
                         try {
-                            args = commands[1].split(" ", 4); // set, channel, mode/hello-message
-                            if (args.length >= 3) {
+                            args = commands[1].split(" ", 3); // set, channel, mode/hello-message
+                            if (args.length == 3) {
                                 changeSettings(JircBot.extractServer(event.getBot().getServerHostname()), args[0], args[1], args[2]); //server, channel, set, mode
                                 event.respondPrivateMessage("done");
                             } else {
