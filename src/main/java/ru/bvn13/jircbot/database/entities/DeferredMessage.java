@@ -30,6 +30,10 @@ public class DeferredMessage extends BaseModel {
 
     @Getter
     @Setter
+    private String recipientIdent;
+
+    @Getter
+    @Setter
     @Type(type = "text")
     private String message;
 
