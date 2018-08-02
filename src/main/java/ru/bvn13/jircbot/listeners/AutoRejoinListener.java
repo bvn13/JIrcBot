@@ -48,7 +48,7 @@ public class AutoRejoinListener extends ImprovedListenerAdapter {
 
         if (wasKicked) {
             wasKicked = false;
-            this.sendNotice(event, ""+offender+", "+ AdviceEngine.getAdvice());
+            event.respond(""+offender+", "+ AdviceEngine.getAdvice());
         }
 
     }

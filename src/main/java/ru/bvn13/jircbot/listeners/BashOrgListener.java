@@ -46,7 +46,7 @@ public class BashOrgListener extends ImprovedListenerAdapter {
         }
 
         try {
-            this.sendNotice(event, getRandomBashQuote());
+            event.respond(getRandomBashQuote());
         } catch (Exception e) {
             event.respond("ОШИБКА: "+e.getMessage());
             e.printStackTrace();

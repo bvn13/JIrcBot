@@ -15,6 +15,6 @@ import java.util.List;
 public interface DeferredMessageRepository extends JpaRepository<DeferredMessage, Long> {
     List<DeferredMessage> getDeferredMessagesByChannelNameAndRecipientAndSentOrderByDtCreated(String channelName, String recipient, Boolean sent);
     @Query(nativeQuery=true,
-            value = "select d.* from DeferredMessage as d where d.channelName = :channelName and d.recipientIdent regexp :ident and d.sent = :sent")
+            value = "select d.* from DeferredMessage as d where d.channelName = :channelName and :ident ~ d.recipientIdent and d.sent = :sent")
     List<DeferredMessage> getDeferredMessagesByChannelNameAndRecipientIdentAndSentOrderByDtCreated(@Param("channelName") String channelName, @Param("ident") String recipientIdent, @Param("sent") Boolean sent);
 }

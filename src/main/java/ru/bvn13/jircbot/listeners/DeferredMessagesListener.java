@@ -47,33 +47,33 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
 
         String userName = event.getUser().getNick();
         String channelName = this.getChannelName(event);
-        String userIdent = event.getUser().getIdent();
+        String userIdent = event.getUser().getNick() + "!" + event.getUser().getLogin() + "@" + event.getUser().getHostname();
 
         if (event.getMessage().startsWith(COMMAND)) {
             String message = event.getMessage().replace(COMMAND, "").trim();
             String commands[] = message.split(" ", 2);
 
             if (commands.length != 2) {
-                event.respond("Deferred messages usage: ?tell <UserNick/ME> your message here");
+                event.respond("Deferred messages usage: ?tell <UserNick/ME/Ident> your message here");
                 return;
             }
 
             if (commands[0].equalsIgnoreCase("me")) {
                 // deferred to myself
                 deferredMessageService.saveDeferredMessage(channelName, userName, userName.toLowerCase(), commands[1]);
-                this.sendNotice(event,"Saved message to "+userName);
+                event.respond("Saved message to "+userName);
             } else {
                 if (commands[0].equalsIgnoreCase(event.getBot().getUserBot().getNick())) {
-                    this.sendNotice(event,"Sorry, message cannot be deferred to me.");
+                    event.respond("Sorry, message cannot be deferred to me.");
                 } else {
                     // deferred to somebody
                     deferredMessageService.saveDeferredMessage(channelName, userName, commands[0].toLowerCase(), commands[1]);
-                    this.sendNotice(event, "Saved message to " + commands[0]);
+                    event.respond("Saved message to " + commands[0]);
                 }
             }
         } else if (event.getMessage().startsWith(COMMAND_FORGET)) {
             int count = deferredMessageService.forgetAllMessages(channelName, userName, userIdent);
-            this.sendNotice(event, "All "+count+" messages to "+userName+" were deleted");
+            event.respond("All "+count+" messages to "+userName+" were deleted");
         } else if (event.getMessage().startsWith(COMMAND_READ)) {
             List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(channelName, userName, userIdent);
             deferredMessages.forEach(msg -> {
@@ -89,7 +89,9 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
 
     private void sendDeferredMessage(final MessageEvent event) {
 
-        List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase(), event.getUser().getIdent());
+        String userIdent = event.getUser().getNick() + "!" + event.getUser().getLogin() + "@" + event.getUser().getHostname();
+
+        List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase(), userIdent);
         if (deferredMessages != null && deferredMessages.size() > 0) {
             DeferredMessage msg = deferredMessages.get(0);
             String more = "" + (deferredMessages.size() > 1 ? " ("+(deferredMessages.size()-1)+" message/-s more)" : "");
@@ -106,7 +108,9 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
             return;
         }
 
-        List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase(), event.getUser().getIdent());
+        String userIdent = event.getUser().getNick() + "!" + event.getUser().getLogin() + "@" + event.getUser().getHostname();
+
+        List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase(), userIdent);
         if (deferredMessages != null && deferredMessages.size() > 0) {
             event.respond("You have "+deferredMessages.size()+" unread message(-s)");
         }

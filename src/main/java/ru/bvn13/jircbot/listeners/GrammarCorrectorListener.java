@@ -64,7 +64,7 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
                 Matcher matcher = REGEX.matcher(data[0].trim());
                 if (matcher.find() && !matcher.group().trim().equalsIgnoreCase(data[2].trim())) {
                     String correct = matcher.group().replace(data[1], data[2]);
-                    this.sendNotice(event,"*"+correct);
+                    event.respond("*"+correct);
                 }
             //}
         });
