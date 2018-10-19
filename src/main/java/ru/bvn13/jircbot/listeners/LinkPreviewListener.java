@@ -53,7 +53,8 @@ public class LinkPreviewListener extends ImprovedListenerAdapter {
         for (String link : links) {
             String info = parseLink(link);
             if (info != null && !info.isEmpty()) {
-                event.respond(info);
+                //event.respond(info);
+                event.getChannel().send().message(info);
             }
         };
 
