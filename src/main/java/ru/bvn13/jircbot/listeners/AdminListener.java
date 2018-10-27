@@ -145,7 +145,7 @@ public class AdminListener extends ImprovedListenerAdapter {
                         try {
                             args = commands[1].split(" ", 3); // set, channel, mode/hello-message
                             if (args.length == 3) {
-                                changeSettings(JircBot.extractServer(event.getBot().getServerHostname()), args[0], args[1], args[2]); //server, channel, set, mode
+                                changeSettings(JircBot.extractServer(event.getBot().getServerHostname()), args[0], args[1], args[2]); //server, channel, settings, mode
                                 event.respondPrivateMessage("done");
                             } else {
                                 event.respondPrivateMessage("SYNTAX: ?set <channel> <option> on/off");

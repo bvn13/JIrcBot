@@ -58,7 +58,7 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
                 return;
             }
 
-            if (commands[0].equalsIgnoreCase("me")) {
+            if (commands[0].equalsIgnoreCase("me") || userName.equalsIgnoreCase(commands[0])) {
                 // deferred to myself
                 deferredMessageService.saveDeferredMessage(channelName, userName, userName.toLowerCase(), commands[1]);
                 event.respond("Saved message to "+userName);
@@ -67,8 +67,12 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
                     event.respond("Sorry, message cannot be deferred to me.");
                 } else {
                     // deferred to somebody
-                    deferredMessageService.saveDeferredMessage(channelName, userName, commands[0].toLowerCase(), commands[1]);
-                    event.respond("Saved message to " + commands[0]);
+                    if (isUserOnline(event, userName)) {
+                        event.respond(String.format("%s is online, tell him/her directly, please.", commands[0]));
+                    } else {
+                        deferredMessageService.saveDeferredMessage(channelName, userName, commands[0].toLowerCase(), commands[1]);
+                        event.respond("Saved message to " + commands[0]);
+                    }
                 }
             }
         } else if (event.getMessage().startsWith(COMMAND_FORGET)) {

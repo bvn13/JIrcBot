@@ -5,6 +5,9 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.types.GenericChannelEvent;
 import org.pircbotx.hooks.types.GenericEvent;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Created by bvn13 on 31.01.2018.
  */
@@ -20,6 +23,15 @@ public class ImprovedListenerAdapter extends ListenerAdapter {
         } else {
             return ((MessageEvent) event).getChannel().getName();
         }
+    }
+
+    protected boolean isUserOnline(GenericEvent event, String username) {
+
+        List<String> usersNicks = event.getBot().getUserChannelDao().getAllUsers().stream()
+                .map(u -> u.getNick().toLowerCase()).collect(Collectors.toList());
+
+        return usersNicks.contains(username.toLowerCase());
+
     }
 
 }
