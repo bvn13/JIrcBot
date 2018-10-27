@@ -27,7 +27,9 @@ public class ImprovedListenerAdapter extends ListenerAdapter {
 
     protected boolean isUserOnline(GenericEvent event, String username) {
 
-        List<String> usersNicks = event.getBot().getUserChannelDao().getAllUsers().stream()
+        String channel = getChannelName(event);
+
+        List<String> usersNicks = event.getBot().getUserChannelDao().getChannel(channel).getUsers().stream()
                 .map(u -> u.getNick().toLowerCase()).collect(Collectors.toList());
 
         return usersNicks.contains(username.toLowerCase());

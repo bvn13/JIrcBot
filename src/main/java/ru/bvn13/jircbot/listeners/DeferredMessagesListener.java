@@ -67,7 +67,7 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
                     event.respond("Sorry, message cannot be deferred to me.");
                 } else {
                     // deferred to somebody
-                    if (isUserOnline(event, userName)) {
+                    if (isUserOnline(event, commands[0])) {
                         event.respond(String.format("%s is online, tell him/her directly, please.", commands[0]));
                     } else {
                         deferredMessageService.saveDeferredMessage(channelName, userName, commands[0].toLowerCase(), commands[1]);
