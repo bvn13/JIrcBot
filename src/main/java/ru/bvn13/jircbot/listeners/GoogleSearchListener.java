@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
 import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
+import ru.bvn13.jircbot.documentation.DescriptionProvided;
+import ru.bvn13.jircbot.documentation.DocumentationProvider;
+import ru.bvn13.jircbot.documentation.ListenerDescription;
 import ru.bvn13.jircbot.services.InternetAccessor;
 
 import java.io.UnsupportedEncodingException;
@@ -18,11 +21,14 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
 
+import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescription;
+
+
 /**
  * Created by bvn13 on 06.02.2018.
  */
 @Component
-public class GoogleSearchListener extends ImprovedListenerAdapter {
+public class GoogleSearchListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
     private static final String COMMAND = "?gs";
 
@@ -31,6 +37,24 @@ public class GoogleSearchListener extends ImprovedListenerAdapter {
 
     @Autowired
     private ChannelSettingsService channelSettingsService;
+
+    @Autowired
+    public GoogleSearchListener(DocumentationProvider documentationProvider) {
+        this.registerDescription(documentationProvider);
+    }
+
+    @Override
+    public ListenerDescription getDescription() {
+        return ListenerDescription.create()
+                .setModuleName("GoogleSearchListener")
+                .setModuleDescription("Make a search in Google for you")
+                .addCommand(CommandDescription.builder()
+                        .command("gs")
+                        .description("Search it")
+                        .example("?gs [WHAT YOU WANT TO SEARCH]")
+                        .build()
+                );
+    }
 
 
     @Override
@@ -90,6 +114,5 @@ public class GoogleSearchListener extends ImprovedListenerAdapter {
 
         return String.format("%s / %s / %s", URLDecoder.decode(destinationUrl, "utf-8"), linkTitle, description);
     }
-
 
 }

@@ -6,13 +6,13 @@
 
     <groupId>ru.bvn13</groupId>
     <artifactId>jircbot</artifactId>
-    <version>2.0.7</version>
+    <version>2.0.8</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.0.RELEASE</version>
+        <version>2.0.6.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -23,10 +23,6 @@
         <java.version>1.8</java.version>
 
         <pircbotx.version>2.1</pircbotx.version>
-
-        <spring.framework.version>2.0.0.RELEASE</spring.framework.version>
-        <spring.orm.version>5.0.4.RELEASE</spring.orm.version>
-        <hibernate.version>5.2.14.Final</hibernate.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -78,7 +74,10 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
 
         <!-- Dependencies for Database, Hibernate and ORM  -->
         <dependency>
@@ -88,12 +87,10 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>2.7.6</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -114,7 +111,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
-            <version>5.1.0.Final</version>
         </dependency>
 
 

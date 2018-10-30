@@ -4,21 +4,25 @@ import org.pircbotx.hooks.events.MessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
-import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.entities.dto.StatisticsDTO;
 import ru.bvn13.jircbot.database.services.IrcMessageService;
+import ru.bvn13.jircbot.documentation.DescriptionProvided;
+import ru.bvn13.jircbot.documentation.DocumentationProvider;
+import ru.bvn13.jircbot.documentation.ListenerDescription;
 import ru.bvn13.jircbot.utilities.DateTimeUtility;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+
+import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescription;
+
 
 /**
  * Created by bvn13 on 11.04.2018.
  */
 @Component
-public class StatisticsListener extends ImprovedListenerAdapter {
+public class StatisticsListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
     private static final String COMMAND = "?stats";
 
@@ -29,6 +33,24 @@ public class StatisticsListener extends ImprovedListenerAdapter {
 
     @Autowired
     private IrcMessageService ircMessageService;
+
+    @Autowired
+    public StatisticsListener(DocumentationProvider documentationProvider) {
+        registerDescription(documentationProvider);
+    }
+
+    @Override
+    public ListenerDescription getDescription() {
+        return ListenerDescription.create()
+                .setModuleName("StatisticsListener")
+                .setModuleDescription("")
+                .addCommand(CommandDescription.builder()
+                        .command("stats")
+                        .description("Provides statistics for channel")
+                        .example("?stats [D(ay)|M(onth)|Y(ear)|A(ll)] [ALL]")
+                        .build()
+                );
+    }
 
     @Override
     public void onMessage(MessageEvent event) throws Exception {

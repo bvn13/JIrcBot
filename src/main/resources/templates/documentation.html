@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>JIrcBot documentation</title>
+</head>
+<body>
+
+<h1>JIrcBot documentation</h1>
+
+<h4>view project sources at <a href="https://github.com/bvn13/jircbot">GitHub repo</a></h4>
+
+<hr/>
+
+<th:block th:each="module : ${modules}">
+    <div th:with="provider=${descriptions.get(module)}">
+        <h3 th:id="${module}">MODULE: <span th:text="${module}"></span></h3>
+        <p>
+            <i>
+                <span th:utext="${provider.description.moduleDescription.replaceAll('\n', '<br/>')}"></span>
+            </i>
+        </p>
+
+        <p>COMMANDS:</p>
+
+        <ol>
+            <th:block th:each="commandName : ${provider.description.commandNames}">
+                <li th:with="command=${provider.description.getCommandDescription(commandName)}">
+                    <p>
+                        <b>
+                            <span th:text="${command.command}"></span>
+                        </b>
+                    </p>
+                    <p>
+                        Description: <span th:utext="${command.description.replaceAll('\n', '<br/>')}"></span>
+                    </p>
+                    <p><b>
+                        Example: <span th:utext="${command.example.replaceAll('\n', '<br/>')}"></span>
+                    </b></p>
+                </li>
+            </th:block>
+        </ol>
+    </div>
+
+    <hr/>
+
+</th:block>
+
+<p>
+    (c) bvn13<br/>
+    powered with PircBotX
+</p>
+
+</body>
+</html>

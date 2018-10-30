@@ -3,7 +3,6 @@ package ru.bvn13.jircbot.listeners;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.pircbotx.hooks.events.PrivateMessageEvent;
-import org.pircbotx.hooks.types.GenericEvent;
 import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,15 +13,20 @@ import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
 import ru.bvn13.jircbot.database.entities.ChannelSettings;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
+import ru.bvn13.jircbot.documentation.DescriptionProvided;
+import ru.bvn13.jircbot.documentation.DocumentationProvider;
+import ru.bvn13.jircbot.documentation.ListenerDescription;
 import ru.bvn13.jircbot.model.Config;
 
 import java.util.concurrent.atomic.AtomicReference;
+
+import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescription;
 
 /**
  * Created by bvn13 on 27.03.2018.
  */
 @Component
-public class AdminListener extends ImprovedListenerAdapter {
+public class AdminListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminListener.class);
 
@@ -33,6 +37,81 @@ public class AdminListener extends ImprovedListenerAdapter {
 
     @Autowired
     private ChannelSettingsService channelSettingsService;
+
+    @Autowired
+    public AdminListener(DocumentationProvider documentationProvider) {
+        this.registerDescription(documentationProvider);
+    }
+
+    @Override
+    public ListenerDescription getDescription() {
+        return ListenerDescription.create()
+                .setModuleName("AdminListener")
+                .setModuleDescription("Admin commands of the bot\nMust be send in private dialog\nYou must be the owner of the bot (config.json) and your nick must be registered and verified at server")
+                .addCommand(CommandDescription.builder()
+                        .command("join")
+                        .description("joins given channel on current server")
+                        .example("?join [#CHANNEL_NAME]")
+                        .build()
+                )
+                .addCommand(CommandDescription.builder()
+                        .command("leave")
+                        .description("joins given channel on current server")
+                        .example("?leave [#CHANNEL_NAME]")
+                        .build()
+                )
+                .addCommand(CommandDescription.builder()
+                        .command("restart")
+                        .description("trying to restart the bot on current server")
+                        .example("?restart")
+                        .build()
+                )
+                .addCommand(CommandDescription.builder()
+                        .command("privmsg")
+                        .description("send private message")
+                        .example("?privmsg [YOUR_FRIEND_NICK]")
+                        .build()
+                )
+                .addCommand(CommandDescription.builder()
+                        .command("cmd")
+                        .description("send RAW command to server (be careful with that shit!)")
+                        .example("?cmd [ANY COMMAND WITH PARAMS]")
+                        .build()
+                )
+                .addCommand(CommandDescription.builder()
+                        .command("op|deop")
+                        .description("give / take away OP user status")
+                        .example("?op [#CHANNEL_NAME] [YOUR_FRIEND_NICK]\n?deop [#CHANNEL_NAME] [YOUR_HOSTILE_NICK]")
+                        .build()
+                )
+                .addCommand(CommandDescription.builder()
+                        .command("kick")
+                        .description("kick user from channel")
+                        .example("?kick [#CHANNEL_NAME] [YOUR_HOSTILE_NICK]")
+                        .build()
+                )
+                .addCommand(CommandDescription.builder()
+                        .command("set")
+                        .description("set ON|OFF any of bot opportunity for channel\n\n"+
+                                "Opportunities: \n\n"+
+                                "autorejoin | auto-rejoin - auto rejoin channel on kicking\n"+
+                                "bash | bashorg - bach.org quoting\n"+
+                                "deferredmessages | deferred-messages | tell - saving and delivering deferred messages\n"+
+                                "gs | googlesearch | google-search - search in Google\n"+
+                                "grammar | grammarcorrection | grammar-correction - grammar checker (does not work in current version)\n"+
+                                "hello | helloonjoin | hello-on-join - sending your phrase on user joins\n"+
+                                "links | linkpreview | links-preview - sending titles of web pages by given URL\n"+
+                                "logging | log - logging for channel\n"+
+                                "regex | regexp | regexchecker | regexpchecker | regex-checker | regexp-checker - regular expression checker\n"+
+                                "advice | advices - give yor friend advices\n"+
+                                "calc | calculator - calculator\n"+
+                                "quiz - quiz\n")
+                        .example("?set [#CHANNEL_NAME] [OPPORTUNITY] [ON|OFF]")
+                        .build()
+                )
+                ;
+    }
+
 
     @Override
     public void onJoin(JoinEvent event) throws Exception {
@@ -47,8 +126,6 @@ public class AdminListener extends ImprovedListenerAdapter {
             }
         }
     }
-
-
 
     @Override
     public void onMessage(MessageEvent event) throws Exception {
@@ -247,8 +324,8 @@ public class AdminListener extends ImprovedListenerAdapter {
                 case "bashorg":
                     settings.setBashOrgEnabled(mode);
                     break;
-                case "defferedmessages":
-                case "deffered-messages":
+                case "deferredmessages":
+                case "deferred-messages":
                 case "tell" :
                     settings.setDeferredMessagesEnabled(mode);
                     break;
@@ -302,4 +379,5 @@ public class AdminListener extends ImprovedListenerAdapter {
             channelSettingsService.save(settings);
         }
     }
+
 }

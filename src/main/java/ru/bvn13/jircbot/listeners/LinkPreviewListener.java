@@ -1,34 +1,29 @@
 package ru.bvn13.jircbot.listeners;
 
-import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
-import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
 import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
+import ru.bvn13.jircbot.documentation.DescriptionProvided;
+import ru.bvn13.jircbot.documentation.DocumentationProvider;
+import ru.bvn13.jircbot.documentation.ListenerDescription;
 import ru.bvn13.jircbot.services.InternetAccessor;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.lang.System.out;
+import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescription;
 
 /**
  * Created by bvn13 on 23.01.2018.
  */
 @Component
-public class LinkPreviewListener extends ImprovedListenerAdapter {
+public class LinkPreviewListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
     @Autowired
     private InternetAccessor internetAccessor;
@@ -37,6 +32,20 @@ public class LinkPreviewListener extends ImprovedListenerAdapter {
 
     @Autowired
     private ChannelSettingsService channelSettingsService;
+
+    @Autowired
+    public LinkPreviewListener(DocumentationProvider documentationProvider) {
+        registerDescription(documentationProvider);
+    }
+
+    @Override
+    public ListenerDescription getDescription() {
+        return ListenerDescription.create()
+                .setModuleName("LinkPreviewListener")
+                .setModuleDescription("With this module enabled into <a href='/docs#AdminListener'>Admin module</a> the bot will send the title of every URL found in messages posted in channel")
+                ;
+    }
+
 
     @Override
     public void onMessage(final MessageEvent event) throws Exception {

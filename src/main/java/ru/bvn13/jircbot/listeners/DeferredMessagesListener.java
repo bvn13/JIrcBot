@@ -11,15 +11,20 @@ import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.entities.DeferredMessage;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 import ru.bvn13.jircbot.database.services.DeferredMessageService;
+import ru.bvn13.jircbot.documentation.DescriptionProvided;
+import ru.bvn13.jircbot.documentation.DocumentationProvider;
+import ru.bvn13.jircbot.documentation.ListenerDescription;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescription;
 
 /**
  * Created by bvn13 on 31.01.2018.
  */
 @Component
-public class DeferredMessagesListener extends ImprovedListenerAdapter {
+public class DeferredMessagesListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
     private static final String COMMAND = "?tell";
     private static final String COMMAND_FORGET = "?forget";
@@ -32,6 +37,37 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter {
 
     @Autowired
     private DeferredMessageService deferredMessageService;
+
+    @Autowired
+    public DeferredMessagesListener(DocumentationProvider documentationProvider) {
+        registerDescription(documentationProvider);
+    }
+
+    @Override
+    public ListenerDescription getDescription() {
+        return ListenerDescription.create()
+                .setModuleName("DeferredMessagesListener")
+                .setModuleDescription("This module is like answerphone - it stores your speech to any opponent into bot's database and when your opponent becomes online (joins channel and starts to speak) the bot notice him/her with your deferred messages.")
+                .addCommand(CommandDescription.builder()
+                        .command("tell")
+                        .description("Let the bot keep in mind your message to any opponent")
+                        .example("?tell [YOUR_FRIEND] [YOUR MESSAGE]")
+                        .build()
+                )
+                .addCommand(CommandDescription.builder()
+                        .command("forget")
+                        .description("If you do not want to read all messages deferred to you this command tells the bot do not disturb you this time")
+                        .example("?forget")
+                        .build()
+                )
+                .addCommand(CommandDescription.builder()
+                        .command("read")
+                        .description("Let the bot send you all the messages deferred to you this time in private dialogue")
+                        .example("?read")
+                        .build()
+                )
+                ;
+    }
 
 
     @Override

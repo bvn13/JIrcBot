@@ -1,22 +1,26 @@
 package ru.bvn13.jircbot.listeners;
 
-import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.WaitForQueue;
 import org.pircbotx.hooks.events.MessageEvent;
-import org.pircbotx.hooks.types.GenericMessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
 import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
+import ru.bvn13.jircbot.documentation.DescriptionProvided;
+import ru.bvn13.jircbot.documentation.DocumentationProvider;
+import ru.bvn13.jircbot.documentation.ListenerDescription;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescription;
+
+
 @Component
-public class RegexCheckerListener extends ImprovedListenerAdapter {
+public class RegexCheckerListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
     private static final String COMMAND = "?regex ";
 
@@ -24,6 +28,24 @@ public class RegexCheckerListener extends ImprovedListenerAdapter {
 
     @Autowired
     private ChannelSettingsService channelSettingsService;
+
+    @Autowired
+    public RegexCheckerListener(DocumentationProvider documentationProvider) {
+        registerDescription(documentationProvider);
+    }
+
+    @Override
+    public ListenerDescription getDescription() {
+        return ListenerDescription.create()
+                .setModuleName("RegexCheckerListener")
+                .setModuleDescription("")
+                .addCommand(CommandDescription.builder()
+                        .command("regex")
+                        .description("Checks if given message with given regular expression")
+                        .example("?regex")
+                        .build()
+                );
+    }
 
     @Override
     public void onMessage(final MessageEvent event) throws Exception {

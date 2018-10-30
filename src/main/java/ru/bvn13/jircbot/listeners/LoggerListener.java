@@ -2,8 +2,6 @@ package ru.bvn13.jircbot.listeners;
 
 import org.pircbotx.hooks.Event;
 import org.pircbotx.hooks.events.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
@@ -11,14 +9,20 @@ import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.entities.IrcMessage;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 import ru.bvn13.jircbot.database.services.IrcMessageService;
+import ru.bvn13.jircbot.documentation.DescriptionProvided;
+import ru.bvn13.jircbot.documentation.DocumentationProvider;
+import ru.bvn13.jircbot.documentation.ListenerDescription;
 
 import java.util.*;
+
+import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescription;
+
 
 /**
  * Created by bvn13 on 10.03.2018.
  */
 @Component
-public class LoggerListener extends ImprovedListenerAdapter {
+public class LoggerListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
 
     @Autowired
@@ -29,7 +33,18 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
     private Map<String, Set<String>> onlineUsers = new HashMap<>();
 
+    @Autowired
+    public LoggerListener(DocumentationProvider documentationProvider) {
+        registerDescription(documentationProvider);
+    }
 
+    @Override
+    public ListenerDescription getDescription() {
+        return ListenerDescription.create()
+                .setModuleName("LoggerListener")
+                .setModuleDescription("This module logs all the messages into database for being able to observe in Web")
+                ;
+    }
 
 
     public boolean isEnabled(Event event) throws Exception {

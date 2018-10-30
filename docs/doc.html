@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>JIrcBot documentation</title>
+</head>
+<body>
+
+<h1>JIrcBot documentation</h1>
+
+<h4>view project sources at <a href="https://github.com/bvn13/jircbot">GitHub repo</a></h4>
+
+<hr/>
+
+
+<div>
+    <h3 id="AdminListener">MODULE: <span>AdminListener</span></h3>
+    <p>
+        <i>
+            <span>Admin commands of the bot<br/>Must be send in private dialog<br/>You must be the owner of the bot (config.json) and your nick must be registered and verified at server</span>
+        </i>
+    </p>
+
+    <p>COMMANDS:</p>
+
+    <ol>
+
+        <li>
+            <p>
+                <b>
+                    <span>cmd</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>send RAW command to server (be careful with that shit!)</span>
+            </p>
+            <p><b>
+                Example: <span>?cmd [ANY COMMAND WITH PARAMS]</span>
+            </b></p>
+        </li>
+
+        <li>
+            <p>
+                <b>
+                    <span>join</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>joins given channel on current server</span>
+            </p>
+            <p><b>
+                Example: <span>?join [#CHANNEL_NAME]</span>
+            </b></p>
+        </li>
+
+        <li>
+            <p>
+                <b>
+                    <span>kick</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>kick user from channel</span>
+            </p>
+            <p><b>
+                Example: <span>?kick [#CHANNEL_NAME] [YOUR_HOSTILE_NICK]</span>
+            </b></p>
+        </li>
+
+        <li>
+            <p>
+                <b>
+                    <span>leave</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>joins given channel on current server</span>
+            </p>
+            <p><b>
+                Example: <span>?leave [#CHANNEL_NAME]</span>
+            </b></p>
+        </li>
+
+        <li>
+            <p>
+                <b>
+                    <span>op|deop</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>give / take away OP user status</span>
+            </p>
+            <p><b>
+                Example: <span>?op [#CHANNEL_NAME] [YOUR_FRIEND_NICK]<br/>?deop [#CHANNEL_NAME] [YOUR_HOSTILE_NICK]</span>
+            </b></p>
+        </li>
+
+        <li>
+            <p>
+                <b>
+                    <span>privmsg</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>send private message</span>
+            </p>
+            <p><b>
+                Example: <span>?privmsg [YOUR_FRIEND_NICK]</span>
+            </b></p>
+        </li>
+
+        <li>
+            <p>
+                <b>
+                    <span>restart</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>trying to restart the bot on current server</span>
+            </p>
+            <p><b>
+                Example: <span>?restart</span>
+            </b></p>
+        </li>
+
+        <li>
+            <p>
+                <b>
+                    <span>set</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>set ON|OFF any of bot opportunity for channel<br/><br/>Opportunities: <br/><br/>autorejoin | auto-rejoin - auto rejoin channel on kicking<br/>bash | bashorg - bach.org quoting<br/>deferredmessages | deferred-messages | tell - saving and delivering deferred messages<br/>gs | googlesearch | google-search - search in Google<br/>grammar | grammarcorrection | grammar-correction - grammar checker (does not work in current version)<br/>hello | helloonjoin | hello-on-join - sending your phrase on user joins<br/>links | linkpreview | links-preview - sending titles of web pages by given URL<br/>logging | log - logging for channel<br/>regex | regexp | regexchecker | regexpchecker | regex-checker | regexp-checker - regular expression checker<br/>advice | advices - give yor friend advices<br/>calc | calculator - calculator<br/>quiz - quiz<br/></span>
+            </p>
+            <p><b>
+                Example: <span>?set [#CHANNEL_NAME] [OPPORTUNITY] [ON|OFF]</span>
+            </b></p>
+        </li>
+
+    </ol>
+</div>
+
+<hr/>
+
+
+<div>
+    <h3 id="BashOrgListener">MODULE: <span>BashOrgListener</span></h3>
+    <p>
+        <i>
+            <span>Send bash.org quotes in channel on your request</span>
+        </i>
+    </p>
+
+    <p>COMMANDS:</p>
+
+    <ol>
+
+        <li>
+            <p>
+                <b>
+                    <span>bash</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>Send random quote from bash.org to channel</span>
+            </p>
+            <p><b>
+                Example: <span>?bash</span>
+            </b></p>
+        </li>
+
+    </ol>
+</div>
+
+<hr/>
+
+
+<div>
+    <h3 id="DeferredMessagesListener">MODULE: <span>DeferredMessagesListener</span></h3>
+    <p>
+        <i>
+            <span>This module is like answerphone - it stores your speech to any opponent into bot's database and when your opponent becomes online (joins channel and starts to speak) the bot notice him/her with your deferred messages.</span>
+        </i>
+    </p>
+
+    <p>COMMANDS:</p>
+
+    <ol>
+
+        <li>
+            <p>
+                <b>
+                    <span>forget</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>If you do not want to read all messages deferred to you this command tells the bot do not disturb you this time</span>
+            </p>
+            <p><b>
+                Example: <span>?forget</span>
+            </b></p>
+        </li>
+
+        <li>
+            <p>
+                <b>
+                    <span>read</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>Let the bot send you all the messages deferred to you this time in private dialogue</span>
+            </p>
+            <p><b>
+                Example: <span>?read</span>
+            </b></p>
+        </li>
+
+        <li>
+            <p>
+                <b>
+                    <span>tell</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>Let the bot keep in mind your message to any opponent</span>
+            </p>
+            <p><b>
+                Example: <span>?tell [YOUR_FRIEND] [YOUR MESSAGE]</span>
+            </b></p>
+        </li>
+
+    </ol>
+</div>
+
+<hr/>
+
+
+<div>
+    <h3 id="GoogleSearchListener">MODULE: <span>GoogleSearchListener</span></h3>
+    <p>
+        <i>
+            <span>Make a search in Google for you</span>
+        </i>
+    </p>
+
+    <p>COMMANDS:</p>
+
+    <ol>
+
+        <li>
+            <p>
+                <b>
+                    <span>gs</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>Search it</span>
+            </p>
+            <p><b>
+                Example: <span>?gs [WHAT YOU WANT TO SEARCH]</span>
+            </b></p>
+        </li>
+
+    </ol>
+</div>
+
+<hr/>
+
+
+<div>
+    <h3 id="HelloOnJoinListener">MODULE: <span>HelloOnJoinListener</span></h3>
+    <p>
+        <i>
+            <span>The bot greets everyone joining the channel<br/>You can set the greeting text using <a href='/docs#AdminListener'>Admin module</a></span>
+        </i>
+    </p>
+
+    <p>COMMANDS:</p>
+
+    <ol>
+
+    </ol>
+</div>
+
+<hr/>
+
+
+<div>
+    <h3 id="LinkPreviewListener">MODULE: <span>LinkPreviewListener</span></h3>
+    <p>
+        <i>
+            <span>With this module enabled into <a href='/docs#AdminListener'>Admin module</a> the bot will send the title of every URL found in messages posted in channel</span>
+        </i>
+    </p>
+
+    <p>COMMANDS:</p>
+
+    <ol>
+
+    </ol>
+</div>
+
+<hr/>
+
+
+<div>
+    <h3 id="LoggerListener">MODULE: <span>LoggerListener</span></h3>
+    <p>
+        <i>
+            <span>This module logs all the messages into database for being able to observe in Web</span>
+        </i>
+    </p>
+
+    <p>COMMANDS:</p>
+
+    <ol>
+
+    </ol>
+</div>
+
+<hr/>
+
+
+<div>
+    <h3 id="PingPongListener">MODULE: <span>PingPongListener</span></h3>
+    <p>
+        <i>
+            <span>Try to play ping-pong if you not aware of is the bot here</span>
+        </i>
+    </p>
+
+    <p>COMMANDS:</p>
+
+    <ol>
+
+        <li>
+            <p>
+                <b>
+                    <span>ping</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>Returns pong</span>
+            </p>
+            <p><b>
+                Example: <span>?ping</span>
+            </b></p>
+        </li>
+
+    </ol>
+</div>
+
+<hr/>
+
+
+<div>
+    <h3 id="RegexCheckerListener">MODULE: <span>RegexCheckerListener</span></h3>
+    <p>
+        <i>
+            <span></span>
+        </i>
+    </p>
+
+    <p>COMMANDS:</p>
+
+    <ol>
+
+        <li>
+            <p>
+                <b>
+                    <span>regex</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>Checks if given message with given regular expression</span>
+            </p>
+            <p><b>
+                Example: <span>?regex</span>
+            </b></p>
+        </li>
+
+    </ol>
+</div>
+
+<hr/>
+
+
+<div>
+    <h3 id="StatisticsListener">MODULE: <span>StatisticsListener</span></h3>
+    <p>
+        <i>
+            <span></span>
+        </i>
+    </p>
+
+    <p>COMMANDS:</p>
+
+    <ol>
+
+        <li>
+            <p>
+                <b>
+                    <span>stats</span>
+                </b>
+            </p>
+            <p>
+                Description: <span>Provides statistics for channel</span>
+            </p>
+            <p><b>
+                Example: <span>?stats [D(ay)|M(onth)|Y(ear)|A(ll)] [ALL]</span>
+            </b></p>
+        </li>
+
+    </ol>
+</div>
+
+<hr/>
+
+
+
+<p>
+    (c) bvn13<br/>
+    powered with PircBotX
+</p>
+
+</body>
+</html>
