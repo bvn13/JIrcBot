@@ -3,23 +3,25 @@ package ru.bvn13.jircbot.listeners;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
 import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
+import ru.bvn13.jircbot.documentation.DescriptionProvided;
+import ru.bvn13.jircbot.documentation.ListenerDescription;
 import ru.bvn13.jircbot.services.InternetAccessor;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescription;
+
+
 @Component
-public class DuckDuckGoSearchListener extends ImprovedListenerAdapter {
+public class DuckDuckGoSearchListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
     private static final String COMMAND = "?s";
 
@@ -28,6 +30,19 @@ public class DuckDuckGoSearchListener extends ImprovedListenerAdapter {
 
     @Autowired
     private ChannelSettingsService channelSettingsService;
+
+    @Override
+    public ListenerDescription getDescription() {
+        return ListenerDescription.create()
+                .setModuleName("DuckDuckGoSearchListener")
+                .setModuleDescription("Make a search in DuckDuckGo for you")
+                .addCommand(CommandDescription.builder()
+                        .command("s")
+                        .description("Search it")
+                        .example("?s [WHAT YOU WANT TO SEARCH]")
+                        .build()
+                );
+    }
 
 
     @Override
@@ -54,10 +69,6 @@ public class DuckDuckGoSearchListener extends ImprovedListenerAdapter {
     }
 
     private String search(String phrase) throws Exception {
-        String encodedPhrase = URLEncoder.encode(phrase.replaceAll(" ", "+"), "utf-8");
-        //String link = "https://duckduckgo.com/?q="+encodedPhrase;
-        //String queryPage = internetAccessor.retrieveContentByLink(link);
-
         String link = "https://duckduckgo.com/lite/";
         Map<String, String> data = new HashMap<>();
         data.put("q", phrase);
@@ -77,4 +88,5 @@ public class DuckDuckGoSearchListener extends ImprovedListenerAdapter {
         }
 
     }
+
 }

@@ -1,12 +1,10 @@
 package ru.bvn13.jircbot.documentation;
 
-import javafx.collections.transformation.SortedList;
 import lombok.Getter;
 import org.modelmapper.internal.util.Lists;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by bvn13 on 28.10.2018.
