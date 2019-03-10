@@ -32,6 +32,7 @@ public class StatisticsListener extends ImprovedListenerAdapter {
 
     @Override
     public void onMessage(MessageEvent event) throws Exception {
+        super.onMessage(event);
 
         if (!event.getMessage().startsWith(COMMAND)) {
             return;

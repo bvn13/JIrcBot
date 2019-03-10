@@ -15,7 +15,7 @@ public class AdviceEngine {
     private static final String urlAdvice = "http://fucking-great-advice.ru/api/random";
 
     public static String getAdvice() throws Exception {
-        StringBuffer content = new StringBuffer();
+        StringBuilder content = new StringBuilder();
         try {
             URL url = new URL(urlAdvice);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();

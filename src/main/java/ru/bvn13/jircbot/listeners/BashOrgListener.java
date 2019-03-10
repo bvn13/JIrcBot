@@ -32,12 +32,13 @@ public class BashOrgListener extends ImprovedListenerAdapter {
 
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
+        super.onMessage(event);
 
         if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), getChannelName(event)).getBashOrgEnabled()) {
             return;
         }
 
-        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
+        if (event.getUser() != null && event.getBot().getUserBot().getNick().equals(event.getUser().getNick())) {
             return;
         }
 
@@ -57,7 +58,7 @@ public class BashOrgListener extends ImprovedListenerAdapter {
     private String getDataFromConnection(HttpURLConnection con) throws Exception {
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "windows-1251"));
         String inputLine;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
 
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);

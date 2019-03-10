@@ -25,7 +25,9 @@ public class GoogleDoodleListener extends ListenerAdapter {
     @Override
     public void onGenericMessage(final GenericMessageEvent event) throws Exception {
 
-        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
+        super.onGenericMessage(event);
+
+        if (event.getUser() != null && event.getBot().getUserBot().getNick().equals(event.getUser().getNick())) {
             return;
         }
 

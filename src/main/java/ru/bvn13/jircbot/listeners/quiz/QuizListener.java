@@ -31,7 +31,7 @@ public class QuizListener extends ImprovedListenerAdapter {
             return;
         }
 
-        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
+        if (event.getUser() != null && event.getBot().getUserBot().getNick().equals(event.getUser().getNick())) {
             return;
         }
 

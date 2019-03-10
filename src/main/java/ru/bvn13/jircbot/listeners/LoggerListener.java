@@ -48,6 +48,8 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
     @Override
     public void onJoin(JoinEvent event) throws Exception {
+        super.onJoin(event);
+
         if (!isEnabled(event)) return;
 
         synchronized (onlineUsers) {
@@ -67,6 +69,8 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
     @Override
     public void onPart(PartEvent event) throws Exception {
+        super.onPart(event);
+
         if (!isEnabled(event)) return;
         log(event.getBot().getServerHostname(), event.getChannel().getName(), "User " + event.getUser().getNick() + " quit (" + event.getReason() + ")");
         synchronized (onlineUsers) {
@@ -81,6 +85,8 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
     @Override
     public void onQuit(QuitEvent event) throws Exception {
+        super.onQuit(event);
+
         List<String> channels = new ArrayList<>();
         synchronized (onlineUsers) {
             for (String channelName : onlineUsers.keySet()) {
@@ -97,6 +103,8 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
     @Override
     public void onKick(KickEvent event) throws Exception {
+        super.onKick(event);
+
         if (!isEnabled(event)) return;
 
         if (onlineUsers.containsKey(event.getChannel().getName())) {
@@ -107,12 +115,16 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
     @Override
     public void onMessage(MessageEvent event) throws Exception {
+        super.onMessage(event);
+
         if (!isEnabled(event)) return;
         log(event.getBot().getServerHostname(), event.getChannel().getName(), event.getUser().getNick(), event.getMessage());
     }
 
     @Override
     public void onNickChange(NickChangeEvent event) throws Exception {
+        super.onNickChange(event);
+
         List<String> channels = new ArrayList<>();
         for (String channelName : onlineUsers.keySet()) {
             Set<String> users = onlineUsers.get(channelName);
@@ -127,24 +139,32 @@ public class LoggerListener extends ImprovedListenerAdapter {
 
     @Override
     public void onNotice(NoticeEvent event) throws Exception {
+        super.onNotice(event);
+
         if (!isEnabled(event)) return;
         log(event.getBot().getServerHostname(), event.getChannel().getName(), event.getMessage());
     }
 
     @Override
     public void onTopic(TopicEvent event) throws Exception {
+        super.onTopic(event);
+
         if (!isEnabled(event)) return;
         log(event.getBot().getServerHostname(), event.getChannel().getName(), ""+event.getUser().getNick()+" set topic: "+event.getTopic());
     }
 
     @Override
     public void onAction(ActionEvent event) throws Exception {
+        super.onAction(event);
+
         if (!isEnabled(event)) return;
         log(event.getBot().getServerHostname(), event.getChannel().getName(), "*"+event.getUser().getNick()+" "+event.getAction());
     }
 
     @Override
     public void onOutput(OutputEvent event) throws Exception {
+        super.onOutput(event);
+
         if (!isEnabled(JircBot.extractServer(event.getBot().getServerHostname()), event.getLineParsed().get(1))) return;
         switch (event.getLineParsed().get(0)) {
             case "PRIVMSG" :

@@ -22,13 +22,15 @@ public class HelloOnJoinListener extends ImprovedListenerAdapter {
     @Override
     public void onJoin(final JoinEvent event) throws Exception {
 
+        super.onJoin(event);
+
         ChannelSettings channelSettings = channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), getChannelName(event));
 
         if (!channelSettings.getHelloOnJoinEnabled()) {
             return;
         }
 
-        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
+        if (event.getUser() != null && event.getBot().getUserBot().getNick().equals(event.getUser().getNick())) {
             return;
         }
 

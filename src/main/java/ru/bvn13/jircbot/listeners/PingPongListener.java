@@ -12,8 +12,9 @@ public class PingPongListener extends ListenerAdapter {
 
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
+        super.onMessage(event);
 
-        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
+        if (event.getUser() != null && event.getBot().getUserBot().getNick().equals(event.getUser().getNick())) {
             return;
         }
 
