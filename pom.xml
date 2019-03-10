@@ -24,10 +24,6 @@
 
         <pircbotx.version>2.1</pircbotx.version>
 
-        <spring.framework.version>2.0.0.RELEASE</spring.framework.version>
-        <spring.orm.version>5.0.4.RELEASE</spring.orm.version>
-        <hibernate.version>5.2.14.Final</hibernate.version>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
