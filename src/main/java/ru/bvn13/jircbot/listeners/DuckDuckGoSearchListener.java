@@ -10,6 +10,7 @@ import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
 import ru.bvn13.jircbot.bot.JircBot;
 import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 import ru.bvn13.jircbot.documentation.DescriptionProvided;
+import ru.bvn13.jircbot.documentation.DocumentationProvider;
 import ru.bvn13.jircbot.documentation.ListenerDescription;
 import ru.bvn13.jircbot.services.InternetAccessor;
 
@@ -30,6 +31,11 @@ public class DuckDuckGoSearchListener extends ImprovedListenerAdapter implements
 
     @Autowired
     private ChannelSettingsService channelSettingsService;
+
+    @Autowired
+    public DuckDuckGoSearchListener(DocumentationProvider documentationProvider) {
+        this.registerDescription(documentationProvider);
+    }
 
     @Override
     public ListenerDescription getDescription() {
