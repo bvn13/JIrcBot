@@ -1,14 +1,17 @@
 package ru.bvn13.jircbot.services;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLDecoder;
+import java.io.OutputStream;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  * Created by bvn13 on 06.02.2018.
@@ -38,7 +41,7 @@ public class InternetAccessor {
 
     private String getLastUrl_http(String link) {
         String url = ""+link;
-        StringBuffer content = new StringBuffer();
+        StringBuilder content = new StringBuilder();
         URL resourceUrl, base, next;
         HttpURLConnection conn;
         String location = link;
@@ -84,7 +87,7 @@ public class InternetAccessor {
 
     private String getLastUrl_https(String link) {
         String url = ""+link;
-        StringBuffer content = new StringBuffer();
+        StringBuilder content = new StringBuilder();
         URL resourceUrl, base, next;
         HttpsURLConnection conn;
         String location = link;
@@ -130,7 +133,7 @@ public class InternetAccessor {
 
     private String retrieveContentByLinkWithEncoding_http(String link, String encoding) {
         String url = ""+link;
-        StringBuffer content = new StringBuffer();
+        StringBuilder content = new StringBuilder();
         URL resourceUrl, base, next;
         HttpURLConnection conn;
         String location = null;
@@ -186,7 +189,7 @@ public class InternetAccessor {
 
     private String retrieveContentByLinkWithEncoding_https(String link, String encoding) {
         String url = ""+link;
-        StringBuffer content = new StringBuffer();
+        StringBuilder content = new StringBuilder();
         URL resourceUrl, base, next;
         HttpsURLConnection conn;
         String location = null;
@@ -238,6 +241,51 @@ public class InternetAccessor {
             //throw new Exception("не могу получить совет для тебя");
         }
         return "";
+    }
+
+    public String sendPost(String link, Map<String, String> data) throws Exception {
+        URL url = new URL(link);
+        URLConnection con = url.openConnection();
+        HttpURLConnection http = (HttpURLConnection)con;
+        http.setRequestMethod("POST"); // PUT is another valid option
+        http.setDoOutput(true);
+
+        data.put("kl", "us-en");
+
+        http.setRequestProperty("user-agent", "Mozilla/5.0 (X11; Fedora; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
+        http.setRequestProperty("origin", "https://duckduckgo.com");
+        http.setRequestProperty("referer", "https://duckduckgo.com/");
+
+        StringJoiner sj = new StringJoiner("&");
+        for(Map.Entry<String,String> entry : data.entrySet()) {
+            sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+        byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
+        int length = out.length;
+
+        http.setFixedLengthStreamingMode(length);
+        http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        http.connect();
+        try(OutputStream os = http.getOutputStream()) {
+            os.write(out);
+        }
+
+        int responseCode = http.getResponseCode();
+        if (responseCode >= 200 && responseCode < 400) {
+
+            StringBuilder answer = new StringBuilder();
+            BufferedReader in = new BufferedReader(new InputStreamReader(http.getInputStream(), "UTF-8"));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                answer.append(inputLine);
+            }
+            in.close();
+
+            http.disconnect();
+            return answer.toString();
+        } else {
+            return http.getResponseMessage();
+        }
     }
 
 }

@@ -72,12 +72,13 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter implements
 
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
+        super.onMessage(event);
 
         if (!channelSettingsService.getChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), getChannelName(event)).getDeferredMessagesEnabled()) {
             return;
         }
 
-        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
+        if (event.getUser() != null && event.getBot().getUserBot().getNick().equals(event.getUser().getNick())) {
             return;
         }
 
@@ -144,7 +145,9 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter implements
     @Override
     public void onJoin(JoinEvent event) throws Exception {
 
-        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
+        super.onJoin(event);
+
+        if (event.getUser() != null && event.getBot().getUserBot().getNick().equals(event.getUser().getNick())) {
             return;
         }
 

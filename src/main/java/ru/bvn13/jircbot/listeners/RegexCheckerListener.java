@@ -49,6 +49,7 @@ public class RegexCheckerListener extends ImprovedListenerAdapter implements Des
 
     @Override
     public void onMessage(final MessageEvent event) throws Exception {
+        super.onMessage(event);
 
         //TODO: rework with FSM
 
@@ -56,7 +57,7 @@ public class RegexCheckerListener extends ImprovedListenerAdapter implements Des
             return;
         }
 
-        if (event.getUser().getUserId().equals(event.getBot().getUserBot().getUserId())) {
+        if (event.getUser() != null && event.getBot().getUserBot().getNick().equals(event.getUser().getNick())) {
             return;
         }
 

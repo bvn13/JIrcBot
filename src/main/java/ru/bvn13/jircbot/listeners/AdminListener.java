@@ -115,6 +115,8 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
 
     @Override
     public void onJoin(JoinEvent event) throws Exception {
+        super.onJoin(event);
+
         if (event.getChannel().getName().startsWith("#")) {
             if (event.getUser().getNick().equals(event.getBot().getNick())) {
                 event.getBot().sendRaw().rawLineNow("MODE " + event.getBot().getUserBot().getNick() + " +B");
@@ -129,6 +131,8 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
 
     @Override
     public void onMessage(MessageEvent event) throws Exception {
+        super.onMessage(event);
+
         Config config = getBotConfig(event);
         if (config == null) {
             return;
@@ -186,6 +190,8 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
 
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
+
+        super.onPrivateMessage(event);
 
         Config config = getBotConfig(event);
         if (config == null) {

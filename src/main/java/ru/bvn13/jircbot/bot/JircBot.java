@@ -92,6 +92,9 @@ public class JircBot extends ListenerAdapter {
     private GoogleSearchListener googleSearchListener;
 
     @Autowired
+    private DuckDuckGoSearchListener duckDuckGoSearchListener;
+
+    @Autowired
     private LoggerListener loggerListener;
 
     @Autowired
@@ -159,7 +162,8 @@ public class JircBot extends ListenerAdapter {
                     .addListener(linkPreviewListener)
                     .addListener(helloOnJoinListener)
                     .addListener(grammarCorrectorListener)
-                    .addListener(googleSearchListener)
+                    //.addListener(googleSearchListener)
+                    .addListener(duckDuckGoSearchListener)
                     .addListener(loggerListener)
 
                     // not tested

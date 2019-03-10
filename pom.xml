@@ -6,19 +6,19 @@
 
     <groupId>ru.bvn13</groupId>
     <artifactId>jircbot</artifactId>
-    <version>2.0.8</version>
+    <version>${bot.version}</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.6.RELEASE</version>
+        <version>2.1.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
 
     <properties>
-        <bot.version>2.0.7</bot.version>
+        <bot.version>2.0.8</bot.version>
 
         <java.version>1.8</java.version>
 
@@ -74,10 +74,7 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-        </dependency>
+
 
         <!-- Dependencies for Database, Hibernate and ORM  -->
         <dependency>
@@ -87,10 +84,12 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
+            <version>2.7.6</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -111,6 +110,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
+            <version>5.1.0.Final</version>
         </dependency>
 
 

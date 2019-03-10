@@ -54,6 +54,7 @@ public class StatisticsListener extends ImprovedListenerAdapter implements Descr
 
     @Override
     public void onMessage(MessageEvent event) throws Exception {
+        super.onMessage(event);
 
         if (!event.getMessage().startsWith(COMMAND)) {
             return;
