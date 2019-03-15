@@ -18,7 +18,6 @@ import ru.bvn13.jircbot.listeners.advices.AdviceEngine;
 @Component
 public class AutoRejoinListener extends ImprovedListenerAdapter {
 
-    @Autowired
     private ChannelSettingsService channelSettingsService;
 
     private Boolean wasKicked = false;
@@ -55,5 +54,10 @@ public class AutoRejoinListener extends ImprovedListenerAdapter {
             event.respond(""+offender+", "+ AdviceEngine.getAdvice());
         }
 
+    }
+
+    @Autowired
+    public void setChannelSettingsService(ChannelSettingsService channelSettingsService) {
+        this.channelSettingsService = channelSettingsService;
     }
 }

@@ -1,7 +1,6 @@
 package ru.bvn13.jircbot.bot;
 
 
-import lombok.Getter;
 import org.pircbotx.Configuration;
 import org.pircbotx.MultiBotManager;
 import org.pircbotx.PircBotX;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ru.bvn13.jircbot.services.YandexSearchService;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
 import ru.bvn13.jircbot.listeners.*;
 import ru.bvn13.jircbot.listeners.advices.AdviceListener;
@@ -38,9 +36,9 @@ public class JircBot extends ListenerAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(JircBot.class);
 
-    @Value("${bot.version}")
+    @Value("${jircbot.version}")
     private String version;
-    public String getVersion() {
+    private String getVersion() {
         return version == null ? "" : version;
     }
 
@@ -48,9 +46,6 @@ public class JircBot extends ListenerAdapter {
 
     private Map<String, PircBotX> bots = new HashMap<>();
 
-
-    @Autowired
-    private YandexSearchService yandexSearchService;
 
 
     @Autowired
@@ -63,64 +58,37 @@ public class JircBot extends ListenerAdapter {
 
     private MultiBotManager manager = new MultiBotManager();
 
-    @Autowired
     private PingPongListener pingPongListener;
-    @Autowired
     private CalculatorListener calculatorListener;
-    @Autowired
     private RegexCheckerListener regexCheckerListener;
-    @Autowired
     private AdviceListener adviceListener;
-    @Autowired
     private QuizListener quizListener;
-    @Autowired
     private BashOrgListener bashOrgListener;
-    @Autowired
     private AutoRejoinListener autoRejoinListener;
-    @Autowired
     private DeferredMessagesListener deferredMessagesListener;
-
-    @Autowired
     private LinkPreviewListener linkPreviewListener;
-    @Autowired
     private HelloOnJoinListener helloOnJoinListener;
-
-    @Autowired
     private GrammarCorrectorListener grammarCorrectorListener;
-
-    @Autowired
-    private GoogleSearchListener googleSearchListener;
-
-    @Autowired
+    private HelpListener helpListener;
     private DuckDuckGoSearchListener duckDuckGoSearchListener;
-
-    @Autowired
     private LoggerListener loggerListener;
-
-    @Autowired
     private AdminListener adminListener;
-
-    @Autowired
     private StatisticsListener statisticsListener;
+
+
 
 
     @PostConstruct
     public void postConstruct() {
         logger.warn("VERSION: "+version);
         this.executorService = Executors.newScheduledThreadPool(10);
-        this.executorService.schedule(new Runnable() {
-            @Override
-            public void run() {
-                initBots();
-                startBots();
-            }
+        this.executorService.schedule(() -> {
+            initBots();
+            startBots();
         }, 5, TimeUnit.SECONDS);
-        this.executorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                logger.debug("check");
-                checkBots();
-            }
+        this.executorService.scheduleAtFixedRate(() -> {
+            logger.debug("check");
+            checkBots();
         }, 15, 5, TimeUnit.SECONDS);
     }
 
@@ -162,13 +130,9 @@ public class JircBot extends ListenerAdapter {
                     .addListener(linkPreviewListener)
                     .addListener(helloOnJoinListener)
                     .addListener(grammarCorrectorListener)
-                    //.addListener(googleSearchListener)
+                    .addListener(helpListener)
                     .addListener(duckDuckGoSearchListener)
                     .addListener(loggerListener)
-
-                    // not tested
-                    //.addListener(new GoogleDoodleListener(this.config))
-                    //.addListener(new YandexSearchListener(this.config, this.yandexSearchService))
 
                     .setServers(servers)
                     .setAutoReconnect(true)
@@ -235,4 +199,85 @@ public class JircBot extends ListenerAdapter {
         return ""+d[d.length-2]+"."+d[d.length-1];
     }
 
+    //*************************************************
+
+    @Autowired
+    public void setPingPongListener(PingPongListener pingPongListener) {
+        this.pingPongListener = pingPongListener;
+    }
+
+    @Autowired
+    public void setCalculatorListener(CalculatorListener calculatorListener) {
+        this.calculatorListener = calculatorListener;
+    }
+
+    @Autowired
+    public void setRegexCheckerListener(RegexCheckerListener regexCheckerListener) {
+        this.regexCheckerListener = regexCheckerListener;
+    }
+
+    @Autowired
+    public void setAdviceListener(AdviceListener adviceListener) {
+        this.adviceListener = adviceListener;
+    }
+
+    @Autowired
+    public void setQuizListener(QuizListener quizListener) {
+        this.quizListener = quizListener;
+    }
+
+    @Autowired
+    public void setBashOrgListener(BashOrgListener bashOrgListener) {
+        this.bashOrgListener = bashOrgListener;
+    }
+
+    @Autowired
+    public void setAutoRejoinListener(AutoRejoinListener autoRejoinListener) {
+        this.autoRejoinListener = autoRejoinListener;
+    }
+
+    @Autowired
+    public void setDeferredMessagesListener(DeferredMessagesListener deferredMessagesListener) {
+        this.deferredMessagesListener = deferredMessagesListener;
+    }
+
+    @Autowired
+    public void setLinkPreviewListener(LinkPreviewListener linkPreviewListener) {
+        this.linkPreviewListener = linkPreviewListener;
+    }
+
+    @Autowired
+    public void setHelloOnJoinListener(HelloOnJoinListener helloOnJoinListener) {
+        this.helloOnJoinListener = helloOnJoinListener;
+    }
+
+    @Autowired
+    public void setGrammarCorrectorListener(GrammarCorrectorListener grammarCorrectorListener) {
+        this.grammarCorrectorListener = grammarCorrectorListener;
+    }
+
+    @Autowired
+    public void setHelpListener(HelpListener helpListener) {
+        this.helpListener = helpListener;
+    }
+
+    @Autowired
+    public void setDuckDuckGoSearchListener(DuckDuckGoSearchListener duckDuckGoSearchListener) {
+        this.duckDuckGoSearchListener = duckDuckGoSearchListener;
+    }
+
+    @Autowired
+    public void setLoggerListener(LoggerListener loggerListener) {
+        this.loggerListener = loggerListener;
+    }
+
+    @Autowired
+    public void setAdminListener(AdminListener adminListener) {
+        this.adminListener = adminListener;
+    }
+
+    @Autowired
+    public void setStatisticsListener(StatisticsListener statisticsListener) {
+        this.statisticsListener = statisticsListener;
+    }
 }

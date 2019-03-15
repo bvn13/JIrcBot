@@ -20,8 +20,13 @@ import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescript
 @Component
 public class HelloOnJoinListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
-    @Autowired
     private ChannelSettingsService channelSettingsService;
+
+
+    @Autowired
+    public HelloOnJoinListener(DocumentationProvider documentationProvider) {
+        registerDescription(documentationProvider);
+    }
 
     @Override
     public void onJoin(final JoinEvent event) throws Exception {
@@ -45,10 +50,6 @@ public class HelloOnJoinListener extends ImprovedListenerAdapter implements Desc
         }
     }
 
-    @Autowired
-    public HelloOnJoinListener(DocumentationProvider documentationProvider) {
-        registerDescription(documentationProvider);
-    }
 
     @Override
     public ListenerDescription getDescription() {
@@ -59,4 +60,8 @@ public class HelloOnJoinListener extends ImprovedListenerAdapter implements Desc
                 ;
     }
 
+    @Autowired
+    public void setChannelSettingsService(ChannelSettingsService channelSettingsService) {
+        this.channelSettingsService = channelSettingsService;
+    }
 }

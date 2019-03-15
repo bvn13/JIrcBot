@@ -31,7 +31,6 @@ public class StatisticsListener extends ImprovedListenerAdapter implements Descr
         Date dateStart;
     }
 
-    @Autowired
     private IrcMessageService ircMessageService;
 
     @Autowired
@@ -197,5 +196,10 @@ public class StatisticsListener extends ImprovedListenerAdapter implements Descr
 
     private void sendHelp(MessageEvent event) {
         event.respond("syntax: ?stats [d(ay)|m(onth)|y(ear)|a(ll)] [all]");
+    }
+
+    @Autowired
+    public void setIrcMessageService(IrcMessageService ircMessageService) {
+        this.ircMessageService = ircMessageService;
     }
 }

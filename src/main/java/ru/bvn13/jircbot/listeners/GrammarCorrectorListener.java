@@ -28,10 +28,8 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
 
     private static SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    @Autowired
     private ChannelSettingsService channelSettingsService;
 
-    @Autowired
     private GrammarCorrectionService grammarCorrectionService;
 
 
@@ -133,4 +131,14 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
         return "syntax: ?correct add <REGEX-formatted word> > <full correction> | ?correct remove <REGEX-formatted word> > <full correction> | ?correct show";
     }
 
+
+    @Autowired
+    public void setChannelSettingsService(ChannelSettingsService channelSettingsService) {
+        this.channelSettingsService = channelSettingsService;
+    }
+
+    @Autowired
+    public void setGrammarCorrectionService(GrammarCorrectionService grammarCorrectionService) {
+        this.grammarCorrectionService = grammarCorrectionService;
+    }
 }

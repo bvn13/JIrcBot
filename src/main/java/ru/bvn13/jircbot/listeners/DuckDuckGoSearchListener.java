@@ -26,10 +26,8 @@ public class DuckDuckGoSearchListener extends ImprovedListenerAdapter implements
 
     private static final String COMMAND = "?s";
 
-    @Autowired
     private InternetAccessor internetAccessor;
 
-    @Autowired
     private ChannelSettingsService channelSettingsService;
 
     @Autowired
@@ -95,4 +93,13 @@ public class DuckDuckGoSearchListener extends ImprovedListenerAdapter implements
 
     }
 
+    @Autowired
+    public void setInternetAccessor(InternetAccessor internetAccessor) {
+        this.internetAccessor = internetAccessor;
+    }
+
+    @Autowired
+    public void setChannelSettingsService(ChannelSettingsService channelSettingsService) {
+        this.channelSettingsService = channelSettingsService;
+    }
 }

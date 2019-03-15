@@ -32,10 +32,8 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter implements
 
     private static SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    @Autowired
     private ChannelSettingsService channelSettingsService;
 
-    @Autowired
     private DeferredMessageService deferredMessageService;
 
     @Autowired
@@ -160,4 +158,13 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter implements
 
     }
 
+    @Autowired
+    public void setChannelSettingsService(ChannelSettingsService channelSettingsService) {
+        this.channelSettingsService = channelSettingsService;
+    }
+
+    @Autowired
+    public void setDeferredMessageService(DeferredMessageService deferredMessageService) {
+        this.deferredMessageService = deferredMessageService;
+    }
 }

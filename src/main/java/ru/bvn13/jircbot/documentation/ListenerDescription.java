@@ -7,6 +7,8 @@ import org.modelmapper.internal.util.Lists;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by bvn13 on 28.10.2018.
@@ -54,14 +56,19 @@ public class ListenerDescription {
         return this;
     }
 
+    public String getCommandNamesJoined() {
+        return Lists.from(commandsDescription.keySet().iterator()).stream().sorted().collect(Collectors.joining(","));
+    }
+
+    public Optional<CommandDescription> getCommandDescriptionOpt(String command) {
+        return Optional.ofNullable(commandsDescription.getOrDefault(command, null));
+    }
+
     public List<String> getCommandNames() {
-        List<String> names = Lists.from(commandsDescription.keySet().iterator());
-        names.sort(String.CASE_INSENSITIVE_ORDER);
-        return names;
+        return Lists.from(commandsDescription.keySet().iterator());
     }
 
     public CommandDescription getCommandDescription(String command) {
         return commandsDescription.getOrDefault(command, null);
     }
-
 }

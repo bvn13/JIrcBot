@@ -26,7 +26,6 @@ public class RegexCheckerListener extends ImprovedListenerAdapter implements Des
 
     private static final Map<String, Boolean> usersState = new HashMap<>();
 
-    @Autowired
     private ChannelSettingsService channelSettingsService;
 
     @Autowired
@@ -119,4 +118,8 @@ public class RegexCheckerListener extends ImprovedListenerAdapter implements Des
 
     }
 
+    @Autowired
+    public void setChannelSettingsService(ChannelSettingsService channelSettingsService) {
+        this.channelSettingsService = channelSettingsService;
+    }
 }

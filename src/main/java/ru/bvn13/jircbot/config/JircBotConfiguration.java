@@ -23,9 +23,12 @@ public class JircBotConfiguration {
 
     private static Logger logger = LoggerFactory.getLogger(JircBotConfiguration.class);
 
-
-    @Value("${config}")
+    @Value("${jircbot.config}")
     private String configFileName;
+
+    @Getter
+    @Value("${jircbot.url.main}")
+    private String mainUrl;
 
     @Getter
     private List<Config> connections = new ArrayList<>();
@@ -134,5 +137,6 @@ public class JircBotConfiguration {
         sets.setKey((String) searchSets.get("key"));
         return sets;
     }
+
 
 }

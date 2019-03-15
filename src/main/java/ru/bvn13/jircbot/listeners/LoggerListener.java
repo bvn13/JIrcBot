@@ -25,10 +25,8 @@ import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescript
 public class LoggerListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
 
-    @Autowired
     private ChannelSettingsService channelSettingsService;
 
-    @Autowired
     private IrcMessageService ircMessageService;
 
     private Map<String, Set<String>> onlineUsers = new HashMap<>();
@@ -198,4 +196,14 @@ public class LoggerListener extends ImprovedListenerAdapter implements Descripti
         ircMessageService.save(msg);
     }
 
+
+    @Autowired
+    public void setChannelSettingsService(ChannelSettingsService channelSettingsService) {
+        this.channelSettingsService = channelSettingsService;
+    }
+
+    @Autowired
+    public void setIrcMessageService(IrcMessageService ircMessageService) {
+        this.ircMessageService = ircMessageService;
+    }
 }

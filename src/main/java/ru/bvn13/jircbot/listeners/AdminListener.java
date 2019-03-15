@@ -32,10 +32,8 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
 
     private static final String COMMAND = "?";
 
-    @Autowired
     private JircBotConfiguration configuration;
 
-    @Autowired
     private ChannelSettingsService channelSettingsService;
 
     @Autowired
@@ -386,4 +384,13 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
         }
     }
 
+    @Autowired
+    public void setConfiguration(JircBotConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
+    @Autowired
+    public void setChannelSettingsService(ChannelSettingsService channelSettingsService) {
+        this.channelSettingsService = channelSettingsService;
+    }
 }
