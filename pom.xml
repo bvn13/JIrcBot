@@ -6,7 +6,7 @@
 
     <groupId>ru.bvn13</groupId>
     <artifactId>jircbot</artifactId>
-    <version>${jircbot.version}</version>
+    <version>2.1.0</version>
     <packaging>jar</packaging>
 
     <parent>
