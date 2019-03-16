@@ -80,47 +80,49 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter implements
             return;
         }
 
-        String userName = event.getUser().getNick();
-        String channelName = this.getChannelName(event);
-        String userIdent = event.getUser().getNick() + "!" + event.getUser().getLogin() + "@" + event.getUser().getHostname();
+        if (event.getUser() != null) {
+            String userName = event.getUser().getNick();
+            String channelName = this.getChannelName(event);
+            String userIdent = event.getUser().getNick() + "!" + event.getUser().getLogin() + "@" + event.getUser().getHostname();
 
-        if (event.getMessage().startsWith(COMMAND)) {
-            String message = event.getMessage().replace(COMMAND, "").trim();
-            String commands[] = message.split(" ", 2);
+            if (event.getMessage().startsWith(COMMAND)) {
+                String message = event.getMessage().substring(COMMAND.length()).trim();
+                String[] commands = message.split(" ", 2);
 
-            if (commands.length != 2) {
-                event.respond("Deferred messages usage: ?tell <UserNick/ME/Ident> your message here");
-                return;
-            }
+                if (commands.length != 2) {
+                    event.respond("Deferred messages usage: ?tell <UserNick/ME/Ident> your message here");
+                    return;
+                }
 
-            if (commands[0].equalsIgnoreCase("me") || userName.equalsIgnoreCase(commands[0])) {
-                // deferred to myself
-                deferredMessageService.saveDeferredMessage(channelName, userName, userName.toLowerCase(), commands[1]);
-                event.respond("Saved message to "+userName);
-            } else {
-                if (commands[0].equalsIgnoreCase(event.getBot().getUserBot().getNick())) {
-                    event.respond("Sorry, message cannot be deferred to me.");
+                if (commands[0].equalsIgnoreCase("me") || userName.equalsIgnoreCase(commands[0])) {
+                    // deferred to myself
+                    deferredMessageService.saveDeferredMessage(channelName, userName, userName.toLowerCase(), commands[1]);
+                    event.respond("Saved message to "+userName);
                 } else {
-                    // deferred to somebody
-                    if (isUserOnline(event, commands[0])) {
-                        event.respond(String.format("%s is online, tell him/her directly, please.", commands[0]));
+                    if (commands[0].equalsIgnoreCase(event.getBot().getUserBot().getNick())) {
+                        event.respond("Sorry, message cannot be deferred to me.");
                     } else {
-                        deferredMessageService.saveDeferredMessage(channelName, userName, commands[0].toLowerCase(), commands[1]);
-                        event.respond("Saved message to " + commands[0]);
+                        // deferred to somebody
+                        if (isUserOnline(event, commands[0])) {
+                            event.respond(String.format("%s is online, tell him/her directly, please.", commands[0]));
+                        } else {
+                            deferredMessageService.saveDeferredMessage(channelName, userName, commands[0].toLowerCase(), commands[1]);
+                            event.respond("Saved message to " + commands[0]);
+                        }
                     }
                 }
+            } else if (event.getMessage().startsWith(COMMAND_FORGET)) {
+                int count = deferredMessageService.forgetAllMessages(channelName, userName, userIdent);
+                event.respond("All "+count+" messages to "+userName+" were deleted");
+            } else if (event.getMessage().startsWith(COMMAND_READ)) {
+                List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(channelName, userName, userIdent);
+                deferredMessages.forEach(msg -> {
+                    event.respondPrivateMessage("User "+msg.getSender()+" at "+dt.format(msg.getDtCreated())+" told you: "+msg.getMessage());
+                    deferredMessageService.markMessageWasSent(msg);
+                });
+            } else {
+                this.sendDeferredMessage(event);
             }
-        } else if (event.getMessage().startsWith(COMMAND_FORGET)) {
-            int count = deferredMessageService.forgetAllMessages(channelName, userName, userIdent);
-            event.respond("All "+count+" messages to "+userName+" were deleted");
-        } else if (event.getMessage().startsWith(COMMAND_READ)) {
-            List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(channelName, userName, userIdent);
-            deferredMessages.forEach(msg -> {
-                event.respondPrivateMessage("User "+msg.getSender()+" at "+dt.format(msg.getDtCreated())+" told you: "+msg.getMessage());
-                deferredMessageService.markMessageWasSent(msg);
-            });
-        } else {
-            this.sendDeferredMessage(event);
         }
 
     }
@@ -128,16 +130,17 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter implements
 
     private void sendDeferredMessage(final MessageEvent event) {
 
-        String userIdent = event.getUser().getNick() + "!" + event.getUser().getLogin() + "@" + event.getUser().getHostname();
+        if (event.getUser() != null) {
+            String userIdent = event.getUser().getNick() + "!" + event.getUser().getLogin() + "@" + event.getUser().getHostname();
 
-        List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase(), userIdent);
-        if (deferredMessages != null && deferredMessages.size() > 0) {
-            DeferredMessage msg = deferredMessages.get(0);
-            String more = "" + (deferredMessages.size() > 1 ? " ("+(deferredMessages.size()-1)+" message/-s more)" : "");
-            event.respond("User "+msg.getSender()+" at "+dt.format(msg.getDtCreated())+" told you"+more+": "+msg.getMessage());
-            deferredMessageService.markMessageWasSent(msg);
+            List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase(), userIdent);
+            if (deferredMessages != null && deferredMessages.size() > 0) {
+                DeferredMessage msg = deferredMessages.get(0);
+                String more = "" + (deferredMessages.size() > 1 ? " (" + (deferredMessages.size() - 1) + " message/-s more)" : "");
+                event.respond("User " + msg.getSender() + " at " + dt.format(msg.getDtCreated()) + " told you" + more + ": " + msg.getMessage());
+                deferredMessageService.markMessageWasSent(msg);
+            }
         }
-
     }
 
     @Override
@@ -149,13 +152,14 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter implements
             return;
         }
 
-        String userIdent = event.getUser().getNick() + "!" + event.getUser().getLogin() + "@" + event.getUser().getHostname();
+        if (event.getUser() != null) {
+            String userIdent = event.getUser().getNick() + "!" + event.getUser().getLogin() + "@" + event.getUser().getHostname();
 
-        List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase(), userIdent);
-        if (deferredMessages != null && deferredMessages.size() > 0) {
-            event.respond("You have "+deferredMessages.size()+" unread message(-s)");
+            List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase(), userIdent);
+            if (deferredMessages != null && deferredMessages.size() > 0) {
+                event.respond("You have " + deferredMessages.size() + " unread message(-s)");
+            }
         }
-
     }
 
     @Autowired

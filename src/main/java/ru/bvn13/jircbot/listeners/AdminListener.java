@@ -116,7 +116,7 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
         super.onJoin(event);
 
         if (event.getChannel().getName().startsWith("#")) {
-            if (event.getUser().getNick().equals(event.getBot().getNick())) {
+            if (event.getUser() != null && event.getBot().getNick().equalsIgnoreCase(event.getUser().getNick())) {
                 event.getBot().sendRaw().rawLineNow("MODE " + event.getBot().getUserBot().getNick() + " +B");
                 try {
                     channelSettingsService.createChannelSettings(JircBot.extractServer(event.getBot().getServerHostname()), event.getChannel().getName());
@@ -136,13 +136,13 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
             return;
         }
 
-        if (event.getUser().isVerified()
+        if (event.getUser() != null && event.getUser().isVerified()
                 && !config.getMasterNick().isEmpty()
                 && config.getMasterNick().equals(event.getUser().getNick())) {
 
             if (event.getMessage().startsWith(COMMAND)) {
                 String command = event.getMessage().substring(COMMAND.length());
-                String commands[] = command.trim().split(" ", 2);
+                String[] commands = command.trim().split(" ", 2);
 
                 if (commands[0].startsWith("+") || commands[0].startsWith("-")) {
                     boolean isApply = commands[0].startsWith("+");
@@ -196,20 +196,20 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
             return;
         }
 
-        if (event.getUser().isVerified()
+        if (event.getUser() != null && event.getUser().isVerified()
                 && !config.getMasterNick().isEmpty()
                 && config.getMasterNick().equals(event.getUser().getNick())) {
 
             if (event.getMessage().startsWith(COMMAND)) {
                 String command = event.getMessage().substring(COMMAND.length());
-                String commands[] = command.trim().split(" ", 2);
+                String[] commands = command.trim().split(" ", 2);
 
                 if (commands.length != 2) {
                     event.respondPrivateMessage("Wrong command");
                     return;
                 }
 
-                String args[] = null;
+                String[] args = null;
                 switch (commands[0].toLowerCase()) {
                     case "restart":
                         event.getBot().stopBotReconnect(); break;
@@ -273,8 +273,8 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
     }
 
     private boolean sameServer(String s1, String s2) {
-        String d1[] = s1.split("[\\.]");
-        String d2[] = s2.split("[\\.]");
+        String[] d1 = s1.split("[\\.]");
+        String[] d2 = s2.split("[\\.]");
 
         if (d1.length >= 2 && d2.length >= 2) {
             if (d1[d1.length - 1].equals(d2[d2.length - 1])
@@ -302,8 +302,7 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
             return null;
         }
 
-        Config config = aConfig.get();
-        return config;
+        return aConfig.get();
     }
 
     private void changeSettings(String serverHost, String channelName, String set, String modeStr) {

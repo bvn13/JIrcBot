@@ -59,7 +59,7 @@ public class StatisticsListener extends ImprovedListenerAdapter implements Descr
             return;
         }
 
-        String commands[] = event.getMessage().toLowerCase().split(" ");
+        String[] commands = event.getMessage().toLowerCase().split(" ");
 
         if (commands.length > 3) {
             sendHelp(event);

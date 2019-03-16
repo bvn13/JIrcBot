@@ -5,6 +5,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.pircbotx.hooks.events.MessageEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
@@ -28,6 +30,8 @@ import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescript
  */
 @Component
 public class BashOrgListener extends ImprovedListenerAdapter implements DescriptionProvided {
+
+    private static final Logger logger = LoggerFactory.getLogger(BashOrgListener.class);
 
     private static final String COMMAND = "?bash";
     private static final String USER_AGENT = "Mozilla/5.0";
@@ -66,16 +70,14 @@ public class BashOrgListener extends ImprovedListenerAdapter implements Descript
             return;
         }
 
-        if (!event.getMessage().startsWith(COMMAND)) {
-            return;
-        }
-
-        try {
-            event.respond(getRandomBashQuote());
-        } catch (Exception e) {
-            event.respond("ERROR: "+e.getMessage());
-            e.printStackTrace();
-        }
+        isApplicable(event, COMMAND, message -> {
+            try {
+                event.respond(getRandomBashQuote());
+            } catch (Exception e) {
+                event.respond("ERROR: "+e.getMessage());
+                logger.error("", e);
+            }
+        });
 
     }
 
@@ -108,12 +110,12 @@ public class BashOrgListener extends ImprovedListenerAdapter implements Descript
             throw new Exception("Could not get a random quote!");
         }
 
-        String contentType = con.getContentType();
-        Matcher matcher = PATTERN_CHARSET.matcher(contentType);
-        String charset = "utf-8";
-        if (matcher.find()) {
-            charset = matcher.group(1);
-        }
+//        String contentType = con.getContentType();
+//        Matcher matcher = PATTERN_CHARSET.matcher(contentType);
+//        String charset = "utf-8";
+//        if (matcher.find()) {
+//            charset = matcher.group(1);
+//        }
         String response = getDataFromConnection(con);
 
         Document doc = Jsoup.parse(response);

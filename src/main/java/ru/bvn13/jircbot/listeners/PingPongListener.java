@@ -4,6 +4,7 @@ import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.MessageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.bvn13.jircbot.bot.ImprovedListenerAdapter;
 import ru.bvn13.jircbot.documentation.DescriptionProvided;
 import ru.bvn13.jircbot.documentation.DocumentationProvider;
 import ru.bvn13.jircbot.documentation.ListenerDescription;
@@ -11,7 +12,7 @@ import ru.bvn13.jircbot.documentation.ListenerDescription;
 import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescription;
 
 @Component
-public class PingPongListener extends ListenerAdapter implements DescriptionProvided {
+public class PingPongListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
     private static final String COMMAND = "?ping";
 
@@ -23,11 +24,7 @@ public class PingPongListener extends ListenerAdapter implements DescriptionProv
             return;
         }
 
-        if (!event.getMessage().startsWith(COMMAND)) {
-            return;
-        }
-
-        event.respond("pong!");
+        isApplicable(event, COMMAND, message -> event.respond("pong!"));
 
     }
 

@@ -74,10 +74,10 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
 
     private void onCommand(final GenericMessageEvent event) throws Exception {
         String message = event.getMessage().replace(COMMAND, "").trim();
-        String commands[] = message.split(" ", 2);
+        String[] commands = message.split(" ", 2);
         if (commands.length == 2) {
             if (commands[0].trim().equalsIgnoreCase("add")) {
-                String params[] = commands[1].trim().split(">");
+                String[] params = commands[1].trim().split(">");
                 if (params.length != 2) {
                     event.respond(helpMessage());
                 } else {
@@ -85,7 +85,7 @@ public class GrammarCorrectorListener extends ImprovedListenerAdapter {
                     event.respond("added correction: "+params[0].trim()+" > "+params[1].trim());
                 }
             } else if (commands[0].trim().equalsIgnoreCase("remove")) {
-                String params[] = commands[1].trim().split(">");
+                String[] params = commands[1].trim().split(">");
                 if (params.length == 1) {
                     // by word
                     if (grammarCorrectionService.removeAllCorrectionsByWord(commands[1].trim())) {

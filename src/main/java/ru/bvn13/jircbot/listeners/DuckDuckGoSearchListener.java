@@ -61,15 +61,15 @@ public class DuckDuckGoSearchListener extends ImprovedListenerAdapter implements
             return;
         }
 
-        if (!event.getMessage().startsWith(COMMAND)) {
-            return;
-        }
+        isApplicable(event, COMMAND, message -> {
+            try {
+                String result = search(message);
+                event.respond(result);
+            } catch (Exception e) {
+                event.respond("error is occurred while searching");
+            }
+        });
 
-        String message = event.getMessage().replace(COMMAND, "").trim();
-
-        String result = search(message);
-
-        event.respond(result);
     }
 
     private String search(String phrase) throws Exception {

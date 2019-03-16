@@ -22,7 +22,7 @@ import java.util.Optional;
 @Component
 public class HelpListener extends ImprovedListenerAdapter implements DescriptionProvided {
 
-    private static final List<String> COMMAND = Arrays.asList("?help", "?h");
+    private static final List<String> COMMANDS = Arrays.asList("?help", "?h");
 
     private JircBotConfiguration configuration;
     private DocumentationProvider documentationProvider;
@@ -42,33 +42,17 @@ public class HelpListener extends ImprovedListenerAdapter implements Description
             return;
         }
 
-        answer(event);
+        isApplicable(event, COMMANDS, message -> answer(event, message));
     }
 
     @Override
     public void onPrivateMessage(PrivateMessageEvent event) throws Exception {
         super.onPrivateMessage(event);
 
-        answer(event);
+        isApplicable(event, COMMANDS, message -> answer(event, message));
     }
 
-    private void answer(GenericMessageEvent event) {
-        boolean isHelp = false;
-        String command = "";
-        for (String c : COMMAND) {
-            if (event.getMessage().startsWith(c)) {
-                isHelp = true;
-                command = c;
-                break;
-            }
-        }
-
-        if (!isHelp) {
-            return;
-        }
-
-        String message = event.getMessage().replace(command, "").trim();
-
+    private void answer(GenericMessageEvent event, String message) {
         if (message.isEmpty()) {
             event.respond(adviceToFollowMainUrl);
         } else {
@@ -79,12 +63,12 @@ public class HelpListener extends ImprovedListenerAdapter implements Description
     private void answerWithHelp(GenericMessageEvent event, String message) {
         String[] words = message.replace("  ", "").split(" ");
         if (words.length > 1 || words[0].equalsIgnoreCase("all")) {
-            event.respond(String.format("help syntax: ?help | ?help <COMMAND> | Commands: %s", documentationProvider.getAllCommands()));
+            event.respond(String.format("help syntax: ?help | ?help <COMMANDS> | Commands: %s", documentationProvider.getAllCommands()));
         } else {
             Optional<ListenerDescription.CommandDescription> description = documentationProvider.findByCommand(words[0].toLowerCase());
             if (description.isPresent()) {
                 ListenerDescription.CommandDescription d = description.get();
-                event.respond(String.format("COMMAND: %s, DESCRIPTION: %s, EXAMPLE: %s", d.getCommand(), d.getDescription(), d.getExample()));
+                event.respond(String.format("COMMANDS: %s, DESCRIPTION: %s, EXAMPLE: %s", d.getCommand(), d.getDescription(), d.getExample()));
             } else {
                 event.respond(String.format("wrong command %s. %s%s", words[0], adviceToFollowMainUrl.substring(0, 1).toUpperCase(), adviceToFollowMainUrl.substring(1)));
             }

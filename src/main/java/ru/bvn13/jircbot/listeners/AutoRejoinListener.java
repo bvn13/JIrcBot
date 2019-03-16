@@ -32,10 +32,12 @@ public class AutoRejoinListener extends ImprovedListenerAdapter {
             return;
         }
 
-        if (event.getRecipient().getUserId().equals(event.getBot().getUserBot().getUserId())) {
+        if (event.getRecipient() != null && event.getRecipient().getUserId().equals(event.getBot().getUserBot().getUserId())) {
             wasKicked = true;
-            offender = event.getUser().getNick();
-            event.getBot().sendIRC().joinChannel(event.getChannel().getName());
+            if (event.getUser() != null) {
+                offender = event.getUser().getNick();
+                event.getBot().sendIRC().joinChannel(event.getChannel().getName());
+            }
         }
 
     }

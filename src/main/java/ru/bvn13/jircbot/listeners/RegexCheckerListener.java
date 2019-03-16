@@ -60,7 +60,7 @@ public class RegexCheckerListener extends ImprovedListenerAdapter implements Des
             return;
         }
 
-        if (!event.getMessage().startsWith(COMMAND)) {
+        if (!isApplicable(event, COMMAND)) {
             return;
         }
 

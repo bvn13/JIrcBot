@@ -61,7 +61,7 @@ public class LinkPreviewListener extends ImprovedListenerAdapter implements Desc
         List<String> links = findLink(event.getMessage());
         for (String link : links) {
             String info = parseLink(link);
-            if (info != null && !info.isEmpty()) {
+            if (!info.isEmpty()) {
                 //event.respond(info);
                 event.getChannel().send().message(info);
             }
@@ -70,7 +70,7 @@ public class LinkPreviewListener extends ImprovedListenerAdapter implements Desc
     }
 
 
-    public List<String> findLink(String message) {
+    private List<String> findLink(String message) {
         Matcher matcher = REGEX.matcher(message);
         List<String> links = new ArrayList<>();
         while (matcher.find()) {
@@ -84,19 +84,19 @@ public class LinkPreviewListener extends ImprovedListenerAdapter implements Desc
         String content = internetAccessor.retrieveContentByLink(link);
 
         String encoding = null; //getCharsetFromHeaders(content.toString());
-        if (encoding == null) {
-            encoding = getCharsetFromBody(content.toString());
-        }
+//        if (encoding == null) {
+//            encoding = getCharsetFromBody(content.toString());
+//        }
 
         String title = "";
 
-        if (encoding != null && !encoding.isEmpty()) {
-            content = internetAccessor.retrieveContentByLinkWithEncoding(link, encoding);
-        }
+//        if (encoding != null && !encoding.isEmpty()) {
+//            content = internetAccessor.retrieveContentByLinkWithEncoding(link, encoding);
+//        }
 
         title = content.substring(content.indexOf("<title>") + 7, content.indexOf("</title>"));
 
-        return "Title: "+title.toString();
+        return "Title: "+title;
     }
 
 
@@ -115,9 +115,7 @@ public class LinkPreviewListener extends ImprovedListenerAdapter implements Desc
         w.flush();
         w.close();
 
-        String encodedTitle = out.toString();
-
-        return encodedTitle;
+        return out.toString();
     }
 
     String decodeTitle(String title, String encoding) throws UnsupportedEncodingException {
