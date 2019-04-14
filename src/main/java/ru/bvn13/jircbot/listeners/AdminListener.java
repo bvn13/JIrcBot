@@ -95,13 +95,13 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
                                 "autorejoin | auto-rejoin - auto rejoin channel on kicking\n"+
                                 "bash | bashorg - bach.org quoting\n"+
                                 "deferredmessages | deferred-messages | tell - saving and delivering deferred messages\n"+
-                                "gs | googlesearch | google-search - search in Google\n"+
+                                "s | search - search in DuckDuckGo for you\n"+
                                 "grammar | grammarcorrection | grammar-correction - grammar checker (does not work in current version)\n"+
                                 "hello | helloonjoin | hello-on-join - sending your phrase on user joins\n"+
                                 "links | linkpreview | links-preview - sending titles of web pages by given URL\n"+
                                 "logging | log - logging for channel\n"+
                                 "regex | regexp | regexchecker | regexpchecker | regex-checker | regexp-checker - regular expression checker\n"+
-                                "advice | advices - give yor friend advices\n"+
+                                "advice | advices - give your friend advices\n"+
                                 "calc | calculator - calculator\n"+
                                 "quiz - quiz\n")
                         .example("?set [#CHANNEL_NAME] [OPPORTUNITY] [ON|OFF]")
@@ -164,6 +164,9 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
                                 event.getBot().sendRaw().rawLine("MODE " + event.getChannel().getName() + " " + (isApply ? "+" : "-") + "v " + commands[1]);
                             }
                             break;
+                        default:
+                            event.respond("Wrong command. Try to send it privately.");
+                            break;
                     }
                 } else {
                     switch (command.toLowerCase()) {
@@ -177,6 +180,9 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
                             if (command.length() > 1) {
                                 event.getBot().sendRaw().rawLine("KICK " + event.getChannel().getName() + " " + commands[1] + (commands.length > 2 ? " "+commands[2] : ""));
                             }
+                            break;
+                        default:
+                            event.respond("Wrong command. Try to send it privately.");
                             break;
                     }
                 }
@@ -332,9 +338,8 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
                 case "tell" :
                     settings.setDeferredMessagesEnabled(mode);
                     break;
-                case "gs":
-                case "googlesearch":
-                case "google-search":
+                case "s":
+                case "search":
                     settings.setGoogleSearchEnabled(mode);
                     break;
                 case "grammar":
