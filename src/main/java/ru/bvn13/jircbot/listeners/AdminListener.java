@@ -165,7 +165,7 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
                             }
                             break;
                         default:
-                            event.respond("Wrong command. Try to send it privately.");
+                            event.respond("Wrong command. Options: ?+ op|v[oice]");
                             break;
                     }
                 } else {
