@@ -3,7 +3,6 @@ package ru.bvn13.jircbot.database.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.annotation.Nullable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;

@@ -6,19 +6,19 @@
 
     <groupId>ru.bvn13</groupId>
     <artifactId>jircbot</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.3.RELEASE</version>
+        <version>2.1.6.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
 
     <properties>
-        <bot.version>2.1.0</bot.version>
+        <bot.version>2.1.1</bot.version>
 
         <java.version>1.8</java.version>
 
@@ -89,7 +89,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -135,13 +134,6 @@
             <version>1.11.2</version>
         </dependency>
 
-        <!--Google API-->
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-customsearch</artifactId>
-            <version>v1-rev57-1.23.0</version>
-        </dependency>
-
         <!--Mapper-->
         <dependency>
             <groupId>org.modelmapper</groupId>
@@ -168,21 +160,6 @@
 
         <!--logging-->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>1.2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.7</version>
@@ -201,7 +178,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
         </dependency>
 
 
