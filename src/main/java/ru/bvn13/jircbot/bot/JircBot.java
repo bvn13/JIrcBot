@@ -108,7 +108,8 @@ public class JircBot extends ListenerAdapter {
                 .setLogin("JIrcBot") //login part of hostmask, eg name:login@host
                 .setAutoNickChange(true) //Automatically change nick when the current one is in use
                 .setCapEnabled(true) //Enable CAP features
-                .addCapHandler(new TLSCapHandler(new UtilSSLSocketFactory().trustAllCertificates(), true));
+//                .addCapHandler(new TLSCapHandler(new UtilSSLSocketFactory().trustAllCertificates(), true))
+                ;
 
         this.config.getConnections().forEach(c -> {
             List<Configuration.ServerEntry> servers = new ArrayList<>();
