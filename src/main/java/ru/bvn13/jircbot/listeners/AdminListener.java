@@ -92,6 +92,7 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
                         .command("set")
                         .description("set ON|OFF any of bot opportunity for channel\n\n"+
                                 "Opportunities: \n\n"+
+                                "login | autologin | join-on-start - auto login mode on startup\n"+
                                 "autorejoin | auto-rejoin - auto rejoin channel on kicking\n"+
                                 "bash | bashorg - bach.org quoting\n"+
                                 "deferredmessages | deferred-messages | tell - saving and delivering deferred messages\n"+
@@ -380,6 +381,10 @@ public class AdminListener extends ImprovedListenerAdapter implements Descriptio
                 case "quiz":
                     settings.setQuizEnabled(mode);
                     break;
+                case "join-on-start":
+                case "login":
+                case "autologin":
+                    settings.setJoinOnStart(mode);
                 default:
                     throw new RuntimeException("Setting " + set + " not exist");
             }

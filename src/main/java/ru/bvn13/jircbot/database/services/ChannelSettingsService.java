@@ -5,6 +5,11 @@ import org.springframework.stereotype.Service;
 import ru.bvn13.jircbot.database.entities.ChannelSettings;
 import ru.bvn13.jircbot.database.repositories.ChannelSettingsRepository;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * Created by bvn13 on 01.02.2018.
  */
@@ -36,6 +41,16 @@ public class ChannelSettingsService {
 
     public void save(ChannelSettings settings) {
         channelSettingsRepository.save(settings);
+    }
+
+    public Set<String> getListeningChannels(String serverHost, List<String> defaultChannels) {
+        Set<String> channels = channelSettingsRepository.getAllChannelsToAutoJoinByServerHost(serverHost).stream()
+                .map(ChannelSettings::getChannelName)
+                .collect(Collectors.toSet());
+        if (channels.isEmpty()) {
+            channels.addAll(defaultChannels);
+        }
+        return channels;
     }
 
 }

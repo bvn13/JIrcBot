@@ -40,6 +40,9 @@ public class ChannelSettings extends BaseModel {
     @Column(nullable = false)
     private Boolean autoRejoinEnabled = false;
 
+    @Column(nullable = false, columnDefinition = "Boolean DEFAULT false")
+    private Boolean joinOnStart = false;
+
     @Column(nullable = false)
     private Boolean linkPreviewEnabled = false;
 

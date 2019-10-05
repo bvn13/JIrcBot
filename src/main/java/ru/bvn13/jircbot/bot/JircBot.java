@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.bvn13.jircbot.config.JircBotConfiguration;
+import ru.bvn13.jircbot.database.services.ChannelSettingsService;
 import ru.bvn13.jircbot.listeners.*;
 import ru.bvn13.jircbot.listeners.advices.AdviceListener;
 import ru.bvn13.jircbot.listeners.calculator.CalculatorListener;
@@ -43,14 +44,16 @@ public class JircBot extends ListenerAdapter {
     }
 
     private JircBotConfiguration config;
+    private ChannelSettingsService channelSettingsService;
 
     private Map<String, PircBotX> bots = new HashMap<>();
 
 
 
     @Autowired
-    public JircBot(JircBotConfiguration config) {
+    public JircBot(JircBotConfiguration config, ChannelSettingsService channelSettingsService) {
         this.config = config;
+        this.channelSettingsService = channelSettingsService;
     }
 
 
@@ -137,7 +140,7 @@ public class JircBot extends ListenerAdapter {
 
                     .setServers(servers)
                     .setAutoReconnect(true)
-                    .addAutoJoinChannels(c.getChannelsNames());
+                    .addAutoJoinChannels(channelSettingsService.getListeningChannels(c.getServer(), c.getChannelsNames()));
 
             if (c.getBotPassword() != null && !c.getBotPassword().isEmpty()) {
                 confBuilder.setNickservPassword(c.getBotPassword());
