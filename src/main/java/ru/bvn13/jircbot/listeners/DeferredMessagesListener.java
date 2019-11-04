@@ -16,7 +16,10 @@ import ru.bvn13.jircbot.documentation.DocumentationProvider;
 import ru.bvn13.jircbot.documentation.ListenerDescription;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static ru.bvn13.jircbot.documentation.ListenerDescription.CommandDescription;
 
@@ -35,6 +38,8 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter implements
     private ChannelSettingsService channelSettingsService;
 
     private DeferredMessageService deferredMessageService;
+
+    private Map<String, Object> mutexes = new ConcurrentHashMap<>();
 
     @Autowired
     public DeferredMessagesListener(DocumentationProvider documentationProvider) {
@@ -127,18 +132,21 @@ public class DeferredMessagesListener extends ImprovedListenerAdapter implements
 
     }
 
-
     private void sendDeferredMessage(final MessageEvent event) {
 
         if (event.getUser() != null) {
             String userIdent = event.getUser().getNick() + "!" + event.getUser().getLogin() + "@" + event.getUser().getHostname();
+            Object mutex = mutexes.containsKey(userIdent) ? mutexes.get(userIdent) : new Object();
+            mutexes.put(userIdent, mutex);
 
-            List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase(), userIdent);
-            if (deferredMessages != null && deferredMessages.size() > 0) {
-                DeferredMessage msg = deferredMessages.get(0);
-                String more = "" + (deferredMessages.size() > 1 ? " (" + (deferredMessages.size() - 1) + " message/-s more)" : "");
-                event.respond("User " + msg.getSender() + " at " + dt.format(msg.getDtCreated()) + " told you" + more + ": " + msg.getMessage());
-                deferredMessageService.markMessageWasSent(msg);
+            synchronized (mutex) {
+                List<DeferredMessage> deferredMessages = deferredMessageService.getDeferredMessagesForUser(this.getChannelName(event), event.getUser().getNick().toLowerCase(), userIdent);
+                if (deferredMessages != null && deferredMessages.size() > 0) {
+                    DeferredMessage msg = deferredMessages.get(0);
+                    String more = "" + (deferredMessages.size() > 1 ? " (" + (deferredMessages.size() - 1) + " message/-s more)" : "");
+                    event.respond("User " + msg.getSender() + " at " + dt.format(msg.getDtCreated()) + " told you" + more + ": " + msg.getMessage());
+                    deferredMessageService.markMessageWasSent(msg);
+                }
             }
         }
     }
